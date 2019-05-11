@@ -1,8 +1,8 @@
+import main from './js/main';
 
-window.init = () => {
-  console.log("Hello word");
-}
-
+document.addEventListener("DOMContentLoaded", function(event) { 
+  main();
+});
 
 if (module.hot) {
   module.hot.accept('./index.js', function() {

@@ -4,7 +4,8 @@
   "description": "A3 for DECO:3100",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "develop": "npx webpack-dev-server",
+    "build": "npx webpack"
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +13,7 @@
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.4",
     "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
     "@babel/register": "^7.4.4",
     "babel-loader": "^8.0.5",
@@ -23,5 +25,8 @@
     "webpack": "^4.31.0",
     "webpack-cli": "^3.3.2",
     "webpack-dev-server": "^3.3.1"
+  },
+  "dependencies": {
+    "d3": "^5.9.2"
   }
 }
