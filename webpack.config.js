@@ -1,6 +1,9 @@
 // Imports: Dependencies
 const path = require('path');
 require("babel-register");
+
+const webpack = require('webpack');
+const CopyPlugin = require('copy-webpack-plugin');
 // Webpack Configuration
 const config = {
   
@@ -33,8 +36,23 @@ const config = {
       
     ]
   },
+
+  // Dev Server
+  devServer: {
+    contentBase: './dist',
+    hot: true,
+    port: 8080,
+  },
+
   // Plugins
-  plugins: [],
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new CopyPlugin([
+      { from: 'src/index.html', to: 'index.html' },
+      { from: 'src/public/', to: 'public/' },
+    ]),
+  ],
+
 
   // OPTIONAL
   // Reload On File Change
