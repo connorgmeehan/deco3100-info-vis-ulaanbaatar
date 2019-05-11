@@ -1,12 +1,12 @@
 // Imports: Dependencies
 const path = require('path');
-require("babel-register");
+require('babel-register');
 
 const webpack = require('webpack');
 const CopyPlugin = require('copy-webpack-plugin');
 // Webpack Configuration
 const config = {
-  
+
   // Entry
   entry: './src/index.js',
   // Output
@@ -16,12 +16,17 @@ const config = {
   },
   // Loaders
   module: {
-    rules : [
-      // JavaScript/JSX Files
+    rules: [
+      {
+        enforce: 'pre',
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'eslint-loader',
+      },
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: ['babel-loader'],
+        loader: 'babel-loader',
       },
       // CSS Files
       {
@@ -31,10 +36,9 @@ const config = {
       // SASS Files
       {
         test: /\.sass$/,
-        use: ['style-loader', 'sass-loader']
-      }
-      
-    ]
+        use: ['style-loader', 'sass-loader'],
+      },
+    ],
   },
 
   // Dev Server
