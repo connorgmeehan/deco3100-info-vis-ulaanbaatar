@@ -4,6 +4,7 @@
   "description": "A3 for DECO:3100",
   "main": "index.js",
   "scripts": {
+    "start": "npm run develop",
     "develop": "npx webpack-dev-server",
     "build": "npx webpack"
   },

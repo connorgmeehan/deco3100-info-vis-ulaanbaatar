@@ -4,8 +4,6 @@ export default class D3Graph {
   svg; // Stores the root SVG
   graph; // Stores the margined graph
   data = [];
-  max = 0;
-  min = 0;
 
   constructor(target, width, height, margin, data) {
     this.svg = d3.select(target)
@@ -18,9 +16,6 @@ export default class D3Graph {
     this.margin = margin;
     this.width = width;
     this.height = height;
-    this.data = data.map(e => +e);
-    this.max = d3.max(this.data, d => d);
-    this.min = d3.min(this.data, d => d);
   }
 
   // eslint-disable-next-line class-methods-use-this

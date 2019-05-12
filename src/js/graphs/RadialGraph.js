@@ -1,5 +1,6 @@
 import * as d3 from 'd3';
 import D3Graph from './D3Graph';
+import dateToString from '../helpers/dateToString';
 
 export const RadialGraphOptions = {
   width: 200,
@@ -13,7 +14,7 @@ export const RadialGraphOptions = {
     left: 15, top: 15, right: 15, bottom: 15,
   },
   labelFactor: 1.25,
-  opacityArea: 0.5,
+  opacityArea: 0.1,
   color: d3.scaleOrdinal(d3.schemeCategory10),
 };
 
@@ -28,11 +29,8 @@ class RadialGraph extends D3Graph {
       y: this.cfg.height / 2,
     };
 
-    // Setup helper data
-     this.maxValue = d3.max(data, d => d3.max(d.map(el => el.value)));
-
-
-    this.allAxis = data[0].map(el => el.month);
+    this.maxValue = d3.max(data, locationData => d3.max(locationData, d => +d.pm25));
+    this.allAxis = data[Object.keys(data)[0]].map(el => el.utc);
     this.dataLength = this.allAxis.length;
     this.angleSlice = (2 * Math.PI) / this.dataLength;
 
@@ -85,15 +83,15 @@ class RadialGraph extends D3Graph {
       .attr('dy', '0.35em')
       .attr('x', (d, i) => this.rScale(this.maxValue * this.cfg.labelFactor) * Math.cos(this.angleSlice * i - Math.PI / 2))
       .attr('y', (d, i) => this.rScale(this.maxValue * this.cfg.labelFactor) * Math.sin(this.angleSlice * i - Math.PI / 2))
-      .text(d => `${d}`)
+      .text(d => `${dateToString(d).mon}`)
       .attr('fill', 'grey');
 
 
     // Build radar graph
     this.radarLine = d3.lineRadial()
-    .curve(d3.curveCatmullRomClosed.alpha(0.5))
-    .radius(d => this.rScale(d.value))
-    .angle((d, i) => i * this.angleSlice);
+      .curve(d3.curveCatmullRomClosed.alpha(0.5))
+      .radius(d => this.rScale(d.pm25))
+      .angle((d, i) => i * this.angleSlice);
 
     // Create a wrapper for the blobs
     this.blobWrapper = this.graph.selectAll('.radarWrapper')
@@ -102,6 +100,7 @@ class RadialGraph extends D3Graph {
       .attr('class', 'radarWrapper');
 
     // Append the backgrounds
+    console.log('\tAppending Backgrounds')
     this.blobWrapper
       .append('path')
       .attr('class', 'radarArea')
@@ -110,25 +109,24 @@ class RadialGraph extends D3Graph {
       .style('fill-opacity', this.cfg.opacityArea);
 
     // Create the outlines
+    console.log('\tCreating Outlines')
     this.blobWrapper.append('path')
       .attr('class', 'radarStroke')
-      .attr('d', (d) => {
-        console.log(d);
-        return this.radarLine(d);
-      })
+      .attr('d', d => this.radarLine(d))
       .style('stroke-width', '2px')
       .style('stroke', (d, i) => this.cfg.color(i))
       .style('fill', 'none');
 
     // Append the circles
+    console.log('\tAppending Circle')
     this.blobWrapper.selectAll('.radarCircle')
       .data(d => d)
       .enter()
       .append('circle')
       .attr('class', 'radarCircle')
       .attr('r', this.cfg.dotRadius)
-      .attr('cx', (d, i) => this.rScale(d.value) * Math.cos(this.angleSlice * i - Math.PI / 2))
-      .attr('cy', (d, i) => this.rScale(d.value) * Math.sin(this.angleSlice * i - Math.PI / 2))
+      .attr('cx', (d, i) => this.rScale(d.pm25) * Math.cos(this.angleSlice * i - Math.PI / 2))
+      .attr('cy', (d, i) => this.rScale(d.pm25) * Math.sin(this.angleSlice * i - Math.PI / 2))
       .style('fill', d => this.cfg.color(d.id))
       .style('fill-opacity', 0.8);
   }
