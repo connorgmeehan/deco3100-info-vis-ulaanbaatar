@@ -1,12 +1,11 @@
 import main from './js/main';
 
-document.addEventListener("DOMContentLoaded", function(event) { 
+document.addEventListener('DOMContentLoaded', () => {
   main();
 });
 
 if (module.hot) {
-  module.hot.accept('./index.js', function() {
+  module.hot.accept('./index.js', () => {
 
   })
 }
-  
