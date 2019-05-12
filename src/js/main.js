@@ -11,7 +11,7 @@ const main = () => {
     const radialGraphOptions = RadialGraphOptions;
     radialGraphOptions.width = 500;
     radialGraphOptions.height = 500;
-    const graph = new RadialGraph('body', formattedData, radialGraphOptions);
+    const graph = new RadialGraph('#seg1', formattedData, radialGraphOptions);
     graph.setTitle('PM2.5 Concentration in Ulaanbaatar 2017 by Month');
   });
 
