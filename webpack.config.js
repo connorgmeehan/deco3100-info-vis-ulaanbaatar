@@ -71,13 +71,13 @@ const config = {
   // Dev Server
   devServer: {
     contentBase: './dist',
-    hot: true,
+    hot: process.env.NODE_ENV !== 'production',
     port: 8080,
   },
 
   // OPTIONAL
   // Reload On File Change
-  watch: true,
+  watch: process.env.NODE_ENV !== 'production',
   // Development Tools (Map Errors To Source File)
   devtool: 'source-map',
 };
