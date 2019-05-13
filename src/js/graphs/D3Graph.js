@@ -12,7 +12,7 @@ export default class D3Graph {
     .attr('height', height + margin.top + margin.bottom);
     this.graph = this.svg.append('g')
     .attr('transform', `translate( ${(width / 2 + margin.left)}, ${(height / 2 + margin.top)})`);
-    
+
     this.margin = margin;
     this.width = width;
     this.height = height;

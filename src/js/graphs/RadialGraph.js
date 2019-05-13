@@ -132,7 +132,7 @@ class RadialGraph extends D3Graph {
   }
 
   update(appstate) {
-    
+
   }
 }
 
