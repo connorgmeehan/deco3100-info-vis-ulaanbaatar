@@ -19,6 +19,7 @@
     "import/newline-after-import":"off",
     "indent": "off",
     "no-this-before-super": "off",
+    "no-plusplus": "off",
     
     "class-methods-use-this": "warn",
     "no-unused-vars": "warn",
