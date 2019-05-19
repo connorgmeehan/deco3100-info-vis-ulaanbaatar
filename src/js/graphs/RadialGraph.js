@@ -21,8 +21,10 @@ export const RadialGraphOptions = {
 
 class RadialGraph extends D3Graph {
   cfg = {};
-  constructor(target, data, options) {
-    super(target, options.width, options.height, options.margin, data);
+  constructor(name, graphOptions, data, options) {
+    console.log(`RadialGraph::constructor(name: ${name}, graphOptions: ${graphOptions}, data: ${data}, options: ${options})`);
+    super(name, graphOptions, options.margin, data);
+    console.log(data);
 
     this.cfg = options;
     this.cfg.centerPoint = {
@@ -34,6 +36,8 @@ class RadialGraph extends D3Graph {
     this.allAxis = data[Object.keys(data)[0]].map(el => el.utc);
     this.dataLength = this.allAxis.length;
     this.angleSlice = (2 * Math.PI) / this.dataLength;
+
+    console.log(this.element);
 
     this.init(data);
   }

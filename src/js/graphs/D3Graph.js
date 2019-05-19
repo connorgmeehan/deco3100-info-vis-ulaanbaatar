@@ -1,17 +1,26 @@
+import GenericGraph from './GenericGraph';
+
 const d3 = require('d3');
 
-export default class D3Graph {
+export default class D3Graph extends GenericGraph {
   svg; // Stores the root SVG
   graph; // Stores the margined graph
   data = [];
 
-  constructor(target, width, height, margin, data) {
-    this.svg = d3.select(target)
-    .append('svg')
-    .attr('width', width + margin.left + margin.right)
-    .attr('height', height + margin.top + margin.bottom);
+  constructor(name, graphOptions, margin, data) {
+    console.log(`D3Graph::constructor(name: ${name}, graphOptions: ${graphOptions}, margin: ${margin}, data: ${data})`);
+    super(name, graphOptions, data);
+    const { width, height } = graphOptions.dimensions;
+    
+    this.svg = d3.select(this.element)
+      .append('svg')
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom);
+    console.log(`\t selected this.element.id: ${this.element.id}`);
+    console.log(this.svg);
+
     this.graph = this.svg.append('g')
-    .attr('transform', `translate( ${(width / 2 + margin.left)}, ${(height / 2 + margin.top)})`);
+      .attr('transform', `translate( ${(width / 2 + margin.left)}, ${(height / 2 + margin.top)})`);
 
     this.margin = margin;
     this.width = width;

@@ -1,9 +1,42 @@
 body {
   color: blue;
+  margin: 0;
 }
 
 #seg1 {
   height: 2000px;
   width: 100%;
   background: lightgrey;
+}
+
+.Graph {
+  position: absolute;
+
+  &_Radial {
+    // background: blue;
+  }
+}
+
+.Section {
+  transform: translate3d(0, 0, 0);
+  width: 100vw;
+  height: 100vh;
+
+  &--sticky {
+    position: absolute;
+  }
+
+  &--stuck {
+    position: fixed;
+    left: 0;
+    top: 0;
+  }
+
+  &_Track {
+    position: relative;
+  }
+}
+
+.Element {
+  position: absolute;
 }
