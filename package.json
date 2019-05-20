@@ -47,6 +47,8 @@
   },
   "dependencies": {
     "d3": "^5.9.2",
-    "sticky-js": "^1.2.0"
+    "sticky-js": "^1.2.0",
+    "three": "^0.104.0",
+    "three-orbitcontrols": "^2.102.1"
   }
 }

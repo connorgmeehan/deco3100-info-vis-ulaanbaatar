@@ -3,6 +3,8 @@ import groupBy from './helpers/groupBy';
 import Section from './components/Section';
 import RadialGraph, { RadialGraphOptions } from './graphs/RadialGraph';
 
+import HeightMap, { HeightMapConfig } from './graphs/Heightmap';
+
 
 const main = () => {
   d3.csv('/public/all_stations_pm25_2017.csv').then((data) => {
@@ -11,10 +13,25 @@ const main = () => {
     console.log(formattedData);
 
     const SectionIntro = new Section(2000, 'Intro');
+
+    const hmGraphOptions = {
+      position: {
+        x: 50,
+        y: 50,
+      },
+      dimensions: {
+        width: 1024,
+        height: 500,
+      },
+    };
+    const hmConfig = HeightMapConfig;
+    const heightMap = new HeightMap('Heightmap', hmGraphOptions, null, hmConfig);
+    SectionIntro.addChild(heightMap);
+
     const genericOptionsRadial = {
       position: {
-        x: 200,
-        y: 300,
+        x: 50,
+        y: 550,
       },
       dimensions: {
         width: 500,

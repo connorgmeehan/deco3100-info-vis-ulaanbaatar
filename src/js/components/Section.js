@@ -43,7 +43,6 @@ class Section {
     progress = (progress < 0.0 ? 0.0 : progress);
     progress = (progress > 1.0 ? 1.0 : progress);
 
-    console.log(window.scrollY, window.innerHeight, this.topOffset, this.height);
     if (window.scrollY < this.topOffset) {
       if (this.isStuck) {
         this.unstick('top');
