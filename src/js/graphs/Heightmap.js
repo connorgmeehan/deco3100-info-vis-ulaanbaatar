@@ -13,13 +13,13 @@ export const HeightMapConfig = {
   camera: {
     x: 0,
     y: 30,
-    z: -30,
+    z: 40,
     viewAngle: 45,
   },
   light: {
     x: 1200,
     y: 1200,
-    z: 1200,
+    z: -1200,
     intensity: 0.8,
   },
 }
@@ -67,6 +67,7 @@ class Heightmap extends GenericGraph {
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setClearColor(0x333333, 1.0);
     this.renderer.setSize(graphOptions.dimensions.width, graphOptions.dimensions.height);
+    this.renderer.getMaxAnisotropy();
 
     this.light = new THREE.DirectionalLight();
     this.light.position.set(hmConfig.light.x, hmConfig.light.y, hmConfig.light.z);
@@ -131,6 +132,10 @@ class Heightmap extends GenericGraph {
 
   render = () => {
     // controls.update();
+  }
+
+  update(progress) {
+    console.log(`Heightmap::update(progress: ${progress})`);
   }
 }
 

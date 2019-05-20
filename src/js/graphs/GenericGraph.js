@@ -24,8 +24,9 @@ class GenericGraph {
     this.graphOptions = graphOptions;
   }
 
+  update = null;
   onScroll(scrollOffset, progress) {
-    // console.log(`GenericGraph::onScroll() -> scrollOffset: ${scrollOffset} progress: ${progress}`);
+    this.update(progress);
   }
 }
 

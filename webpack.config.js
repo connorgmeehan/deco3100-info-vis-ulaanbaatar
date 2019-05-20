@@ -74,10 +74,6 @@ const config = {
     hot: process.env.NODE_ENV !== 'production' || process.env.NODE_ENV !== 'staging',
     port: 8080,
   },
-
-  // OPTIONAL
-  // Reload On File Change
-  watch: process.env.NODE_ENV !== 'production' || process.env.NODE_ENV !== 'staging',
   // Development Tools (Map Errors To Source File)
   devtool: 'source-map',
 };
