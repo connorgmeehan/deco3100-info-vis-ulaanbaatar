@@ -1,28 +1,30 @@
 import * as THREE from 'three';
 
-export const PollutionStationOptions = {
-  position: { x: -1, y: -1, },
-  name: 'Unnamed',
-};
-
 class PollutionStation {
   scene;
   name;
   data;
-  position = { x: -1, y: -1, z: -1 };
+  p = { x: -1, y: -1, z: -1 };
 
-  constructor(scene, data, psOptions) {
+  constructor(scene, data, stationMetaData) {
     this.scene = scene;
     this.data = data;
-    this.position = psOptions.position;
-    this.name = psOptions.name;
+    this.name = stationMetaData.location;
 
-    this.p.x = data.lat;
-    this.p.y = data.lon;
-    this.p.z = 1;
+    this.p.x = stationMetaData.x;
+    this.p.y = 1;
+    this.p.z = stationMetaData.y;
 
-    this.sphere = new THREE.Sphere(THREE.Vector3(...this.p), 5);
-    
+    this.init();
+  }
+
+  init() {
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const cube = new THREE.Mesh(geometry, material);
+    cube.position.set(this.p.x, this.p.y, this.p.z);
+
+    this.scene.add(cube);
   }
 
   update(scrollOffset, progress) {

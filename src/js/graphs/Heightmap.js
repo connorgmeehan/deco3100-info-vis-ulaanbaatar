@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import OrbitControls from 'three-orbitcontrols';
 import GenericGraph from './GenericGraph';
+import PollutionStation from './Heightmap_pollutionstation';
 
 export const HeightMapConfig = {
   width: 1024,
@@ -25,6 +26,17 @@ export const HeightMapConfig = {
 }
 
 class Heightmap extends GenericGraph {
+  scene;
+  renderer;
+  light;
+  controls;
+
+  pollutionData;
+  stationMetaData;
+  weatherData;
+
+  pollutionStations = [];
+
   constructor(name, graphOptions, data, hmConfig = null) {
     super(name, graphOptions, data);
 
@@ -56,6 +68,12 @@ class Heightmap extends GenericGraph {
         textures.texturemap = tex;
         checkTextures();
       });
+
+  this.pollutionData = data.pollutionData;
+  this.stationMetaData = data.stationMetaData;
+  this.weatherData = data.weatherData;
+
+  console.log(this);
   }
 
   init(graphOptions, textures, hmConfig) {
@@ -92,9 +110,15 @@ class Heightmap extends GenericGraph {
     const cube = new THREE.Mesh(geometry, material);
     this.scene.add(cube);
 
-
     this.element.appendChild(this.renderer.domElement);
     this.controls = new OrbitControls(this.cam, this.renderer.domElement);
+
+    this.stationMetaData.forEach((station) => {
+      console.log('adding new Sphere for');
+      console.log(station);
+      const stationData = this.data.stationsData.filter(el => el[0] === station.location)
+      this.pollutionStations.push(new PollutionStation(this.scene, stationData, station));
+    });
 
     this.render();
   }

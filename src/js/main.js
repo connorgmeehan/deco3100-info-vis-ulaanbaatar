@@ -20,6 +20,7 @@ const main = () => {
 
   const stations = stationMetaData.map(row => row.location);
   const stationsData = formattedData.filter(el => stations.includes(el[0]));
+  const weatherData = formattedData.filter(el => el[0] === 'Weather (C)');
   // Use utc as index of data
   stationsData.index = formattedData.reduce((acc, cur) => (acc[0] === 'utc' ? acc : cur));
 
@@ -30,7 +31,7 @@ const main = () => {
   // HeightMap
   const hmGraphOptions = new GraphOptions(50, 50, 1024, 500, 'left');
   const hmConfig = HeightMapConfig;
-  const heightMap = new HeightMap('Heightmap', hmGraphOptions, null, hmConfig);
+  const heightMap = new HeightMap('Heightmap', hmGraphOptions, { stationMetaData, stationsData, weatherData }, hmConfig);
   SectionMap.addChild(heightMap);
 
 
