@@ -59,6 +59,7 @@ class Heightmap extends GenericGraph {
   }
 
   init(graphOptions, textures, hmConfig) {
+    console.log(`Heightmap::init(graphOptions: ${graphOptions}, textures: ${textures}, hmConfig: ${hmConfig})`);
     this.scene = new THREE.Scene();
     this.scene.add(new THREE.AmbientLight(0xeeeeee, 0.5));
 
@@ -84,8 +85,6 @@ class Heightmap extends GenericGraph {
     this.cam.position.z = hmConfig.camera.z;
     this.cam.lookAt(this.scene.position);
 
-    console.log(`Heightmap::constructor() -> hmConfig.imgSrc: ${hmConfig.heightmapSrc}`);
-
     this.createGeometryFromMap(textures);
 
     const geometry = new THREE.BoxGeometry(1, 1, 1);
@@ -102,8 +101,6 @@ class Heightmap extends GenericGraph {
 
   createGeometryFromMap(textures) {
     const { heightmap, normalmap, texturemap } = textures;
-    console.log(`Heightmap::createGeometryFromMap(image: ${heightmap}) -> width: ${heightmap.width}, height: ${heightmap.height}`);
-    console.log(heightmap);
     const maxHeight = 5;
 
 
@@ -137,7 +134,7 @@ class Heightmap extends GenericGraph {
   }
 
   update(progress) {
-    console.log(progress);
+
   }
 }
 

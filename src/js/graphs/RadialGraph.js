@@ -25,7 +25,6 @@ class RadialGraph extends D3Graph {
   constructor(name, graphOptions, data, options) {
     console.log(`RadialGraph::constructor(name: ${name}, graphOptions: ${graphOptions}, data: ${data.length}, options: ${options})`);
     super(name, graphOptions, options.margin, data);
-    console.log(data);
 
     this.cfg = options;
     this.cfg.centerPoint = {
@@ -37,14 +36,11 @@ class RadialGraph extends D3Graph {
     this.allAxis = data.index[1];
     this.dataLength = data[0][1].length;
     this.angleSlice = (2 * Math.PI) / this.dataLength;
-
-    console.log(this.maxValue);
-    console.log(this.allAxis);
-
     this.init(data);
   }
 
   init(data) {
+    console.log(`RadialGraph::init(data.legth: ${data.length})`);
     // Setup d3 scales
     this.rScale = d3.scaleLinear()
       .range([this.cfg.innerRadius, this.cfg.outerRadius])
