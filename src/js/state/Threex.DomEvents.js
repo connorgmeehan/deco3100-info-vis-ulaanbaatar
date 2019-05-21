@@ -1,3 +1,9 @@
+/*
+* Stolen the github of Jerome Etienne
+* Modified to play nice with ES6 imports
+* src: https://github.com/jeromeetienne/threex.domevents
+* Thank you for this code Jerome!
+*/
 /* eslint-disable eqeqeq */
 /* eslint-disable consistent-return */
 /* eslint-disable no-continue */
