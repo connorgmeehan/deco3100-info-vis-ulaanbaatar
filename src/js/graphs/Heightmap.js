@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import * as THREE from 'three';
 import OrbitControls from 'three-orbitcontrols';
+import THREEx from '../state/Threex.DomEvents';
 import GenericGraph from './GenericGraph';
 import PollutionStation from './Heightmap_pollutionstation';
 
@@ -72,7 +73,6 @@ class Heightmap extends GenericGraph {
   this.pollutionData = data.pollutionData;
   this.stationMetaData = data.stationMetaData;
   this.weatherData = data.weatherData;
-
 }
 
   init(graphOptions, textures, hmConfig) {
@@ -103,6 +103,10 @@ class Heightmap extends GenericGraph {
     this.cam.lookAt(this.scene.position);
 
     this.createGeometryFromMap(textures);
+
+    this.events = new THREEx.DomEvents(this.cam, this.renderer.domElement);
+
+    console.log(this.events);
 
     this.stationMetaData.forEach((station) => {
       console.log(station);
