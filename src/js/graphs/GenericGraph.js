@@ -25,14 +25,14 @@ class GenericGraph {
     this.graphOptions = graphOptions;
   }
 
-  onScroll(_scrollOffset, _progress) {
+  onScroll(_progress, _scrollOffset = 0) {
     // todo add throttling if needed
-    this.update(_scrollOffset, _progress);
+    this.update(_progress, _scrollOffset);
   }
 
   // eslint-disable-next-line class-methods-use-this
-  update(_scrollOffset, _progress) {
-
+  update(_progress, _scrollOffset = 0) {
+    // Stub
   }
 }
 
