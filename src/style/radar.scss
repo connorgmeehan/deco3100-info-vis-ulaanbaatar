@@ -1,5 +1,11 @@
 // Styles for RadarChart
-
 .RadarElement {
   fill: none;
+
+  &_Stroke {
+    stroke-width: 2px;
+      .active & {
+        stroke-width: 5px;
+      }
+  }
 }

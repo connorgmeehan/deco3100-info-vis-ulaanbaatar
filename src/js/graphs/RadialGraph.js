@@ -108,7 +108,7 @@ class RadialGraph extends D3Graph {
     console.log('\tAppending Backgrounds')
     this.blobWrapper
       .append('path')
-      .attr('class', 'RadarElement-Area')
+      .attr('class', 'RadarElement_Area')
       .attr('d', d => this.radarLine(d[1]))
       .style('fill', d => this.cfg.color(d[0]))
       .style('fill-opacity', this.cfg.opacityArea);
@@ -116,14 +116,13 @@ class RadialGraph extends D3Graph {
     // Create the outlines
     console.log('\tCreating Outlines')
     this.blobWrapper.append('path')
-      .attr('class', 'RadarElement-Stroke')
+      .attr('class', 'RadarElement_Stroke')
       .attr('d', d => this.radarLine(d[1]))
-      .style('stroke-width', '2px')
       .style('stroke', d => this.cfg.color(d[0]))
 
     // Append the circles
     console.log('\tAppending Circle')
-    this.blobWrapper.selectAll('.RadarElement-Circle')
+    this.blobWrapper.selectAll('.RadarElement_Circle')
       .append('circle')
       .attr('class', 'RadarElementCircle')
       .attr('r', this.cfg.dotRadius)
@@ -131,11 +130,26 @@ class RadialGraph extends D3Graph {
       .attr('cy', (d, i) => this.rScale(d[1]) * Math.sin(this.angleSlice * i - Math.PI / 2))
       .style('fill', d => this.cfg.color(d[0]))
       .style('fill-opacity', 0.8);
+
+    // Bind app state listener
+    window.appState.selectedStation.subscribe(this._onStationStateChange);
   }
 
   update(progress, scrollDistance) {
     this.progress = progress;
     this.scrollDistance = scrollDistance;
+  }
+
+  _onStationStateChange = (data) => {
+    this.blobWrapper
+    .attr('class', (d, i) => {
+      if (d[0] === data) {
+        return 'RadarElement active';
+      }
+      return 'RadarElement';
+    })
+    .filter(d => d[0] === data)
+    .raise()
   }
 }
 

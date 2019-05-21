@@ -17,7 +17,6 @@
 /* eslint-disable no-cond-assign */
 /* eslint-disable no-use-before-define */
 /* eslint-disable func-names */
-/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-undef */
 /* eslint-disable prefer-spread */
 /* eslint-disable prefer-rest-params */
