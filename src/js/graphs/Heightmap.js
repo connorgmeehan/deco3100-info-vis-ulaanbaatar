@@ -73,8 +73,7 @@ class Heightmap extends GenericGraph {
   this.stationMetaData = data.stationMetaData;
   this.weatherData = data.weatherData;
 
-  console.log(this);
-  }
+}
 
   init(graphOptions, textures, hmConfig) {
     console.log(`Heightmap::init(graphOptions: ${graphOptions}, textures: ${textures}, hmConfig: ${hmConfig})`);
@@ -105,20 +104,15 @@ class Heightmap extends GenericGraph {
 
     this.createGeometryFromMap(textures);
 
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const cube = new THREE.Mesh(geometry, material);
-    this.scene.add(cube);
+    this.stationMetaData.forEach((station) => {
+      console.log(station);
+      const stationData = this.data.stationsData.filter(el => el[0] === station.location)
+      this.pollutionStations.push(new PollutionStation(this.scene, this.events, stationData, station));
+    });
 
     this.element.appendChild(this.renderer.domElement);
     this.controls = new OrbitControls(this.cam, this.renderer.domElement);
 
-    this.stationMetaData.forEach((station) => {
-      console.log('adding new Sphere for');
-      console.log(station);
-      const stationData = this.data.stationsData.filter(el => el[0] === station.location)
-      this.pollutionStations.push(new PollutionStation(this.scene, stationData, station));
-    });
 
     this.render();
   }
