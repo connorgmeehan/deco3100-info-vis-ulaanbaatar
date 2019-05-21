@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import * as THREE from 'three';
 import OrbitControls from 'three-orbitcontrols';
 import GenericGraph from './GenericGraph';
@@ -92,13 +93,7 @@ class Heightmap extends GenericGraph {
     this.element.appendChild(this.renderer.domElement);
     this.controls = new OrbitControls(this.cam, this.renderer.domElement);
 
-    const that = this;
-    function render() {
-      that.controls.update();
-      that.renderer.render(that.scene, that.cam);
-      requestAnimationFrame(render);
-    }
-    render();
+    this.render();
   }
 
   createGeometryFromMap(textures) {
@@ -131,11 +126,13 @@ class Heightmap extends GenericGraph {
   }
 
   render = () => {
-    // controls.update();
+    this.controls.update();
+    this.renderer.render(this.scene, this.cam);
+    requestAnimationFrame(this.render);
   }
 
   update(progress) {
-    console.log(`Heightmap::update(progress: ${progress})`);
+    console.log(progress);
   }
 }
 

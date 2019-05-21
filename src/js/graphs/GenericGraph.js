@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const GraphOptions = {
   position: { x: 200, y: 200 },
   dimensions: { width: 500, height: 500 },
@@ -24,9 +25,14 @@ class GenericGraph {
     this.graphOptions = graphOptions;
   }
 
-  update = null;
-  onScroll(scrollOffset, progress) {
-    this.update(progress);
+  onScroll(_scrollOffset, _progress) {
+    // todo add throttling if needed
+    this.update(_scrollOffset, _progress);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  update(_scrollOffset, _progress) {
+
   }
 }
 
