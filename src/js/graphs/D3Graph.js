@@ -8,16 +8,14 @@ export default class D3Graph extends GenericGraph {
   data = [];
 
   constructor(name, graphOptions, margin, data) {
-    console.log(`D3Graph::constructor(name: ${name}, graphOptions: ${graphOptions}, margin: ${margin}, data: ${data})`);
+    console.log(`D3Graph::constructor(name: ${name}, graphOptions: ${graphOptions}, margin: ${margin}, data: ${data.length})`);
     super(name, graphOptions, data);
-    const { width, height } = graphOptions.dimensions;
-    
+    const { width, height } = graphOptions;
+
     this.svg = d3.select(this.element)
       .append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom);
-    console.log(`\t selected this.element.id: ${this.element.id}`);
-    console.log(this.svg);
 
     this.graph = this.svg.append('g')
       .attr('transform', `translate( ${(width / 2 + margin.left)}, ${(height / 2 + margin.top)})`);
@@ -29,11 +27,11 @@ export default class D3Graph extends GenericGraph {
 
   // eslint-disable-next-line class-methods-use-this
   init(data) {
-    console.warn(`D3Graph::init(${data}) -> this function should be overridden by extended class`);
+    console.warn(`D3Graph::init(${data.length}) -> this function should be overridden by extended class`);
   }
   // eslint-disable-next-line class-methods-use-this
   update(data) {
-    console.warn(`D3Graph::update(${data}) -> this function should be overridden by extended class`);
+    console.warn(`D3Graph::update(${data.length}) -> this function should be overridden by extended class`);
   }
 
 

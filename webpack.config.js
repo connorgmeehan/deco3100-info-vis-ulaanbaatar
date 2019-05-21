@@ -44,6 +44,16 @@ const config = {
         exclude: /node_modules/,
         loader: 'babel-loader',
       },
+      // CSV loader
+      {
+        test: /\.csv$/,
+        loader: 'csv-loader',
+        options: {
+          dynamicTyping: true,
+          header: true,
+          skipEmptyLines: true,
+        },
+      },
       // SASS Files
       {
         test: [/.css$|.scss$/],

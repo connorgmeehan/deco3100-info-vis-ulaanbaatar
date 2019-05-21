@@ -1,49 +1,46 @@
-import * as d3 from 'd3';
-import groupBy from './helpers/groupBy';
-import Section from './components/Section';
-import RadialGraph, { RadialGraphOptions } from './graphs/RadialGraph';
+/* eslint-disable prefer-destructuring */
+import pivotArray from 'array-pivot';
 
+import stationMetaData from '../public/station_meta_data.csv';
+import weatherPollutionData from '../public/station_pollution_weather_data.csv'
+
+import AppState from './state/AppState';
+import Section from './components/Section';
+import { GraphOptions } from './graphs/GenericGraph';
+import RadialGraph, { RadialGraphOptions } from './graphs/RadialGraph';
 import HeightMap, { HeightMapConfig } from './graphs/Heightmap';
 
-
 const main = () => {
-  d3.csv('/public/all_stations_pm25_2017.csv').then((data) => {
-    const groupedData = groupBy(data, 'location');
-    const formattedData = Object.keys(groupedData).map(key => groupedData[key]);
-    console.log(formattedData);
+  // Initialise Observer App State
+  window.appState = AppState;
 
-    const SectionIntro = new Section(2000, 'Intro');
+  // Format data to be more easily segmented for each component
+  const formattedData = Object.entries(pivotArray(weatherPollutionData));
+  window.stationMetaData = stationMetaData;
 
-    const hmGraphOptions = {
-      position: {
-        x: 50,
-        y: 50,
-      },
-      dimensions: {
-        width: 1024,
-        height: 500,
-      },
-    };
-    const hmConfig = HeightMapConfig;
-    const heightMap = new HeightMap('Heightmap', hmGraphOptions, null, hmConfig);
-    SectionIntro.addChild(heightMap);
+  const stations = stationMetaData.map(row => row.location);
+  const stationsData = formattedData.filter(el => stations.includes(el[0]));
+  // Use utc as index of data
+  stationsData.index = formattedData.reduce((acc, cur) => (acc[0] === 'utc' ? acc : cur));
 
-    const genericOptionsRadial = {
-      position: {
-        x: 50,
-        y: 550,
-      },
-      dimensions: {
-        width: 500,
-        height: 500,
-      },
-    };
-    const radialGraphOptions = RadialGraphOptions;
-    radialGraphOptions.width = 500;
-    radialGraphOptions.height = 500;
-    const radialGraph = new RadialGraph('Radial', genericOptionsRadial, formattedData, radialGraphOptions);
-    SectionIntro.addChild(radialGraph);
-  });
+  // Section Map
+  // Stores the main visualisation, including THREE.js map and timeline
+  const SectionMap = new Section(2000, 'Intro');
+
+  // HeightMap
+  const hmGraphOptions = new GraphOptions(50, 50, 1024, 500, 'left');
+  const hmConfig = HeightMapConfig;
+  const heightMap = new HeightMap('Heightmap', hmGraphOptions, null, hmConfig);
+  SectionMap.addChild(heightMap);
+
+
+  // Radial Graph
+  const genericOptionsRadial = new GraphOptions(50, 300, 500, 500, 'right');
+  const radialGraphOptions = RadialGraphOptions;
+  radialGraphOptions.width = 500;
+  radialGraphOptions.height = 500;
+  const radialGraph = new RadialGraph('Radial', genericOptionsRadial, stationsData, radialGraphOptions);
+  SectionMap.addChild(radialGraph);
 
   console.log('ready');
 }

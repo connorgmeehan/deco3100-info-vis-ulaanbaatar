@@ -38,7 +38,7 @@ class Section {
     this.element.appendChild(sectionElement.element);
   }
 
-  onScroll = (e) => {
+  onScroll = () => {
     let progress = (window.scrollY + window.innerHeight / 2 - this.topOffset.y) / this.height;
     progress = (progress < 0.0 ? 0.0 : progress);
     progress = (progress > 1.0 ? 1.0 : progress);

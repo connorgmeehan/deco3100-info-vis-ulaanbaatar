@@ -2,7 +2,6 @@
 import * as THREE from 'three';
 import OrbitControls from 'three-orbitcontrols';
 import GenericGraph from './GenericGraph';
-import getTextureData from '../helpers/getTextureData';
 
 export const HeightMapConfig = {
   width: 1024,
@@ -62,12 +61,17 @@ class Heightmap extends GenericGraph {
   init(graphOptions, textures, hmConfig) {
     this.scene = new THREE.Scene();
     this.scene.add(new THREE.AmbientLight(0xeeeeee, 0.5));
-    // this.cam = new THREE.OrthographicCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000)
-    this.cam = new THREE.PerspectiveCamera(hmConfig.camera.viewAngle, graphOptions.dimensions.width / graphOptions.dimensions.height, 0.1, 1000);
-    
+
+    this.cam = new THREE.PerspectiveCamera(
+      hmConfig.camera.viewAngle,
+      graphOptions.width / graphOptions.height,
+      0.1,
+      1000,
+    );
+
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setClearColor(0x333333, 1.0);
-    this.renderer.setSize(graphOptions.dimensions.width, graphOptions.dimensions.height);
+    this.renderer.setSize(graphOptions.width, graphOptions.height);
     this.renderer.getMaxAnisotropy();
 
     this.light = new THREE.DirectionalLight();
@@ -103,7 +107,10 @@ class Heightmap extends GenericGraph {
     const maxHeight = 5;
 
 
-    this.planeGeometry = new THREE.PlaneGeometry(60, 60, heightmap.image.naturalWidth - 1, heightmap.image.naturalHeight - 1);
+    this.planeGeometry = new THREE.PlaneGeometry(
+      60, 60,
+      heightmap.image.naturalWidth - 1, heightmap.image.naturalHeight - 1,
+    );
 
     const material = new THREE.MeshStandardMaterial({
       color: 0xFFFFFF,
@@ -116,8 +123,6 @@ class Heightmap extends GenericGraph {
       normalMap: normalmap,
       map: texturemap,
     })
-
-    // this.plane.rotation.x -= 90 * Math.PI / 180;
 
     this.plane = new THREE.Mesh(this.planeGeometry, material);
     this.plane.rotation.x = -Math.PI / 2;

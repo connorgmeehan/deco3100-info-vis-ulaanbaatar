@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 import * as d3 from 'd3';
 import D3Graph from './D3Graph';
 import dateToString from '../helpers/dateToString';
@@ -5,7 +6,7 @@ import dateToString from '../helpers/dateToString';
 export const RadialGraphOptions = {
   width: 200,
   height: 200,
-  innerRadius: 100,
+  innerRadius: 50,
   outerRadius: 200,
   pointRadius: 20,
   centerPoint: { x: 0, y: 0 },
@@ -14,7 +15,7 @@ export const RadialGraphOptions = {
     left: 15, top: 15, right: 15, bottom: 15,
   },
   labelFactor: 1.25,
-  opacityArea: 0.1,
+  opacityArea: 0.0,
   dotRadius: 5,
   color: d3.scaleOrdinal(d3.schemeCategory10),
 };
@@ -22,7 +23,7 @@ export const RadialGraphOptions = {
 class RadialGraph extends D3Graph {
   cfg = {};
   constructor(name, graphOptions, data, options) {
-    console.log(`RadialGraph::constructor(name: ${name}, graphOptions: ${graphOptions}, data: ${data}, options: ${options})`);
+    console.log(`RadialGraph::constructor(name: ${name}, graphOptions: ${graphOptions}, data: ${data.length}, options: ${options})`);
     super(name, graphOptions, options.margin, data);
     console.log(data);
 
@@ -32,12 +33,13 @@ class RadialGraph extends D3Graph {
       y: this.cfg.height / 2,
     };
 
-    this.maxValue = d3.max(data, locationData => d3.max(locationData, d => +d.pm25));
-    this.allAxis = data[Object.keys(data)[0]].map(el => el.utc);
-    this.dataLength = this.allAxis.length;
+    this.maxValue = d3.max(data, row => d3.max(row[1]));
+    this.allAxis = data.index[1];
+    this.dataLength = data[0][1].length;
     this.angleSlice = (2 * Math.PI) / this.dataLength;
 
-    console.log(this.element);
+    console.log(this.maxValue);
+    console.log(this.allAxis);
 
     this.init(data);
   }
@@ -87,14 +89,17 @@ class RadialGraph extends D3Graph {
       .attr('dy', '0.35em')
       .attr('x', (d, i) => this.rScale(this.maxValue * this.cfg.labelFactor) * Math.cos(this.angleSlice * i - Math.PI / 2))
       .attr('y', (d, i) => this.rScale(this.maxValue * this.cfg.labelFactor) * Math.sin(this.angleSlice * i - Math.PI / 2))
-      .text(d => `${dateToString(d).mon}`)
+      .text((d) => {
+        const date = dateToString(d);
+        return `${date.day}, ${date.month}`;
+      })
       .attr('fill', 'grey');
 
 
     // Build radar graph
     this.radarLine = d3.lineRadial()
       .curve(d3.curveCatmullRomClosed.alpha(0.5))
-      .radius(d => this.rScale(d.pm25))
+      .radius(d => this.rScale(d))
       .angle((d, i) => i * this.angleSlice);
 
     // Create a wrapper for the blobs
@@ -108,35 +113,33 @@ class RadialGraph extends D3Graph {
     this.blobWrapper
       .append('path')
       .attr('class', 'RadarElement-Area')
-      .attr('d', d => this.radarLine(d))
-      .style('fill', (d, i) => this.cfg.color(i))
+      .attr('d', d => this.radarLine(d[1]))
+      .style('fill', d => this.cfg.color(d[0]))
       .style('fill-opacity', this.cfg.opacityArea);
 
     // Create the outlines
     console.log('\tCreating Outlines')
     this.blobWrapper.append('path')
       .attr('class', 'RadarElement-Stroke')
-      .attr('d', d => this.radarLine(d))
+      .attr('d', d => this.radarLine(d[1]))
       .style('stroke-width', '2px')
-      .style('stroke', (d, i) => this.cfg.color(i))
-      .style('fill', 'none');
+      .style('stroke', d => this.cfg.color(d[0]))
 
     // Append the circles
     console.log('\tAppending Circle')
     this.blobWrapper.selectAll('.RadarElement-Circle')
-      .data(d => d)
-      .enter()
       .append('circle')
       .attr('class', 'RadarElementCircle')
       .attr('r', this.cfg.dotRadius)
-      .attr('cx', (d, i) => this.rScale(d.pm25) * Math.cos(this.angleSlice * i - Math.PI / 2))
-      .attr('cy', (d, i) => this.rScale(d.pm25) * Math.sin(this.angleSlice * i - Math.PI / 2))
-      .style('fill', d => this.cfg.color(d.location))
+      .attr('cx', (d, i) => this.rScale(d[1]) * Math.cos(this.angleSlice * i - Math.PI / 2))
+      .attr('cy', (d, i) => this.rScale(d[1]) * Math.sin(this.angleSlice * i - Math.PI / 2))
+      .style('fill', d => this.cfg.color(d[0]))
       .style('fill-opacity', 0.8);
   }
 
-  update(appstate) {
-
+  update(progress, scrollDistance) {
+    this.progress = progress;
+    this.scrollDistance = scrollDistance;
   }
 }
 
