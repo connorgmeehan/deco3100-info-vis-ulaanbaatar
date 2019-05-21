@@ -1,4 +1,16 @@
 // Styles for RadarChart
+
+.Graph_Radial {
+  @include noselect();
+  @include nopointer();
+}
+
+.yAxis {
+  &_Marks {
+    @include noselect();
+  }
+}
+
 .RadarElement {
   fill: none;
 

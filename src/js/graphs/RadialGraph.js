@@ -47,13 +47,13 @@ class RadialGraph extends D3Graph {
       .domain([0, this.maxValue]);
 
     this.axisGrid = this.graph.append('g')
-      .attr('class', 'yAxis-Wrapper');
+      .attr('class', 'yAxis_Wrapper');
 
-    this.axisGrid.selectAll('.yAxis-Wrapper')
+    this.axisGrid.selectAll('.yAxis_Wrapper')
       .data(d3.range(1, this.cfg.levels + 1).reverse())
       .enter()
         .append('circle')
-        .attr('class', 'yAxis-Marks')
+        .attr('class', 'yAxis_Marks')
         .attr('cx', 0)
         .attr('cy', 0)
         .attr('r', d => d * this.cfg.outerRadius / this.cfg.levels)
@@ -63,14 +63,14 @@ class RadialGraph extends D3Graph {
         .attr('stroke', '#CCC')
         .text(d => `${this.maxValue * d / this.cfg.levels}`);
 
-    this.axis = this.axisGrid.selectAll('.xAxis-Wrapper')
+    this.axis = this.axisGrid.selectAll('.xAxis_Wrapper')
       .data(this.allAxis)
       .enter()
         .append('g')
-        .attr('class', 'xAxis-Wrapper');
+        .attr('class', 'xAxis_Wrapper');
 
     this.axis.append('line')
-      .attr('class', 'xAxis-Line')
+      .attr('class', 'xAxis_Line')
       .attr('x1', 0)
       .attr('y1', 0)
       .attr('x2', (d, i) => this.rScale(this.maxValue * 1.1) * Math.cos(this.angleSlice * i - Math.PI / 2))
@@ -79,7 +79,7 @@ class RadialGraph extends D3Graph {
       .style('stroke-width', '1px');
 
     this.axis.append('text')
-      .attr('class', 'xAxis-Label')
+      .attr('class', 'xAxis_Label')
       .style('font-size', '11px')
       .attr('text-anchor', 'middle')
       .attr('dy', '0.35em')
