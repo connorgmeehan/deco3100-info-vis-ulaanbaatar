@@ -29,8 +29,12 @@ class PollutionBlob {
   }
 
   init() {
-    this.geometry = new THREE.SphereGeometry(0.0, WIDTH_SEGMENTS, HEIGHT_SEGMENTS);
-    this.material = new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 0.0 })
+    this.geometry = new THREE.SphereGeometry(0.001, WIDTH_SEGMENTS, HEIGHT_SEGMENTS);
+    this.material = new THREE.MeshBasicMaterial({ 
+      color: 0x000000,
+      opacity: 0.0,
+      blending: THREE.MultiplyBlending,
+    });
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.obj = new THREE.Object3D();
 
