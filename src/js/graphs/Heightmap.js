@@ -6,18 +6,19 @@ import Stats from 'stats-js';
 import THREEx from '../state/Threex.DomEvents';
 import GenericGraph from './GenericGraph';
 import PollutionStation from './Heightmap_PollutionStation';
+import MultiTextureLoader from '../helpers/MultiTextureLoader';
 
 export const HeightMapConfig = {
   width: 1024,
   height: 500,
-  heightmapSrc: '/public/heightmap.png',
-  normalMapSrc: '/public/normalmap.png',
-  textureMapSrc: '/public/texturemap.png',
+  heightmapSrc: '/public/ulaanbaatar_height_512x512.png',
+  normalMapSrc: '/public/ulaanbaatar_normal_512x512.png',
+  textureMapSrc: '/public/ulaanbaatar_texture_2048x2048.png',
 
   camera: {
     x: 0,
     y: 30,
-    z: 40,
+    z: 70,
     viewAngle: 45,
   },
   light: {
@@ -48,37 +49,15 @@ class Heightmap extends GenericGraph {
     this.stats.showPanel(1);
     this.element.appendChild(this.stats.dom);
 
-    const loader = new THREE.TextureLoader();
-    const textures = {
-      heightmap: null,
-      normalmap: null,
-      texturemap: null,
-    }
-
-    const checkTextures = () => {
-      if (textures.heightmap && textures.normalmap && textures.texturemap) {
-        this.init(graphOptions, textures, hmConfig);
-      }
-    }
-
-    loader.load(hmConfig.heightmapSrc,
-      (tex) => {
-        textures.heightmap = tex;
-        checkTextures();
-      });
-    loader.load(hmConfig.normalMapSrc,
-      (tex) => {
-        textures.normalmap = tex;
-        checkTextures();
-      });
-    loader.load(hmConfig.textureMapSrc,
-      (tex) => {
-        textures.texturemap = tex;
-        checkTextures();
-      });
-
-  console.log(this.data.pollutionData);
-}
+    const texLoader = new MultiTextureLoader((texs) => {
+      console.log('TexLoader::callback()');
+      console.log(texs);
+      this.init(graphOptions, texs, hmConfig);
+    })
+    texLoader.addTexture(hmConfig.textureMapSrc);
+    texLoader.addHeightmap(hmConfig.heightmapSrc);
+    texLoader.addNormalMap(hmConfig.normalMapSrc);
+  }
 
   init(graphOptions, textures, hmConfig) {
     console.log(`Heightmap::init(graphOptions: ${graphOptions}, textures: ${textures}, hmConfig: ${hmConfig})`);
@@ -93,9 +72,9 @@ class Heightmap extends GenericGraph {
     );
 
     this.renderer = new THREE.WebGLRenderer();
-    this.renderer.setClearColor(0x333333, 1.0);
+    this.renderer.setClearColor(this.parentSection.settings.backgroundColor, 1.0);
     this.renderer.setSize(graphOptions.width, graphOptions.height);
-    this.renderer.getMaxAnisotropy();
+    // this.renderer.getMaxAnisotropy();
 
     this.light = new THREE.DirectionalLight();
     this.light.position.set(hmConfig.light.x, hmConfig.light.y, hmConfig.light.z);
@@ -167,9 +146,9 @@ class Heightmap extends GenericGraph {
     for (let i = 0; i < this.pollutionStations.length; i++) {
       this.pollutionStations[i].update(progress);
     }
-    
+
     this.stats.end();
-  } 
+  }
 }
 
 export default Heightmap;
