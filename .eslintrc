@@ -21,6 +21,7 @@
     "no-this-before-super": "off",
     "no-plusplus": "off",
     "no-underscore-dangle": "off",
+    "no-param-reassign": "off",
     
     "class-methods-use-this": "warn",
     "no-unused-vars": "warn",

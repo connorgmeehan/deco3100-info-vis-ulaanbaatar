@@ -24,7 +24,6 @@ class PollutionBlob {
     this.origin = settings.origin;
     this.settings = settings;
 
-    console.log(this);
     this.init();
   }
 
@@ -66,7 +65,6 @@ class PollutionBlob {
     this.mesh.position.setY(y + STATION_OFFSET);
     const dist = Math.abs(y - this.origin.y);
     const scale = dist / (1 + dist) * this.settings.scale;
-    console.log(`ThisCale :${scale}`);
     this.mesh.scale.set(scale, scale, scale);
   }
 

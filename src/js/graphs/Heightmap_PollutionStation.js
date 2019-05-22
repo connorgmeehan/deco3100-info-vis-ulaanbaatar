@@ -1,7 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import * as THREE from 'three';
 import PollutionBlob, { PollutionBlobSettings } from './Heightmap_PollutionBlob';
-import mapVal from '../helpers/mapVal';
 
 const NUM_WEEKS_TO_SHOW = 5;
 
@@ -50,8 +49,6 @@ class PollutionStation {
       this.pollutionBlobs.push(new PollutionBlob(this.scene, pollutionBlobSettings, this.data))
     }
 
-    console.log(this.data);
-
     // Bind app state listener
     window.appState.selectedStation.subscribe(this._onStationStateChange);
 
@@ -59,8 +56,6 @@ class PollutionStation {
     this.events.bind(this.cube, 'mouseover', this._onMouseOver);
     this.events.bind(this.cube, 'mouseout', this._onMouseOut);
 
-    console.log(this);
-    
     this.scene.add(this.cube);
   }
 
