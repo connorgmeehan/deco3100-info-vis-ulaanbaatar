@@ -1,5 +1,10 @@
+/* eslint-disable no-param-reassign */
 import clamp from 'clamp';
 import getOffset from '../helpers/getOffset';
+
+export const SectionSettings = {
+  backgroundColor: 'rgb(125, 0, 0)',
+};
 
 class Section {
   className = 'Section';
@@ -12,8 +17,10 @@ class Section {
 
   viewportHeight= 0;
 
-  constructor(height, name) {
+  constructor(height, name, settings) {
     console.log(`Section::constructor(height: ${height}, name: ${name})`);
+
+    this.settings = settings;
 
     const track = document.createElement('div');
     this.track = document.getElementById('app').appendChild(track);
@@ -27,6 +34,8 @@ class Section {
     this.element.id = this.id;
     this.element.className = this.className;
 
+    this.element.style.backgroundColor = this.settings.backgroundColor;
+
     this.height = height;
     this.topOffset = getOffset(this.element).y;
 
@@ -35,6 +44,7 @@ class Section {
 
   addChild(sectionElement) {
     console.log(`Section::addChild(sectionElement: ${sectionElement}) -> this.childElements: ${this.childElements.length}`);
+    sectionElement.parentSection = this;
     this.childElements.push(sectionElement);
     this.element.appendChild(sectionElement.element);
   }
@@ -83,6 +93,10 @@ class Section {
     } else if (location === 'bottom') {
       this.element.style.bottom = '0';
     }
+  }
+
+  getBackgroundColor() {
+    return this.settings.backgroundColor;
   }
 }
 

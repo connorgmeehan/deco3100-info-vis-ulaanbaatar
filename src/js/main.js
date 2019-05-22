@@ -5,7 +5,7 @@ import stationMetaData from '../public/station_meta_data.csv';
 import weatherPollutionData from '../public/station_pollution_weather_data.csv'
 
 import AppState from './state/AppState';
-import Section from './components/Section';
+import Section, { SectionSettings } from './components/Section';
 import { GraphOptions } from './graphs/GenericGraph';
 import RadialGraph, { RadialGraphOptions } from './graphs/RadialGraph';
 import HeightMap, { HeightMapConfig } from './graphs/Heightmap';
@@ -26,7 +26,8 @@ const main = () => {
 
   // Section Map
   // Stores the main visualisation, including THREE.js map and timeline
-  const SectionMap = new Section(2000, 'Intro');
+  const sectionMapSettings = SectionSettings;
+  const SectionMap = new Section(2000, 'Intro', sectionMapSettings);
 
   // HeightMap
   const hmGraphOptions = new GraphOptions(50, 50, 1200, 800, 'left');
