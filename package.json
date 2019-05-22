@@ -50,7 +50,9 @@
   },
   "dependencies": {
     "array-pivot": "^1.0.1",
+    "clamp": "^1.0.1",
     "d3": "^5.9.2",
+    "stats-js": "^1.0.1",
     "sticky-js": "^1.2.0",
     "three": "^0.104.0",
     "three-orbitcontrols": "^2.102.1"

@@ -1,9 +1,11 @@
 /* eslint-disable class-methods-use-this */
 import * as THREE from 'three';
 import OrbitControls from 'three-orbitcontrols';
+import Stats from 'stats-js';
+
 import THREEx from '../state/Threex.DomEvents';
 import GenericGraph from './GenericGraph';
-import PollutionStation from './Heightmap_pollutionstation';
+import PollutionStation from './Heightmap_PollutionStation';
 
 export const HeightMapConfig = {
   width: 1024,
@@ -37,9 +39,14 @@ class Heightmap extends GenericGraph {
   weatherData;
 
   pollutionStations = [];
+  dataLength;
 
   constructor(name, graphOptions, data, hmConfig = null) {
     super(name, graphOptions, data);
+
+    this.stats = new Stats();
+    this.stats.showPanel(1);
+    this.element.appendChild(this.stats.dom);
 
     const loader = new THREE.TextureLoader();
     const textures = {
@@ -70,9 +77,7 @@ class Heightmap extends GenericGraph {
         checkTextures();
       });
 
-  this.pollutionData = data.pollutionData;
-  this.stationMetaData = data.stationMetaData;
-  this.weatherData = data.weatherData;
+  console.log(this.data.pollutionData);
 }
 
   init(graphOptions, textures, hmConfig) {
@@ -106,17 +111,14 @@ class Heightmap extends GenericGraph {
 
     this.events = new THREEx.DomEvents(this.cam, this.renderer.domElement);
 
-    console.log(this.events);
-
-    this.stationMetaData.forEach((station) => {
-      console.log(station);
-      const stationData = this.data.stationsData.filter(el => el[0] === station.location)
+    console.log(this.data.stationMetaData);
+    this.data.stationMetaData.forEach((station) => {
+      const stationData = this.data.stationsData.find(el => el[0] === station.location)
       this.pollutionStations.push(new PollutionStation(this.scene, this.events, stationData, station));
     });
 
     this.element.appendChild(this.renderer.domElement);
     this.controls = new OrbitControls(this.cam, this.renderer.domElement);
-
 
     this.render();
   }
@@ -150,14 +152,24 @@ class Heightmap extends GenericGraph {
   }
 
   render = () => {
+    this.stats.begin();
+
     this.controls.update();
     this.renderer.render(this.scene, this.cam);
+
+    this.stats.end();
     requestAnimationFrame(this.render);
   }
 
   update(progress) {
+    this.stats.begin();
 
-  }
+    for (let i = 0; i < this.pollutionStations.length; i++) {
+      this.pollutionStations[i].update(progress);
+    }
+    
+    this.stats.end();
+  } 
 }
 
 export default Heightmap;

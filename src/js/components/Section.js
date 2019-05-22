@@ -1,3 +1,4 @@
+import clamp from 'clamp';
 import getOffset from '../helpers/getOffset';
 
 class Section {
@@ -39,27 +40,27 @@ class Section {
   }
 
   onScroll = () => {
-    let progress = (window.scrollY + window.innerHeight / 2 - this.topOffset.y) / this.height;
-    progress = (progress < 0.0 ? 0.0 : progress);
-    progress = (progress > 1.0 ? 1.0 : progress);
+    // Get current progress as float from top to bottom of section and clamp between 0 and 1
+    const progress = clamp(
+      (window.scrollY - this.topOffset) / (this.height - window.innerHeight),
+      0.0, 1.0,
+    );
 
-    if (window.scrollY < this.topOffset) {
-      if (this.isStuck) {
+    if (this.isStuck) {
+      if (window.scrollY < this.topOffset) {
         this.unstick('top');
-      }
-    } else if (window.scrollY + window.innerHeight > this.topOffset + this.height) {
-      if (this.isStuck) {
+      } else if (window.scrollY + window.innerHeight > this.topOffset + this.height) {
         this.unstick('bottom');
       }
-    } else if (!this.isStuck) {
-      this.stick();
-    }
-
+    } else if (window.scrollY > this.topOffset
+      && window.scrollY + window.innerHeight < this.topOffset + this.height) {
+        this.stick();
+      }
 
     for (let i = 0; i < this.childElements.length; i++) {
       const el = this.childElements[i];
 
-      el.onScroll(window.scrollY, progress);
+      el.onScroll(progress, window.scrollY);
     }
   }
 

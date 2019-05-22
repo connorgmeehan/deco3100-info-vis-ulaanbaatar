@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /*
 * Stolen the github of Jerome Etienne
 * Modified to play nice with ES6 imports
