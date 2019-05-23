@@ -11,9 +11,10 @@ import MultiTextureLoader from '../helpers/MultiTextureLoader';
 export const HeightMapConfig = {
   width: 1024,
   height: 500,
+  heightScale: 5,
   alphamapSrc: '/public/ulaanbaatar_alpha_512.jpg',
-  heightmapSrc: '/public/ulaanbaatar_height_512.jpg',
-  normalMapSrc: '/public/ulaanbaatar_normal_512.jpg',
+  heightmapSrc: '/public/ulaanbaatar_height_512_blurred.jpg',
+  normalMapSrc: '/public/ulaanbaatar_normal_512_blurred.jpg',
   textureMapSrc: '/public/ulaanbaatar_texture_2048.jpg',
 
   camera: {
@@ -49,6 +50,8 @@ class Heightmap extends GenericGraph {
     this.stats = new Stats();
     this.stats.showPanel(1);
     this.element.appendChild(this.stats.dom);
+
+    this.heightMapConfig = hmConfig;
 
     const texLoader = new MultiTextureLoader((texs) => {
       console.log('TexLoader::callback()');
@@ -107,7 +110,6 @@ class Heightmap extends GenericGraph {
     const {
  heightmap, normalmap, texturemap, alphamap,
 } = textures;
-    const maxHeight = 5;
 
     this.planeGeometry = new THREE.PlaneGeometry(
       60, 60,
@@ -124,7 +126,7 @@ class Heightmap extends GenericGraph {
       alphaMap: alphamap,
       normalMap: normalmap,
       displacementMap: heightmap,
-      displacementScale: maxHeight,
+      displacementScale: this.heightMapConfig.heightScale,
       transparent: true,
     })
 
