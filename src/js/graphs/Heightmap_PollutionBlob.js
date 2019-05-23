@@ -31,8 +31,8 @@ class PollutionBlob {
     this.geometry = new THREE.SphereGeometry(0.001, WIDTH_SEGMENTS, HEIGHT_SEGMENTS);
     this.material = new THREE.MeshBasicMaterial({ 
       color: 0x000000,
-      opacity: 0.0,
-      blending: THREE.MultiplyBlending,
+      opacity: 1.0,
+      transparent: true,
     });
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.obj = new THREE.Object3D();
@@ -45,8 +45,10 @@ class PollutionBlob {
     if (d && this.d !== d) {
       this.d = d;
       this.radius = d / ((4 / 3) * Math.PI) / this.settings.maxPollution;
-      this.mesh.material.opacity = d / this.settings.maxPollution;
-      this.mesh.material.color.r = d / this.settings.maxPollution;
+      this.mesh.material.color.r = 1.0 - d / this.settings.maxPollution * 0.5;
+      this.mesh.material.color.g = 1.0 - d / this.settings.maxPollution;
+      this.mesh.material.color.b = 1.0 - d / this.settings.maxPollution;
+
       this.mesh.geometry = new THREE.SphereGeometry(this.radius, WIDTH_SEGMENTS, HEIGHT_SEGMENTS);
     } else {
       this.mesh.material.color.opacity = 0;
