@@ -11,9 +11,10 @@ import MultiTextureLoader from '../helpers/MultiTextureLoader';
 export const HeightMapConfig = {
   width: 1024,
   height: 500,
-  heightmapSrc: '/public/ulaanbaatar_height_512x512.png',
-  normalMapSrc: '/public/ulaanbaatar_normal_512x512.png',
-  textureMapSrc: '/public/ulaanbaatar_texture_2048x2048.png',
+  alphamapSrc: '/public/ulaanbaatar_alpha_512.jpg',
+  heightmapSrc: '/public/ulaanbaatar_height_512.jpg',
+  normalMapSrc: '/public/ulaanbaatar_normal_512.jpg',
+  textureMapSrc: '/public/ulaanbaatar_texture_2048.jpg',
 
   camera: {
     x: 0,
@@ -57,6 +58,7 @@ class Heightmap extends GenericGraph {
     texLoader.addTexture(hmConfig.textureMapSrc);
     texLoader.addHeightmap(hmConfig.heightmapSrc);
     texLoader.addNormalMap(hmConfig.normalMapSrc);
+    texLoader.addAlphaMap(hmConfig.alphamapSrc);
   }
 
   init(graphOptions, textures, hmConfig) {
@@ -103,9 +105,10 @@ class Heightmap extends GenericGraph {
   }
 
   createGeometryFromMap(textures) {
-    const { heightmap, normalmap, texturemap } = textures;
+    const {
+ heightmap, normalmap, texturemap, alphamap,
+} = textures;
     const maxHeight = 5;
-
 
     this.planeGeometry = new THREE.PlaneGeometry(
       60, 60,
@@ -116,12 +119,14 @@ class Heightmap extends GenericGraph {
       color: 0xFFFFFF,
       metalness: 0,
       roughness: 1,
-      displacementMap: heightmap,
-      displacementScale: maxHeight,
       // wireframe: true,
       // flatShading: true,
-      normalMap: normalmap,
       map: texturemap,
+      alphaMap: alphamap,
+      normalMap: normalmap,
+      displacementMap: heightmap,
+      displacementScale: maxHeight,
+      transparent: true,
     })
 
     this.plane = new THREE.Mesh(this.planeGeometry, material);

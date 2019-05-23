@@ -36,6 +36,15 @@ class MultiTextureLoader {
       });
   }
 
+  addAlphaMap(path) {
+    this.textures.alphamap = null;
+    this.loader.load(path,
+      (tex) => {
+        this.textures.alphamap = tex;
+        this.checkLoadeded();
+      });
+  }
+
   checkLoadeded() {
     if (Object.entries(this.textures).findIndex(el => el[1] === null) && !this.hasExecutedCallback) {
       console.log('passed');
