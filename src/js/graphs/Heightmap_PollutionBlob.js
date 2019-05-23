@@ -18,11 +18,15 @@ class PollutionBlob {
   material;
   mesh;
 
-  constructor(scene, settings, data) {
+  isMouseOver = false;
+
+  constructor(scene, events, settings, data, parent) {
     this.scene = scene;
     this.data = data;
     this.origin = settings.origin;
     this.settings = settings;
+    this.events = events;
+    this.parent = parent;
 
     this.init();
   }
@@ -37,17 +41,19 @@ class PollutionBlob {
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.obj = new THREE.Object3D();
 
+    this.events.bind(this.mesh, 'mouseover', this._onMouseOver);
+    this.events.bind(this.mesh, 'mouseout', this._onMouseOut);
+
     this.mesh.position.set(this.origin.x, this.origin.y, this.origin.z);
     this.scene.add(this.mesh);
   }
 
-  updateData(d) {
-    if (d && this.d !== d) {
+  updateData(d, dataOffsetIndex) {
+    if (d && dataOffsetIndex && this.dataOffsetIndex !== dataOffsetIndex) {
       this.d = d;
       this.radius = d / ((4 / 3) * Math.PI) / this.settings.maxPollution;
-      this.mesh.material.color.r = 1.0 - d / this.settings.maxPollution * 0.5;
-      this.mesh.material.color.g = 1.0 - d / this.settings.maxPollution;
-      this.mesh.material.color.b = 1.0 - d / this.settings.maxPollution;
+
+      this._calculateMaterialColor(d, 0.0);
 
       this.mesh.geometry = new THREE.SphereGeometry(this.radius, WIDTH_SEGMENTS, HEIGHT_SEGMENTS);
     } else {
@@ -73,6 +79,26 @@ class PollutionBlob {
   setZ(z) {
     this.mesh.position.setZ(z);
   }
+
+  _onMouseOver = () => {
+    this.isMouseOver = true;
+    window.appState.selectedTime.notify(this.dataOffsetIndex);
+    this.parent._onMouseOver();
+    this._calculateMaterialColor(this.d, 0.2);
+  }
+
+  _onMouseOut = () => {
+    this.isMouseOver = false;
+    window.appState.selectedTime.notify(this.dataOffsetIndex);
+    this.parent._onMouseOut();
+    this._calculateMaterialColor(this.d, 0.0);
+  }
+
+  _calculateMaterialColor(d, hoverDarkenAmount) {
+    this.mesh.material.color.r = 1.0 - d / this.settings.maxPollution * 0.5 - hoverDarkenAmount;
+    this.mesh.material.color.g = 1.0 - d / this.settings.maxPollution - hoverDarkenAmount;
+    this.mesh.material.color.b = 1.0 - d / this.settings.maxPollution - hoverDarkenAmount;
+  } 
 }
 
 export default PollutionBlob;

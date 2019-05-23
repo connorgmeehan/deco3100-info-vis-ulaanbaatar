@@ -27,7 +27,7 @@ class PollutionStation {
 
     this.pollutionBlobTheta = 1.0 / (this.data[1].length - 1);
 
-    this.maxHeight = 10;
+    this.maxHeight = 20;
     this.pollutionStepDistance = this.maxHeight / NUM_WEEKS_TO_SHOW;
     this.pollutionRiseScale = this.pollutionStepDistance / this.pollutionBlobTheta / 2;
 
@@ -41,12 +41,12 @@ class PollutionStation {
     this.cube.position.set(this.p.x, this.p.y, this.p.z);
 
     const pollutionBlobSettings = PollutionBlobSettings;
-    pollutionBlobSettings.scale = 10;
+    pollutionBlobSettings.scale = 20;
     pollutionBlobSettings.maxPollution = 500;
     pollutionBlobSettings.origin = this.p;
 
     for (let i = 0; i < NUM_WEEKS_TO_SHOW; i++) {
-      this.pollutionBlobs.push(new PollutionBlob(this.scene, pollutionBlobSettings, this.data))
+      this.pollutionBlobs.push(new PollutionBlob(this.scene, this.events, pollutionBlobSettings, this.data, this))
     }
 
     // Bind app state listener
@@ -68,7 +68,7 @@ class PollutionStation {
       const dataOffsetIndex = this.dataLength - dataOffset + i;
       const blob = this.pollutionBlobs[i];
 
-      blob.updateData(this.data[1][dataOffsetIndex])
+      blob.updateData(this.data[1][dataOffsetIndex], dataOffsetIndex)
       blob.setY(this.p.y + positionOffset + i * this.pollutionStepDistance);
     }
   }
@@ -87,7 +87,9 @@ class PollutionStation {
   }
 
   _onMouseOut = () => {
-    window.appState.selectedStation.notify(null);
+    if (window.appState.selectedStation.data === this.name) {
+      window.appState.selectedStation.notify(null);
+    }
   }
 }
 

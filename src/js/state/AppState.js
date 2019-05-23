@@ -22,6 +22,7 @@ class Observable {
   // update all subscribed objects / DOM elements
   // and pass some data to each of them
   notify(data) {
+    this.data = data;
     this.observers.forEach(observer => observer(data));
   }
 }

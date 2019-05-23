@@ -13,6 +13,13 @@ import HeightMap, { HeightMapConfig } from './graphs/Heightmap';
 const main = () => {
   // Initialise Observer App State
   window.appState = AppState;
+  window.appState.selectedStation.subscribe((station) => {
+    console.log(`main.js -> ${station} is the selected station`);
+  });
+
+  window.appState.selectedTime.subscribe((time) => {
+    console.log(`main.js -> ${time} is the selected time`);
+  });
 
   // Format data to be more easily segmented for each component
   const formattedData = Object.entries(pivotArray(weatherPollutionData));
@@ -34,7 +41,6 @@ const main = () => {
   const hmConfig = HeightMapConfig;
   const heightMap = new HeightMap('Heightmap', hmGraphOptions, { stationMetaData, stationsData, weatherData }, hmConfig);
   SectionMap.addChild(heightMap);
-
 
   // Radial Graph
   const genericOptionsRadial = new GraphOptions(50, 300, 500, 500, 'right');
