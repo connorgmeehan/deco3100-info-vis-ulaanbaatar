@@ -156,35 +156,13 @@ THREEx.DomEvents.prototype._getRelativeMouseXY	= function (domEvent) {
 		element = element.parentNode; // Safari fix -- see http://www.quirksmode.org/js/events_properties.html
 	}
 
-	// get the real position of an element relative to the page starting point (0, 0)
-	// credits go to brainjam on answering http://stackoverflow.com/questions/5755312/getting-mouse-position-relative-to-content-area-of-an-element
-	const elPosition	= { x: 0, y: 0 };
-	let tmpElement	= element;
-	// store padding
-	let style	= getComputedStyle(tmpElement, null);
-	elPosition.y += parseInt(style.getPropertyValue('padding-top'), 10);
-	elPosition.x += parseInt(style.getPropertyValue('padding-left'), 10);
-	// add positions
-	do {
-		elPosition.x	+= tmpElement.offsetLeft;
-		elPosition.y	+= tmpElement.offsetTop;
-		style		= getComputedStyle(tmpElement, null);
-
-		elPosition.x	+= parseInt(style.getPropertyValue('border-left-width'), 10);
-		elPosition.y	+= parseInt(style.getPropertyValue('border-top-width'), 10);
-	} while (tmpElement = tmpElement.offsetParent);
-
-	const elDimension	= {
-		width: (element === window) ? window.innerWidth	: element.offsetWidth,
-		height: (element === window) ? window.innerHeight	: element.offsetHeight,
-	};
+	const bounds = element.getBoundingClientRect();
 
 	return {
-		x: +((domEvent.pageX - elPosition.x) / elDimension.width) * 2 - 1,
-		y: -((domEvent.pageY - elPosition.y) / elDimension.height) * 2 + 1,
+		x: +((domEvent.clientX - bounds.left) / bounds.width) * 2 - 1,
+		y: -((domEvent.clientY - bounds.top) / bounds.height) * 2 + 1,
 	};
 };
-
 
 /** ***************************************************************************** */
 /*		domevent context						*/

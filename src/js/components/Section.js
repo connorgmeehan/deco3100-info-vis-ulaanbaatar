@@ -53,7 +53,7 @@ class Section {
     // Get current progress as float from top to bottom of section and clamp between 0 and 1
     const progress = clamp(
       (window.scrollY - this.topOffset) / (this.height - window.innerHeight),
-      0.0, 1.0,
+      -0.1, 1.1,
     );
 
     if (this.isStuck) {
@@ -81,6 +81,11 @@ class Section {
     this.element.classList.add(this.className + this.stuckClass);
     this.element.style.bottom = null;
     this.element.style.top = null;
+
+    const childrenToUpdate = this.childElements.filter(child => child.onStick !== undefined);
+    childrenToUpdate.forEach((child) => {
+      child.onStick();
+    });
   }
 
   unstick(location) {
@@ -93,6 +98,11 @@ class Section {
     } else if (location === 'bottom') {
       this.element.style.bottom = '0';
     }
+
+    const childrenToUpdate = this.childElements.filter(child => child.onStick !== undefined);
+    childrenToUpdate.forEach((child) => {
+      child.onUnstick(location);
+    });
   }
 
   getBackgroundColor() {

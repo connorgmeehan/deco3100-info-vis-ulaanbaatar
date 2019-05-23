@@ -92,7 +92,6 @@ class Heightmap extends GenericGraph {
 
     this.events = new THREEx.DomEvents(this.cam, this.renderer.domElement);
 
-    console.log(this.data.stationMetaData);
     this.data.stationMetaData.forEach((station) => {
       const stationData = this.data.stationsData.find(el => el[0] === station.location)
       this.pollutionStations.push(new PollutionStation(this.scene, this.events, stationData, station));
@@ -142,6 +141,7 @@ class Heightmap extends GenericGraph {
     this.renderer.render(this.scene, this.cam);
 
     this.stats.end();
+
     requestAnimationFrame(this.render);
   }
 
@@ -153,6 +153,16 @@ class Heightmap extends GenericGraph {
     }
 
     this.stats.end();
+  }
+
+  onStick() {
+    console.log('Heightmap::onStick()');
+    console.log(this.events);
+  }
+
+  onUnstick() {
+    console.log('Heightmap::onUnstick()');
+    console.log(this.events);
   }
 }
 
