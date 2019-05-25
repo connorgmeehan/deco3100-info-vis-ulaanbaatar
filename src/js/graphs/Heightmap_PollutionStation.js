@@ -76,12 +76,18 @@ class PollutionStation {
   }
 
   update(dataProgress, dataIndex, stepDistanceMultiplier) {
-    console.log()
     for (let i = 0; i < this.numWeeksToShow; i++) {
       const blob = this.pollutionBlobs[i];
       const scrollModulatedOffset = (dataProgress % 1.0) * this.pollutionStepDistance;
-      blob.updateData(this.data[1][dataIndex], dataIndex)
-      blob.setY((this.p.y + scrollModulatedOffset - i * this.pollutionStepDistance + this.pollutionBlobYOffset) * stepDistanceMultiplier);
+      const newData = this.data[1][dataIndex + i];
+      const newPosition = (
+        this.p.y
+        + scrollModulatedOffset
+        - i * this.pollutionStepDistance
+        + this.pollutionBlobYOffset
+      ) * stepDistanceMultiplier;
+      blob.updateData(newData, dataIndex)
+      blob.setY(newPosition);
     }
   }
 

@@ -179,8 +179,6 @@ class Heightmap extends GenericGraph {
     const dataProgress = clamp(progress * this.dataLength, 0, this.dataLength);
     const dataIndex = Math.floor(dataProgress);
     const stepDistanceMultiplier = clamp(progress, -0.1, 0) * 10 + 1;
-
-    // console.log(dataProgress, dataIndex, scrollPositionOffset);
     for (let i = 0; i < this.pollutionStations.length; i++) {
       this.pollutionStations[i].update(dataProgress, dataIndex, stepDistanceMultiplier);
     }
