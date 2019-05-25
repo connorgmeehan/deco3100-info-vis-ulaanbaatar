@@ -75,7 +75,6 @@ class Section {
   }
 
   stick() {
-    console.log('stick');
     this.isStuck = true;
     this.element.classList.remove(this.className + this.stickyClass);
     this.element.classList.add(this.className + this.stuckClass);
@@ -89,7 +88,6 @@ class Section {
   }
 
   unstick(location) {
-    console.log('unstick');
     this.isStuck = false;
     this.element.classList.add(this.className + this.stickyClass);
     this.element.classList.remove(this.className + this.stuckClass);
