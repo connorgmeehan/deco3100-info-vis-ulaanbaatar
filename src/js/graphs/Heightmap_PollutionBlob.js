@@ -33,7 +33,7 @@ class PollutionBlob {
 
   init() {
     this.geometry = new THREE.SphereGeometry(0.001, WIDTH_SEGMENTS, HEIGHT_SEGMENTS);
-    this.material = new THREE.MeshBasicMaterial({ 
+    this.material = new THREE.MeshBasicMaterial({
       color: 0x000000,
       opacity: 1.0,
       transparent: true,
@@ -82,14 +82,15 @@ class PollutionBlob {
 
   _onMouseOver = () => {
     this.isMouseOver = true;
-    window.appState.selectedTime.notify(this.dataOffsetIndex);
+    window.appState.hoveredTime.notify(this.dataOffsetIndex);
     this.parent._onMouseOver();
     this._calculateMaterialColor(this.d, 0.2);
   }
 
+  
   _onMouseOut = () => {
     this.isMouseOver = false;
-    window.appState.selectedTime.notify(this.dataOffsetIndex);
+    window.appState.hoveredTime.notify(this.dataOffsetIndex);
     this.parent._onMouseOut();
     this._calculateMaterialColor(this.d, 0.0);
   }

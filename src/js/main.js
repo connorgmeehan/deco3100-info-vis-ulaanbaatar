@@ -14,11 +14,15 @@ const main = () => {
   // Initialise Observer App State
   window.appState = AppState;
   window.appState.selectedStation.subscribe((station) => {
-    console.log(`main.js -> ${station} is the selected station`);
+    console.log(`main.js -> ${station.name} is the selected station (filename: ${station.filename})`);
+  });
+  
+  window.appState.hoveredStation.subscribe((station) => {
+    console.log(`main.js -> ${station} is the hovered station`);
   });
 
-  window.appState.selectedTime.subscribe((time) => {
-    console.log(`main.js -> ${time} is the selected time`);
+  window.appState.hoveredTime.subscribe((time) => {
+    console.log(`main.js -> ${time} is the hovered time`);
   });
 
   // Format data to be more easily segmented for each component

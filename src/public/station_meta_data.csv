@@ -1,8 +1,8 @@
-location,lat,lon,x,y
-Amgalan,47.91343,106.99791,5,5
-Baruun 4 zam,47.915382,106.894196,5,10
-Bayankhoshuu,47.95756,106.822754,10,10
-Bukhiin urguu,47.917606,106.93736,0,0
-MNB,47.929733,106.888626,5,0
-Nisekh,47.86394,106.77909,-5,0
-Tolgoit,47.922497,106.79481,0,-5
+location,filename,lat,lon,x,y
+Amgalan,amgalan,47.91343,106.99791,5,5
+Baruun 4 zam,baruun_4_zam,47.915382,106.894196,5,10
+Bayankhoshuu,bayankhoshuu,47.95756,106.822754,10,10
+Bukhiin urguu,bukhiin_urguu,47.917606,106.93736,0,0
+MNB,mnb,47.929733,106.888626,5,0
+Nisekh,nisekh,47.86394,106.77909,-5,0
+Tolgoit,tolgoit,47.922497,106.79481,0,-5

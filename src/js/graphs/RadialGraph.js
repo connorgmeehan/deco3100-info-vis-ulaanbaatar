@@ -132,7 +132,7 @@ class RadialGraph extends D3Graph {
       .style('fill-opacity', 0.8);
 
     // Bind app state listener
-    window.appState.selectedStation.subscribe(this._onStationStateChange);
+    window.appState.hoveredStation.subscribe(this._onStationStateChange);
   }
 
   update(progress, scrollDistance) {

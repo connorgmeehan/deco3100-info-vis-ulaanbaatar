@@ -1,5 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import * as THREE from 'three';
+import PreviewPlane, { PreviewPlaneSettings } from './Heightmap_PreviewPlane';
 import PollutionBlob, { PollutionBlobSettings } from './Heightmap_PollutionBlob';
 
 const NUM_WEEKS_TO_SHOW = 5;
@@ -19,6 +20,7 @@ class PollutionStation {
     this.data = data;
     this.dataLength = data[1].length;
     this.name = stationMetaData.location;
+    this.filename = stationMetaData.filename;
     this.events = events;
 
     this.p.x = stationMetaData.x;
@@ -26,10 +28,17 @@ class PollutionStation {
     this.p.z = stationMetaData.y;
 
     this.pollutionBlobTheta = 1.0 / (this.data[1].length - 1);
-
-    this.maxHeight = 20;
+    this.maxHeight = 30;
     this.pollutionStepDistance = this.maxHeight / NUM_WEEKS_TO_SHOW;
     this.pollutionRiseScale = this.pollutionStepDistance / this.pollutionBlobTheta / 2;
+
+    // Setup preview plane
+    this.previewPaneSettings = PreviewPlaneSettings;
+    this.previewPaneSettings.location = stationMetaData.location;
+    this.previewPaneSettings.filename = stationMetaData.filename;
+    this.previewPaneSettings.position = this.p;
+    console.log(this.previewPaneSettings);
+    this.previewPlane = new PreviewPlane(this.scene, this.events, this.previewPaneSettings);
 
     this.init();
   }
@@ -50,11 +59,12 @@ class PollutionStation {
     }
 
     // Bind app state listener
-    window.appState.selectedStation.subscribe(this._onStationStateChange);
+    window.appState.hoveredStation.subscribe(this._onStationStateChange);
 
     // Bind THREEJS events
     this.events.bind(this.cube, 'mouseover', this._onMouseOver);
     this.events.bind(this.cube, 'mouseout', this._onMouseOut);
+    this.events.bind(this.cube, 'mousedown', this._onMouseUp);
 
     this.scene.add(this.cube);
   }
@@ -83,12 +93,23 @@ class PollutionStation {
   }
 
   _onMouseOver = () => {
-    window.appState.selectedStation.notify(this.name);
+    window.appState.hoveredStation.notify(this.name);
   }
 
   _onMouseOut = () => {
-    if (window.appState.selectedStation.data === this.name) {
-      window.appState.selectedStation.notify(null);
+    if (window.appState.hoveredStation.data === this.name) {
+      window.appState.hoveredStation.notify(null);
+    }
+  }
+
+  _onMouseUp = () => {
+    if (window.appState.selectedStation.data == null
+      || window.appState.selectedStation.data.name !== this.name) {
+      console.log(this.name, this.filename);
+      window.appState.selectedStation.notify({
+        name: this.name,
+        filename: this.filename,
+      });
     }
   }
 }

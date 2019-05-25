@@ -3,7 +3,8 @@ class Observable {
   // each instance of the Observer class
   // starts with an empty array of things (observers)
   // that react to a state change
-  constructor() {
+  constructor(data = null) {
+    this.data = data;
     this.observers = [];
   }
 
@@ -28,7 +29,8 @@ class Observable {
 }
 
 const AppState = {
-  selectedTime: new Observable(),
+  hoveredTime: new Observable(),
+  hoveredStation: new Observable(),
   selectedStation: new Observable(),
 };
 
