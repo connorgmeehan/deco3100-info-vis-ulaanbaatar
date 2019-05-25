@@ -4,6 +4,7 @@ import PreviewPlane, { PreviewPlaneSettings } from './Heightmap_PreviewPlane';
 import PollutionBlob, { PollutionBlobSettings } from './Heightmap_PollutionBlob';
 
 const NUM_WEEKS_TO_SHOW = 5;
+const CAMERA_OFFSET_HEIGHT = 5;
 
 class PollutionStation {
   scene;
@@ -37,7 +38,6 @@ class PollutionStation {
     this.previewPaneSettings.location = stationMetaData.location;
     this.previewPaneSettings.filename = stationMetaData.filename;
     this.previewPaneSettings.position = this.p;
-    console.log(this.previewPaneSettings);
     this.previewPlane = new PreviewPlane(this.scene, this.events, this.previewPaneSettings);
 
     this.init();
@@ -64,7 +64,7 @@ class PollutionStation {
     // Bind THREEJS events
     this.events.bind(this.cube, 'mouseover', this._onMouseOver);
     this.events.bind(this.cube, 'mouseout', this._onMouseOut);
-    this.events.bind(this.cube, 'mousedown', this._onMouseUp);
+    this.events.bind(this.cube, 'mousedown', this._onMouseDown);
 
     this.scene.add(this.cube);
   }
@@ -102,13 +102,28 @@ class PollutionStation {
     }
   }
 
-  _onMouseUp = () => {
+  _onMouseDown = () => {
     if (window.appState.selectedStation.data == null
       || window.appState.selectedStation.data.name !== this.name) {
       console.log(this.name, this.filename);
-      window.appState.selectedStation.notify({
-        name: this.name,
-        filename: this.filename,
+      window.appState.isViewingStation.notify(true);
+      window.appState.camera.notify({
+        position: {
+          x: this.p.x,
+          y: this.p.y + CAMERA_OFFSET_HEIGHT,
+          z: this.p.z,
+        },
+        target: {
+          x: this.p.x,
+          y: this.p.y,
+          z: this.p.z,
+        },
+        callback: () => {
+          window.appState.selectedStation.notify({
+            name: this.name,
+            filename: this.filename,
+          })
+        },
       });
     }
   }

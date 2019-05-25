@@ -49,6 +49,7 @@
     "tar": ">=4.4.2"
   },
   "dependencies": {
+    "@tweenjs/tween.js": "^17.3.0",
     "array-pivot": "^1.0.1",
     "clamp": "^1.0.1",
     "d3": "^5.9.2",

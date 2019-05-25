@@ -14,15 +14,32 @@ const main = () => {
   // Initialise Observer App State
   window.appState = AppState;
   window.appState.selectedStation.subscribe((station) => {
-    console.log(`main.js -> ${station.name} is the selected station (filename: ${station.filename})`);
+    if (station) {
+      console.log(`main.js -> ${station.name} is the selected station (filename: ${station.filename})`);
+    } else {
+      console.log(`main.js -> ${station} is the selected station `);
+    }
   });
-  
+
   window.appState.hoveredStation.subscribe((station) => {
     console.log(`main.js -> ${station} is the hovered station`);
   });
 
   window.appState.hoveredTime.subscribe((time) => {
     console.log(`main.js -> ${time} is the hovered time`);
+  });
+  window.appState.camera.subscribe((cam) => {
+    if (cam && cam.target) {
+      console.log(`main.js -> ${cam.target.x} ${cam.target.y} ${cam.target.z} is the camera target`);
+    }
+
+    if (cam && cam.position) {
+      console.log(`main.js -> ${cam.position.x} ${cam.position.y} ${cam.position.z} is the position target`);
+    }
+
+    if (cam && cam.callback) {
+      console.log(`main.js -> ${cam.callback} is the callback`);
+    }
   });
 
   // Format data to be more easily segmented for each component

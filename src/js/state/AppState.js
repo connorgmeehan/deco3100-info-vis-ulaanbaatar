@@ -32,6 +32,8 @@ const AppState = {
   hoveredTime: new Observable(),
   hoveredStation: new Observable(),
   selectedStation: new Observable(),
+  isViewingStation: new Observable(),
+  camera: new Observable(),
 };
 
 export default AppState;

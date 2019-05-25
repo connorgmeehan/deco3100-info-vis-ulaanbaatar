@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import OrbitControls from 'three-orbitcontrols';
 import Stats from 'stats-js';
+import TWEEN from '@tweenjs/tween.js';
 
 import THREEx from '../state/Threex.DomEvents';
 import GenericGraph from './GenericGraph';
@@ -16,6 +17,7 @@ export const HeightMapConfig = {
   heightmapSrc: '/public/ulaanbaatar_height_512_blurred.jpg',
   normalMapSrc: '/public/ulaanbaatar_normal_512_blurred.jpg',
   textureMapSrc: '/public/ulaanbaatar_texture_2048.jpg',
+  animationDuration: 2000,
 
   camera: {
     x: 0,
@@ -43,6 +45,10 @@ class Heightmap extends GenericGraph {
 
   pollutionStations = [];
   dataLength;
+
+  shouldUpdateControls = false;
+  oldCameraPosition = { x: 0, y: 0, z: 0 };
+  oldTargetPositon = { x: 0, y: 0, z: 0 };
 
   constructor(name, graphOptions, data, hmConfig = null) {
     super(name, graphOptions, data);
@@ -101,8 +107,24 @@ class Heightmap extends GenericGraph {
     });
 
     this.element.appendChild(this.renderer.domElement);
+
     this.buildOrbitCam()
+
+    window.appState.camera.subscribe(data => this._onCameraChange(data));
+    window.appState.isViewingStation.subscribe(data => this._onisViewingStationChange(data));
+
+
     this.render();
+  }
+
+  buildOrbitCam() {
+    this.controls = new OrbitControls(this.cam, this.renderer.domElement);
+    this.controls.maxPolarAngle = Math.PI / 2 - 0.3;
+    this.controls.enableZoom = false;
+    this.controls.enablePan = false;
+    this.controls.enableKeys = false;
+    this.controls.autoRotate = true;
+    this.controls.autoRotateSpeed = 0.1;
   }
 
   createGeometryFromMap(textures) {
@@ -119,8 +141,6 @@ class Heightmap extends GenericGraph {
       color: 0xFFFFFF,
       metalness: 0,
       roughness: 1,
-      // wireframe: true,
-      // flatShading: true,
       map: texturemap,
       alphaMap: alphamap,
       normalMap: normalmap,
@@ -138,7 +158,10 @@ class Heightmap extends GenericGraph {
   render = () => {
     this.stats.begin();
 
-    this.controls.update();
+    TWEEN.update();
+    if (this.shouldUpdateControls) {
+      this.controls.update();
+    }
     this.renderer.render(this.scene, this.cam);
 
     this.stats.end();
@@ -166,12 +189,86 @@ class Heightmap extends GenericGraph {
     console.log(this.events);
   }
 
-  buildOrbitCam() {
-    this.controls = new OrbitControls(this.cam, this.renderer.domElement);
-    this.controls.maxPolarAngle = Math.PI / 2 - 0.3;
-    this.controls.enableZoom = false;
-    this.controls.enablePan = false;
-    this.controls.enableKeys = false;
+  _onisViewingStationChange = (isViewingStation) => {
+    this.shouldUpdateControls = !isViewingStation;
+  }
+
+  _onCameraChange = ({ position, target, callback }) => {
+    // store state of each tween
+    const isComplete = {
+      position: false,
+      target: false,
+    };
+    // define validation callbackc
+    const validationCallback = (name) => {
+      isComplete[name] = true;
+      if (callback !== null && isComplete.position && isComplete.target) {
+        callback();
+      }
+    }
+    this._handleNewCameraPosition(position, validationCallback);
+    this._handleNewCameraTarget(target, validationCallback);
+  }
+
+  _handleNewCameraTarget(newTarget, validationCallback) {
+    // if we're resetting to the default camera target
+    if (newTarget === null) {
+      newTarget = { x: 0, y: 0, z: 0 };
+    }
+    console.log(`Heightmap::_handleNewCameraTarget(newTarget: ${newTarget.x}, ${newTarget.y}, ${newTarget.z})`)
+
+    // initilise the tweenedTarget to store tween (starting at old position)
+    const tweenedTarget = this.oldTargetPositon;
+
+    // Build the tween to move from tweenedTarget to newTarget over animation duration
+    this.targetTween = new TWEEN.Tween(tweenedTarget)
+      .to({ x: newTarget.x, y: newTarget.y, z: newTarget.z }, this.heightMapConfig.animationDuration)
+      .easing(TWEEN.Easing.Quadratic.InOut)
+      .onUpdate(() => {
+        this.cam.lookAt(tweenedTarget.x, tweenedTarget.y, tweenedTarget.z);
+      })
+      .onComplete(() => {
+        validationCallback('target');
+      })
+      .start();
+
+    // Set old target position to new target position
+    this.oldTargetPositon = newTarget;
+  }
+
+  _handleNewCameraPosition(newPosition, validationCallback) {
+    // If we're resetting to the default position (newPosition != null)
+    if (newPosition === null) {
+      newPosition = {
+        x: this.heightMapConfig.camera.x,
+        y: this.heightMapConfig.camera.y,
+        z: this.heightMapConfig.camera.z,
+      }
+    }
+
+    // Set old Camera pos to tween from / return to
+    this.oldCameraPosition.x = this.cam.position.x;
+    this.oldCameraPosition.y = this.cam.position.y;
+    this.oldCameraPosition.z = this.cam.position.z;
+
+    console.log(`Heightmap::_handleNewCameraPosition(newPosition: ${newPosition.x}, ${newPosition.y}, ${newPosition.z})`)
+
+    // Initialise tween pos to store current tween
+    const tweenPos = this.oldCameraPosition;
+
+    // Build tween to new position over animationDuration
+    this.positionTween = new TWEEN.Tween(tweenPos)
+      .to({
+        x: newPosition.x,
+        y: newPosition.y,
+        z: newPosition.z,
+      }, this.heightMapConfig.animationDuration)
+      .onUpdate(() => { this.cam.position.set(tweenPos.x, tweenPos.y, tweenPos.z) })
+      .easing(TWEEN.Easing.Quadratic.InOut)
+      .onComplete(() => {
+        validationCallback('position');
+      })
+      .start();
   }
 }
 

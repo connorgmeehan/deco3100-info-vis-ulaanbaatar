@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import TWEEN from '@tweenjs/tween.js';
 
 export const PreviewPlaneSettings = {
   position: {
@@ -19,6 +20,16 @@ class PreviewPlane {
   material;
   image;
   texture = null;
+
+  isPlaneBound = false;
+
+  position;
+  width;
+  height;
+  location;
+  filename;
+  resolution;
+
   constructor(scene, events, {
  position, width, height, location, filename, resolution,
  }) {
@@ -32,10 +43,15 @@ class PreviewPlane {
     this.filename = filename;
     this.resolution = resolution;
 
-    this.planeGeometry = new THREE.PlaneGeometry(
-      this.width,
-      this.height,
-      2, 2,
+    // this.planeGeometry = new THREE.PlaneGeometry(
+    //   this.width,
+    //   this.height,
+    //   2, 2,
+    // );
+
+    this.planeGeometry = new THREE.BoxGeometry(
+      this.width, this.height, 1,
+      1, 1, 1,
     );
 
     this.material = new THREE.MeshStandardMaterial({
@@ -51,35 +67,51 @@ class PreviewPlane {
     this.plane.position.z = position.z;
     this.plane.rotation.x = -Math.PI / 2;
 
+    // TODO Bind and unbind depending on membervariable flage
     window.appState.selectedStation.subscribe(this._onSelectedStationStateChange)
     console.log(this);
   }
 
-  onClick = () => {
-    this.events.bind(this.plane, 'mouseup', () => {
-      window.appState.selectedStation.notify(null);
-    });
+  _onClick = () => {
+    console.log('Plane clicked');
+    window.appState.selectedStation.notify(null);
+    window.appState.camera.notify({ position: null, target: null, callback: null });
   }
 
-  _onSelectedStationStateChange = (selectedStation) => {
+_onSelectedStationStateChange = (selectedStation) => {
     console.log(`Sectected Station : ${selectedStation}`);
-    if (selectedStation.filename === this.filename) {
+    if (selectedStation && selectedStation.filename === this.filename) {
+      this.selected = true;
       console.log(`PreviewPlane::onActivate() -> srcTexture: ${this.srcTexture} texture: ${this.texture}`);
       const textureUrl = `/public/${selectedStation.filename}_${this.resolution}.jpg`;
       const textureLoader = new THREE.TextureLoader();
+
       textureLoader.load(textureUrl, (texture) => {
         this.texture = texture;
         this.material.map = texture;
         this.material.needsUpdate = true;
         this.material.opacity = 1;
       });
+
+      if (!this.isPlaneBound) {
+        this.events.bind(this.plane, 'mousedown', this._onClick);
+        this.isPlaneBound = true;
+      }
+
+      console.log(this.events);
+
       this.scene.add(this.plane);
-    } else {
-      this.material.opacity = 0;
+    } else if (this.selected) {
       if (this.texture) {
         this.texture.dispose();
       }
       this.material.map = null;
+
+      if (this.isPlaneBound) {
+        this.events.unbind(this.plane, 'mousedown', this._onClick);
+        this.isPlaneBound = false;
+      }
+
       this.scene.remove(this.plane);
     }
   }
