@@ -1,7 +1,9 @@
 /* eslint-disable class-methods-use-this */
 import * as THREE from 'three';
+import clamp from 'clamp';
 import PreviewPlane, { PreviewPlaneSettings } from './Heightmap_PreviewPlane';
 import PollutionBlob, { PollutionBlobSettings } from './Heightmap_PollutionBlob';
+import mapVal from '../helpers/mapVal';
 
 const NUM_WEEKS_TO_SHOW = 5;
 const CAMERA_OFFSET_HEIGHT = 5;
@@ -72,6 +74,12 @@ class PollutionStation {
   update(progress) {
     const offset = progress * 1.0 / this.pollutionBlobTheta;
     const dataOffset = Math.floor(offset);
+    console.log(this.data);
+    const { length } = this.data[1];
+    const maxToShow = clamp(Math.round(mapVal(progress, 0, 1, 0, length)), 0, length);
+
+    // console.log(this.data.stationsData.index[1][maxToShow]);
+
     const positionOffset = (offset % 1.0) * this.pollutionStepDistance
 
     for (let i = 0; i < NUM_WEEKS_TO_SHOW; i++) {

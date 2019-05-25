@@ -3,11 +3,13 @@ import * as THREE from 'three';
 import OrbitControls from 'three-orbitcontrols';
 import Stats from 'stats-js';
 import TWEEN from '@tweenjs/tween.js';
+import clamp from 'clamp';
 
 import THREEx from '../state/Threex.DomEvents';
 import GenericGraph from './GenericGraph';
 import PollutionStation from './Heightmap_PollutionStation';
 import MultiTextureLoader from '../helpers/MultiTextureLoader';
+import mapVal from '../helpers/mapVal';
 
 export const HeightMapConfig = {
   width: 1024,
