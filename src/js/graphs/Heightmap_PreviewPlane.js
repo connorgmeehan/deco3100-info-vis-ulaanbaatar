@@ -69,20 +69,16 @@ class PreviewPlane {
 
     // TODO Bind and unbind depending on membervariable flage
     window.appState.selectedStation.subscribe(this._onSelectedStationStateChange)
-    console.log(this);
   }
 
   _onClick = () => {
-    console.log('Plane clicked');
     window.appState.selectedStation.notify(null);
     window.appState.camera.notify({ position: null, target: null, callback: null });
   }
 
 _onSelectedStationStateChange = (selectedStation) => {
-    console.log(`Sectected Station : ${selectedStation}`);
     if (selectedStation && selectedStation.filename === this.filename) {
       this.selected = true;
-      console.log(`PreviewPlane::onActivate() -> srcTexture: ${this.srcTexture} texture: ${this.texture}`);
       const textureUrl = `/public/${selectedStation.filename}_${this.resolution}.jpg`;
       const textureLoader = new THREE.TextureLoader();
 
@@ -98,7 +94,6 @@ _onSelectedStationStateChange = (selectedStation) => {
         this.isPlaneBound = true;
       }
 
-      console.log(this.events);
 
       this.scene.add(this.plane);
     } else if (this.selected) {

@@ -49,12 +49,9 @@ class MultiTextureLoader {
     // eslint-disable-next-line no-restricted-syntax
     for (let key in this.textures) {
       if (this.textures[key] === null) {
-        console.log(`MultiTextureLoader::checkLoaded() -> failed on ${key}`);
-        console.log(this.textures);
         return;
       }
     }
-    console.log('passed');
     this.hasExecutedCallback = true;
     this.callback(this.textures);
   }

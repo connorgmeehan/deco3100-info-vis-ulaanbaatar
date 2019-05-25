@@ -60,8 +60,6 @@ class Heightmap extends GenericGraph {
     this.heightMapConfig = hmConfig;
 
     const texLoader = new MultiTextureLoader((texs) => {
-      console.log('TexLoader::callback()');
-      console.log(texs);
       this.init(graphOptions, texs, hmConfig);
     })
     texLoader.addTexture(hmConfig.textureMapSrc);
@@ -180,13 +178,9 @@ class Heightmap extends GenericGraph {
   }
 
   onStick() {
-    console.log('Heightmap::onStick()');
-    console.log(this.events);
   }
 
   onUnstick() {
-    console.log('Heightmap::onUnstick()');
-    console.log(this.events);
   }
 
   _onisViewingStationChange = (isViewingStation) => {

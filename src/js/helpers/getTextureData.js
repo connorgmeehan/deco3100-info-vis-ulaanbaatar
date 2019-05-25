@@ -1,6 +1,5 @@
 export default function getTextureData(image) {
   console.log(`getTextureData(image: ${image})`);
-  console.log(image);
   const canvas = document.createElement('canvas');
   canvas.width = image.width;
   canvas.height = image.height;
