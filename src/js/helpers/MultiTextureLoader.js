@@ -46,11 +46,17 @@ class MultiTextureLoader {
   }
 
   checkLoadeded() {
-    if (Object.entries(this.textures).findIndex(el => el[1] === null) && !this.hasExecutedCallback) {
-      console.log('passed');
-      this.hasExecutedCallback = true;
-      this.callback(this.textures);
+    // eslint-disable-next-line no-restricted-syntax
+    for (let key in this.textures) {
+      if (this.textures[key] === null) {
+        console.log(`MultiTextureLoader::checkLoaded() -> failed on ${key}`);
+        console.log(this.textures);
+        return;
+      }
     }
+    console.log('passed');
+    this.hasExecutedCallback = true;
+    this.callback(this.textures);
   }
 }
 
