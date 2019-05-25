@@ -44,10 +44,12 @@ class RadialGraph extends D3Graph {
       const dateString = new Date(Date.UTC(2017 + val, i, 1)).toString();
       this.allAxis.push(dateString)
     }
-    console.log(this.allAxis);
     this.dataLength = data[0][1].length;
-    console.log(this.dataLength);
-    this.angleSlice = (2 * Math.PI) / this.dataLength;
+
+    // Bind app state listener
+    window.appState.hoveredStation.subscribe(this._onStationStateChange);
+    window.appState.hoveredTime.subscribe(this._onTimeStateChange);
+
     this.init(data);
   }
 
@@ -107,6 +109,7 @@ class RadialGraph extends D3Graph {
       })
       .attr('y', (d, i) => {
         const theta = this._getThetaFromUTC(d)
+        console.log(d);
         return this.rScale(this.maxValue * this.cfg.labelFactor) * Math.sin(theta);
       })
       .text((d) => {
@@ -115,20 +118,13 @@ class RadialGraph extends D3Graph {
       })
       .attr('fill', 'grey');
 
-
-    // Build radar graph
-    this.radarLine = d3.radialLine()
-      .curve(d3.curveCatmullRomClosed.alpha(0.5))
-      .radius(d => this.rScale(d))
-      .angle((d, i) => i * this.angleSlice);
-
     this.customRadarLine = d3.line()
       .curve(d3.curveCatmullRomClosed.alpha(0.5))
       .x((d, i) => {
         if (d) {
           const theta = this._getThetaFromUTC(this.index[1][i]);
           return Math.cos(theta)
-            * mapVal(d, 0, this.maxValue, this.cfg.innerRadius, this.cfg.outerRadius);
+            * mapVal(d.val, 0, this.maxValue, this.cfg.innerRadius, this.cfg.outerRadius);
         }
         return 0;
       })
@@ -136,7 +132,7 @@ class RadialGraph extends D3Graph {
         if (d) {
           const theta = this._getThetaFromUTC(this.index[1][i]);
           return Math.sin(theta)
-            * mapVal(d, 0, this.maxValue, this.cfg.innerRadius, this.cfg.outerRadius);
+            * mapVal(d.val, 0, this.maxValue, this.cfg.innerRadius, this.cfg.outerRadius);
         }
         return 0;
       })
@@ -144,19 +140,11 @@ class RadialGraph extends D3Graph {
       .curve(d3.curveBasis);
 
     // Create a wrapper for the blobs
+    console.log(data)
     this.blobWrapper = this.graph.selectAll('.RadarElement')
       .data(data)
       .enter().append('g')
       .attr('class', 'RadarElement');
-
-    // Append the backgrounds
-    console.log('\tAppending Backgrounds')
-    this.blobWrapper
-      .append('path')
-      .attr('class', 'RadarElement_Area')
-      .attr('d', d => this.customRadarLine(d[1]))
-      .style('fill', d => this.cfg.color(d[0]))
-      .style('fill-opacity', this.cfg.opacityArea);
 
     // Create the outlines
     console.log('\tCreating Outlines')
@@ -165,28 +153,26 @@ class RadialGraph extends D3Graph {
       .attr('d', d => this.customRadarLine(d[1]))
       .style('stroke', d => this.cfg.color(d[0]))
 
-    // Append the circles
-    console.log('\tAppending Circle')
-    this.blobWrapper.selectAll('.RadarElement_Circle')
-      .append('circle')
-      .attr('class', 'RadarElementCircle')
-      .attr('r', this.cfg.dotRadius)
-      .attr('cx', (d, i) => this.rScale(d[1]) * Math.cos(this.angleSlice * i - Math.PI / 2))
-      .attr('cy', (d, i) => this.rScale(d[1]) * Math.sin(this.angleSlice * i - Math.PI / 2))
-      .style('fill', d => this.cfg.color(d[0]))
-      .style('fill-opacity', 0.8);
-
-    // Bind app state listener
-    window.appState.hoveredStation.subscribe(this._onStationStateChange);
+    this.hoverTimeIndicator = this.graph
+      .append('line')
+      .attr('id', 'hoverTimeIndicator')
+      .attr('x1', 0)
+      .attr('y1', 0)
+      .attr('x2', 0)
+      .attr('y2', 0)
+      .attr('opacity', 0)
+      .attr('stroke', 'white')
+      .attr('stroke-width', '2px');
   }
 
   update(progress) {
     this.progress = progress;
-    const maxToShow = clamp(Math.round(mapVal(progress, 0, 1, 0, this.dataLength)), 0, this.dataLength);
-    console.log(`showing ${this.index[1][maxToShow]}`);
-    console.log(this.progress, maxToShow);
-    const formattedData = this.data.map(stationData => [stationData[0], stationData[1].slice(0, maxToShow)]);
-    console.log(formattedData)
+    const maxToShow = clamp(Math.round(
+      mapVal(progress, 0, 1, 0, this.dataLength),
+    ), 0, this.dataLength);
+    const formattedData = this.data.map(
+      stationData => [stationData[0], stationData[1].slice(0, maxToShow)],
+    );
 
     this.blobStrokes
       .attr('d', (d, i) => this.customRadarLine(formattedData[i][1]))
@@ -208,6 +194,21 @@ class RadialGraph extends D3Graph {
     })
     .filter(d => d[0] === data)
     .raise()
+  }
+
+  _onTimeStateChange = (data) => {
+    console.log(data);
+    if (data !== null) {
+      d3.select('#hoverTimeIndicator')
+        .attr('x2', Math.cos(this._getThetaFromUTC(data)) * this.maxValue)
+        .attr('y2', Math.sin(this._getThetaFromUTC(data)) * this.maxValue)
+        .attr('opacity', 1);
+    } else {
+      d3.select('#hoverTimeIndicator')
+        .attr('x2', 0)
+        .attr('y2', 0)
+        .attr('opacity', 0);
+    }
   }
 }
 

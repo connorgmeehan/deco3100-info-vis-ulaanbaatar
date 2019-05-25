@@ -7,7 +7,7 @@ import clamp from 'clamp';
 
 import THREEx from '../state/Threex.DomEvents';
 import GenericGraph from './GenericGraph';
-import PollutionStation from './Heightmap_PollutionStation';
+import PollutionStation, { PollutionStationSettings } from './Heightmap_PollutionStation';
 import MultiTextureLoader from '../helpers/MultiTextureLoader';
 import mapVal from '../helpers/mapVal';
 
@@ -58,6 +58,7 @@ class Heightmap extends GenericGraph {
     this.stats = new Stats();
     this.stats.showPanel(1);
     this.element.appendChild(this.stats.dom);
+    console.log(data);
 
     this.heightMapConfig = hmConfig;
 
@@ -68,6 +69,8 @@ class Heightmap extends GenericGraph {
     texLoader.addHeightmap(hmConfig.heightmapSrc);
     texLoader.addNormalMap(hmConfig.normalMapSrc);
     texLoader.addAlphaMap(hmConfig.alphamapSrc);
+
+    this.dataLength = this.data.stationsData.index[1].length;
   }
 
   init(graphOptions, textures, hmConfig) {
@@ -102,8 +105,10 @@ class Heightmap extends GenericGraph {
     this.events = new THREEx.DomEvents(this.cam, this.renderer.domElement);
 
     this.data.stationMetaData.forEach((station) => {
+      const pollutionStationSettings = PollutionStationSettings;
       const stationData = this.data.stationsData.find(el => el[0] === station.location)
-      this.pollutionStations.push(new PollutionStation(this.scene, this.events, stationData, station));
+      stationData[1] = stationData[1].map((el, i) => ({ utc: this.data.stationsData.index[1][i], val: el }))
+      this.pollutionStations.push(new PollutionStation(this.scene, this.events, stationData, station, pollutionStationSettings));
     });
 
     this.element.appendChild(this.renderer.domElement);
@@ -171,9 +176,13 @@ class Heightmap extends GenericGraph {
 
   update(progress) {
     this.stats.begin();
+    const dataProgress = clamp(progress * this.dataLength, 0, this.dataLength);
+    const dataIndex = Math.floor(dataProgress);
+    const stepDistanceMultiplier = clamp(progress, -0.1, 0) * 10 + 1;
 
+    // console.log(dataProgress, dataIndex, scrollPositionOffset);
     for (let i = 0; i < this.pollutionStations.length; i++) {
-      this.pollutionStations[i].update(progress);
+      this.pollutionStations[i].update(dataProgress, dataIndex, stepDistanceMultiplier);
     }
 
     this.stats.end();

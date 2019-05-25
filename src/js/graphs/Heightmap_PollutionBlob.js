@@ -51,9 +51,12 @@ class PollutionBlob {
   updateData(d, dataOffsetIndex) {
     if (d && dataOffsetIndex && this.dataOffsetIndex !== dataOffsetIndex) {
       this.d = d;
-      this.radius = d / ((4 / 3) * Math.PI) / this.settings.maxPollution;
 
-      this._calculateMaterialColor(d, 0.0);
+      this.radius = (d.val !== null
+        ? d.val / ((4 / 3) * Math.PI) / this.settings.maxPollution
+        : 0.00001);
+
+      this._calculateMaterialColor(d.val, 0.0);
 
       this.mesh.geometry = new THREE.SphereGeometry(this.radius, WIDTH_SEGMENTS, HEIGHT_SEGMENTS);
     } else {
@@ -82,17 +85,21 @@ class PollutionBlob {
 
   _onMouseOver = () => {
     this.isMouseOver = true;
-    window.appState.hoveredTime.notify(this.dataOffsetIndex);
+    console.log(this.d);
+    if (window.appState.hoveredTime.data !== this.d.utc) {
+      window.appState.hoveredTime.notify(this.d.utc);
+    }
     this.parent._onMouseOver();
-    this._calculateMaterialColor(this.d, 0.2);
+    this._calculateMaterialColor(this.d.val, 0.2);
   }
 
-  
   _onMouseOut = () => {
     this.isMouseOver = false;
-    window.appState.hoveredTime.notify(this.dataOffsetIndex);
+    if (window.appState.hoveredTime.data === this.d.utc) {
+      window.appState.hoveredTime.notify(null);
+    }
     this.parent._onMouseOut();
-    this._calculateMaterialColor(this.d, 0.0);
+    this._calculateMaterialColor(this.d.val, 0.0);
   }
 
   _calculateMaterialColor(d, hoverDarkenAmount) {

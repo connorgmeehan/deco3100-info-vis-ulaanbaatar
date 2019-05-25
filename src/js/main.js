@@ -60,7 +60,8 @@ const main = () => {
   // HeightMap
   const hmGraphOptions = new GraphOptions(50, 50, 1200, 800, 'left');
   const hmConfig = HeightMapConfig;
-  const heightMap = new HeightMap('Heightmap', hmGraphOptions, { stationMetaData, stationsData, weatherData }, hmConfig);
+  const heightMapData = { stationMetaData, stationsData, weatherData };
+  const heightMap = new HeightMap('Heightmap', hmGraphOptions, heightMapData, hmConfig);
   SectionMap.addChild(heightMap);
 
   // Radial Graph

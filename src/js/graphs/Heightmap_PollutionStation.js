@@ -1,12 +1,13 @@
 /* eslint-disable class-methods-use-this */
 import * as THREE from 'three';
-import clamp from 'clamp';
 import PreviewPlane, { PreviewPlaneSettings } from './Heightmap_PreviewPlane';
 import PollutionBlob, { PollutionBlobSettings } from './Heightmap_PollutionBlob';
-import mapVal from '../helpers/mapVal';
 
-const NUM_WEEKS_TO_SHOW = 5;
-const CAMERA_OFFSET_HEIGHT = 5;
+export const PollutionStationSettings = {
+  maxHeight: 30,
+  numWeeksToShow: 5,
+  cameraOffsetHeight: 5,
+}
 
 class PollutionStation {
   scene;
@@ -18,7 +19,7 @@ class PollutionStation {
   pollutionBlobs = []; // Stores the THREE mesh's for each datapoint
   pollutionBlobTheta = -1; // Scale to multiply progress by and recieve the most recent blobs data
 
-  constructor(scene, events, data, stationMetaData) {
+  constructor(scene, events, data, stationMetaData, pollutionStationSettings) {
     this.scene = scene;
     this.data = data;
     this.dataLength = data[1].length;
@@ -31,9 +32,12 @@ class PollutionStation {
     this.p.z = stationMetaData.y;
 
     this.pollutionBlobTheta = 1.0 / (this.data[1].length - 1);
-    this.maxHeight = 30;
-    this.pollutionStepDistance = this.maxHeight / NUM_WEEKS_TO_SHOW;
+    this.maxHeight = pollutionStationSettings.maxHeight;
+    this.numWeeksToShow = pollutionStationSettings.numWeeksToShow;
+    this.cameraOffsetHeight = pollutionStationSettings.cameraOffsetHeight;
+    this.pollutionStepDistance = this.maxHeight / this.numWeeksToShow;
     this.pollutionRiseScale = this.pollutionStepDistance / this.pollutionBlobTheta / 2;
+    this.pollutionBlobYOffset = this.maxHeight - this.pollutionStepDistance;
 
     // Setup preview plane
     this.previewPaneSettings = PreviewPlaneSettings;
@@ -56,7 +60,7 @@ class PollutionStation {
     pollutionBlobSettings.maxPollution = 500;
     pollutionBlobSettings.origin = this.p;
 
-    for (let i = 0; i < NUM_WEEKS_TO_SHOW; i++) {
+    for (let i = 0; i < this.numWeeksToShow; i++) {
       this.pollutionBlobs.push(new PollutionBlob(this.scene, this.events, pollutionBlobSettings, this.data, this))
     }
 
@@ -71,23 +75,13 @@ class PollutionStation {
     this.scene.add(this.cube);
   }
 
-  update(progress) {
-    const offset = progress * 1.0 / this.pollutionBlobTheta;
-    const dataOffset = Math.floor(offset);
-    console.log(this.data);
-    const { length } = this.data[1];
-    const maxToShow = clamp(Math.round(mapVal(progress, 0, 1, 0, length)), 0, length);
-
-    // console.log(this.data.stationsData.index[1][maxToShow]);
-
-    const positionOffset = (offset % 1.0) * this.pollutionStepDistance
-
-    for (let i = 0; i < NUM_WEEKS_TO_SHOW; i++) {
-      const dataOffsetIndex = this.dataLength - dataOffset + i;
+  update(dataProgress, dataIndex, stepDistanceMultiplier) {
+    console.log()
+    for (let i = 0; i < this.numWeeksToShow; i++) {
       const blob = this.pollutionBlobs[i];
-
-      blob.updateData(this.data[1][dataOffsetIndex], dataOffsetIndex)
-      blob.setY(this.p.y + positionOffset + i * this.pollutionStepDistance);
+      const scrollModulatedOffset = (dataProgress % 1.0) * this.pollutionStepDistance;
+      blob.updateData(this.data[1][dataIndex], dataIndex)
+      blob.setY((this.p.y + scrollModulatedOffset - i * this.pollutionStepDistance + this.pollutionBlobYOffset) * stepDistanceMultiplier);
     }
   }
 
@@ -118,7 +112,7 @@ class PollutionStation {
       window.appState.camera.notify({
         position: {
           x: this.p.x,
-          y: this.p.y + CAMERA_OFFSET_HEIGHT,
+          y: this.p.y + this.cameraOffsetHeight,
           z: this.p.z,
         },
         target: {
