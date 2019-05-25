@@ -81,7 +81,6 @@ class PreviewPlane {
       }
       this.material.map = null;
       this.scene.remove(this.plane);
-
     }
   }
 }
