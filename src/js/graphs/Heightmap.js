@@ -101,8 +101,7 @@ class Heightmap extends GenericGraph {
     });
 
     this.element.appendChild(this.renderer.domElement);
-    this.controls = new OrbitControls(this.cam, this.renderer.domElement);
-
+    this.buildOrbitCam()
     this.render();
   }
 
@@ -165,6 +164,14 @@ class Heightmap extends GenericGraph {
   onUnstick() {
     console.log('Heightmap::onUnstick()');
     console.log(this.events);
+  }
+
+  buildOrbitCam() {
+    this.controls = new OrbitControls(this.cam, this.renderer.domElement);
+    this.controls.maxPolarAngle = Math.PI / 2 - 0.3;
+    this.controls.enableZoom = false;
+    this.controls.enablePan = false;
+    this.controls.enableKeys = false;
   }
 }
 
