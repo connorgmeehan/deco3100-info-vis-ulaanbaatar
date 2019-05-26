@@ -60,7 +60,7 @@ const main = () => {
    */
   // Stores the main visualisation, including THREE.js map and timeline
   const sectionMapSettings = SectionSettings;
-  const sectionMap = new Section(2000, 'Intro', sectionMapSettings);
+  const sectionMap = new Section(2000, 'HeightMap', sectionMapSettings);
 
   // build progressscaler for section
   const sectionMapProgressScaler = new ProgressScaler(0.1, 0.9);
