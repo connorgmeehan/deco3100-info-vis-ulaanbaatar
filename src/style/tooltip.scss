@@ -12,17 +12,19 @@
 }
 
 .Graph_ToolTip {
-  background: white;
+  background: rgb(21,21,21);
   border-radius: 5px;
   padding: 5px 10px;
-  color: black;
+  color: #EEE;
   font-family: 'Avenir';
 
   h5 {
+    font-size: 0.9rem;
     margin: 2px 0;
   }
 
   h6 {
+    font-size: 0.9rem;
     margin: 2px 0;
   }
 }
