@@ -34,10 +34,12 @@ class RadialGraph extends D3Graph {
       x: this.cfg.width / 2,
       y: this.cfg.height / 2,
     };
-    this.data = data;
-    this.index = data.index;
-    this.maxValue = d3.max(data, row => d3.max(row[1]));
-    this.allAxis = data.index[1];
+    console.log(data);
+    this.data = data.stationsData;
+    this.stationsMetaData = data.stationMetaData;
+    this.index = this.data.index;
+    this.maxValue = d3.max(this.data, row => d3.max(row[1]));
+    this.allAxis = this.data.index[1];
 
     this.allAxis = [];
     for (let i = 0; i < 12; i++) {
@@ -45,15 +47,14 @@ class RadialGraph extends D3Graph {
       const dateString = new Date(Date.UTC(2017 + val, i, 1)).toString();
       this.allAxis.push(dateString)
     }
-    this.dataLength = data[0][1].length;
+    this.dataLength = this.data[0][1].length;
 
     // Bind app state listener
     window.appState.hoveredStation.subscribe(this._onStationStateChange);
     window.appState.hoveredTime.subscribe(this._onTimeStateChange);
 
-    console.log(this);
 
-    this.init(data);
+    this.init(this.data);
   }
 
   init(data) {
@@ -153,7 +154,12 @@ class RadialGraph extends D3Graph {
     this.blobStrokes = this.blobWrapper.append('path')
       .attr('class', 'RadarElement_Stroke')
       .attr('d', d => this.customRadarLine(d[1]))
-      .style('stroke', d => this.cfg.color(d[0]))
+      .style('stroke', (d) => {
+        console.log(d);
+        const stationMetaData = this.stationsMetaData.find(el => el.location === d[0]);
+        console.log(stationMetaData);
+        return stationMetaData.color;
+      });
 
     this.hoverTimeIndicator = this.graph
       .append('line')
@@ -172,9 +178,10 @@ class RadialGraph extends D3Graph {
 
     const toShowOffsetMultiplier = clamp(mapVal(progress, -0.1, 0, 0, 1), 0, 1);
     const toShowOffset = Math.floor(toShowOffsetMultiplier * this.cfg.toShowOffset);
-    const maxToShow = clamp(Math.round(
+    let maxToShow = clamp(Math.round(
       mapVal(progress, 0, 1, 0, this.dataLength),
     ), 0, this.dataLength) + toShowOffset;
+    maxToShow = clamp(maxToShow, 0, this.dataLength - 1);
     const formattedData = this.data.map(
       stationData => [stationData[0], stationData[1].slice(0, maxToShow)],
     );

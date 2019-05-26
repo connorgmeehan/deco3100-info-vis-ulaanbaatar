@@ -103,7 +103,7 @@ const main = () => {
   radialGraphOptions.width = 500;
   radialGraphOptions.height = 500;
   radialGraphOptions.toShowOffset = hmConfig.numWeeksToShow;
-  const radialGraph = new RadialGraph('Radial', radialGraphOptions, stationsData, radialGraphSettings);
+  const radialGraph = new RadialGraph('Radial', radialGraphOptions, { stationsData, stationMetaData }, radialGraphSettings);
   sectionMap.addChild(radialGraph);
 
   const radialGraphTitleOptions = new GraphOptions(
