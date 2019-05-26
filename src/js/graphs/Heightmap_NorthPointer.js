@@ -51,8 +51,8 @@ class NorthPointer {
 
     this.ratioText = new TextSprite({
       material: {
-        color: 0xffbbff,
-        fog: true,
+        color: 0xffffff,
+        // transparent: true,
       },
       redrawInterval: 250,
       textSize: 1.2,

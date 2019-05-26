@@ -1,5 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import * as THREE from 'three';
+import TextSprite from 'three.textsprite';
+
 import PreviewPlane, { PreviewPlaneSettings } from './Heightmap_PreviewPlane';
 import PollutionBlob, { PollutionBlobSettings } from './Heightmap_PollutionBlob';
 
@@ -19,10 +21,12 @@ class PollutionStation {
   pollutionBlobs = []; // Stores the THREE mesh's for each datapoint
   pollutionBlobTheta = -1; // Scale to multiply progress by and recieve the most recent blobs data
 
-  constructor(scene, events, data, stationMetaData, pollutionStationSettings) {
+  constructor(scene, camera, events, data, stationMetaData, pollutionStationSettings) {
     this.scene = scene;
+    this.camera = camera;
     this.data = data;
     this.dataLength = data[1].length;
+    this.stationMetaData = stationMetaData;
     this.name = stationMetaData.location;
     this.filename = stationMetaData.filename;
     this.events = events;
@@ -97,8 +101,31 @@ class PollutionStation {
   _onStationStateChange = (data) => {
     if (data === this.name) {
       this.material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      this.ratioText = new TextSprite({
+        material: {
+          color: 0xffffff,
+          fog: true,
+          depthTest: false,
+          depthWrite: false,
+        },
+        redrawInterval: 250,
+        textSize: 0.5,
+        texture: {
+          fontFamily: 'Arial, Helvetica, sans-serif',
+          text: `
+          location: ${this.name}
+          ger/non-ger: ${(this.stationMetaData.isGer === 'yes' ? 'ger' : 'non-ger')}`,
+        },
+      });
+      const textPos = new THREE.Vector3(this.p.x, this.p.y + 4, this.p.z).lerp(this.camera.position, 0.5);
+      this.ratioText.position.set(textPos.x, textPos.y, textPos.z);
+      this.scene.add(this.ratioText);
     } else {
       this.material = new THREE.MeshBasicMaterial({ color: this.color });
+      if (this.ratioText) {
+        this.scene.remove(this.ratioText);
+        this.ratioText = null;
+      }
     }
     this.cube.material = this.material;
   }

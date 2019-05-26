@@ -110,7 +110,7 @@ class Heightmap extends GenericGraph {
       pollutionStationSettings.numWeeksToShow = hmConfig.numWeeksToShow;
       const stationData = this.data.stationsData.find(el => el[0] === station.location)
       stationData[1] = stationData[1].map((el, i) => ({ utc: this.data.stationsData.index[1][i], val: el }))
-      this.pollutionStations.push(new PollutionStation(this.scene, this.events, stationData, station, pollutionStationSettings));
+      this.pollutionStations.push(new PollutionStation(this.scene, this.cam, this.events, stationData, station, pollutionStationSettings));
     });
 
     this.element.appendChild(this.renderer.domElement);
