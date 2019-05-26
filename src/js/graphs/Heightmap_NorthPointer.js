@@ -6,6 +6,7 @@ export const NorthPointerSettings = {
   origin: { x: 0, y: 2, z: 0 },
   sceneRadius: 28,
   realRadius: 22000,
+  screenRadius: 0.185208333,
   northDirection: { x: 0, y: 0, z: -1 },
   segmentCount: 50,
   color: 0xFF0000,
@@ -19,7 +20,8 @@ class NorthPointer {
     this.origin = northPointerSettings.origin;
     this.sceneRadius = northPointerSettings.sceneRadius;
     this.realRadius = northPointerSettings.realRadius;
-    this.ratio = Math.round(this.realRadius / this.sceneRadius);
+    this.screenRadius = northPointerSettings.screenRadius;
+    this.ratio = Math.round(this.realRadius / this.screenRadius);
 
     this.circleGeometry = new THREE.CircleGeometry(this.sceneRadius, northPointerSettings.segmentCount);
     this.circleGeometry.vertices.shift();
