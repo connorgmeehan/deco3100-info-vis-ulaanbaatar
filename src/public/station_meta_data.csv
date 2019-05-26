@@ -1,8 +1,8 @@
-location,filename,lat,lon,x,y
-Amgalan,amgalan,47.91343,106.99791,23,-1
-Baruun 4 zam,baruun_4_zam,47.915382,106.894196,0,-2
-Bayankhoshuu,bayankhoshuu,47.95756,106.822754,-15,-15
-Bukhiin urguu,bukhiin_urguu,47.917606,106.93736,10,-2
-MNB,mnb,47.929733,106.888626,-1,-5
-Nisekh,nisekh,47.86394,106.77909,-23,15
-Tolgoit,tolgoit,47.922497,106.79481,-20,-3
+location,filename,lat,lon,x,y,color,isGer
+Amgalan,amgalan,47.91343,106.99791,23,-1,"rgb(106, 213, 11)",no
+Bukhiin urguu,bukhiin_urguu,47.917606,106.93736,10,-2,"rgb(162, 247, 86)",no
+Baruun 4 zam,baruun_4_zam,47.915382,106.894196,0,-2,"rgb(138, 217, 67)",no
+MNB,mnb,47.929733,106.888626,-1,-5,"rgb(228, 164, 16)",yes
+Bayankhoshuu,bayankhoshuu,47.95756,106.822754,-15,-15,"rgb(212, 171, 77)",yes
+Tolgoit,tolgoit,47.922497,106.79481,-20,-3,"rgb(229, 172, 39)",yes
+Nisekh,nisekh,47.86394,106.77909,-23,15,"rgb(245, 186, 51)",yes
