@@ -69,8 +69,8 @@ const main = () => {
   // Section Title
   const sectionMapTitleOptions = new GraphOptions(25, 0, 1920, 50);
   const sectionMapTitleData = [
-    { tag: 'h2', className: 'HeightmapSection_Title', content: 'Ulaanbaatar: Choked by Pollution - Part 2' },
-    { tag: 'h3', className: 'HeightmapSection_Subtitle', content: 'How time, space and weather shapes Ulaanbaatar\'s pollution' },
+    { tag: 'h1', className: 'HeightmapSection_Title', content: 'Ulaanbaatar: Choked by Pollution - Part 2' },
+    { tag: 'h2', className: 'HeightmapSection_Subtitle', content: 'How time, space and weather shapes Ulaanbaatar\'s pollution' },
   ];
   const sectionMapTitle = new TextBlock('HeightmapSection_TitleBlock', sectionMapTitleOptions, sectionMapTitleData);
   sectionMapTitle.alwaysShow();
