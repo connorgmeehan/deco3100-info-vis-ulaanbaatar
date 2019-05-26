@@ -1,7 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import * as THREE from 'three';
 import OrbitControls from 'three-orbitcontrols';
-import Stats from 'stats-js';
 import TWEEN from '@tweenjs/tween.js';
 import clamp from 'clamp';
 
@@ -55,10 +54,6 @@ class Heightmap extends GenericGraph {
 
   constructor(name, graphOptions, data, hmConfig = null) {
     super(name, graphOptions, data);
-
-    this.stats = new Stats();
-    this.stats.showPanel(1);
-    this.element.appendChild(this.stats.dom);
     console.log(data);
 
     this.heightMapConfig = hmConfig;
@@ -165,29 +160,22 @@ class Heightmap extends GenericGraph {
   }
 
   render = () => {
-    this.stats.begin();
-
     TWEEN.update();
     if (this.shouldUpdateControls) {
       this.controls.update();
     }
     this.renderer.render(this.scene, this.cam);
 
-    this.stats.end();
-
     requestAnimationFrame(this.render);
   }
 
   update(progress) {
-    this.stats.begin();
     const dataProgress = clamp(progress * this.dataLength, 0, this.dataLength);
     const dataIndex = Math.floor(dataProgress);
     const stepDistanceMultiplier = clamp(progress, -0.1, 0) * 10 + 1;
     for (let i = 0; i < this.pollutionStations.length; i++) {
       this.pollutionStations[i].update(dataProgress, dataIndex, stepDistanceMultiplier);
     }
-
-    this.stats.end();
   }
 
   onStick() {
