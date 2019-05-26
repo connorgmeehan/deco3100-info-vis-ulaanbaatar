@@ -10,6 +10,7 @@ import { GraphOptions } from './graphs/GenericGraph';
 import RadialGraph, { RadialGraphOptions } from './graphs/RadialGraph';
 import HeightMap, { HeightMapConfig } from './graphs/Heightmap';
 import ProgressScaler from './helpers/ProgressScaler';
+import TextBlock from './graphs/TextBlock';
 
 const main = () => {
   // Initialise Observer App State
@@ -78,6 +79,17 @@ const main = () => {
   radialGraphOptions.toShowOffset = hmConfig.numWeeksToShow;
   const radialGraph = new RadialGraph('Radial', genericOptionsRadial, stationsData, radialGraphOptions);
   SectionMap.addChild(radialGraph);
+
+  // Heightmap Title
+  const heightmapTitleOptions = new GraphOptions(50, 20, hmGraphOptions.getWidth(), 30);
+  const heightMapTitleData = [
+    { tag: 'h2', className: 'Heightmap_Title', content: 'Ulaanbaatar: Choked by Pollution - Part 2' },
+  ];
+  const heightmapTitle = new TextBlock('Heightmap_Title', heightmapTitleOptions, heightMapTitleData);
+  heightmapTitle.alwaysShow();
+  SectionMap.addChild(heightmapTitle);
+
+  SectionMap.runUpdate();
 
   console.log('ready');
 }

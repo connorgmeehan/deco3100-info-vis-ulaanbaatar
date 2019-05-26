@@ -113,6 +113,10 @@ class Section {
   setProgressScaler(progressScaler) {
     this.progressScaler = progressScaler
   }
+
+  runUpdate() {
+    this.onScroll();
+  }
 }
 
 export default Section;

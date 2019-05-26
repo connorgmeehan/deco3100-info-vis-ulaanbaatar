@@ -1,6 +1,11 @@
 // Styles to layout main page
 .Graph {
   position: absolute;
+  transition: opacity 500ms ease-in-out;
+
+  &__Hidden {
+    opacity: 0;
+  }
 }
 
 .Section {
