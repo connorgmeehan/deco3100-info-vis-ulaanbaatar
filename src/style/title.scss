@@ -1,40 +1,58 @@
-
-body{
-    font-family: "Avenir";
-    color: black;    
+body {
+  font-family: "Avenir";
+  color: black;
+  font-weight: 400;
 }
 .Intro {
-   
-    padding: 50px;
-    .Intro_heading {  
+  padding: 50px;
+  .Intro_heading {
+  }
+}
+.bar_graph {
+  h3 {
+    margin-left: 200px;
+  }
+}
+.context_part1 {
+  padding: 50px;
+  width: 500px;
+}
 
-        }
-}
-.bar_graph{
-h3{margin-left: 200px;
+.interaction {
+  background: black;
+  color: white;
+  padding: 50px;
 
-}
-}
-.context_part1{
-    padding: 50px;
+  .InteractiveMap_title {
+    padding: 10px;
+    margin-left: 20px;
+  }
+  .interaction_howto {
+    margin-left: 30px;
+  }
+
+  .context_part2 {
     width: 500px;
+  }
 }
 
-.interaction{
-    background: black;
-    color: white;
-    padding: 50px;
+#Section_HeightMap {
+    h1 { // Main title
+        font-size: 50px;
+        color:#A44647;
+        padding: 200,200,20,200;
+        font-weight: 600;
+    }
 
-    .InteractiveMap_title{
-padding: 10px;
-margin-left: 20px;
-}
-.interaction_howto{
-margin-left: 30px;
-}
+    h2 { // Subtitle 
+        color: white;
+        text-transform: uppercase; 
+        font-weight: 400;
+    }
 
-.context_part2{
-width: 500px;
-}
-
+    h3 { // Graph title
+        color: white;
+        text-align: center;
+        font-weight: 500;
+    }
 }

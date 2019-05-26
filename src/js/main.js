@@ -60,6 +60,7 @@ const main = () => {
    */
   // Stores the main visualisation, including THREE.js map and timeline
   const sectionMapSettings = SectionSettings;
+  sectionMapSettings.backgroundColor = 'rgb(41,41,41)';
   const sectionMap = new Section(2000, 'HeightMap', sectionMapSettings);
 
   // build progressscaler for section
