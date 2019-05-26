@@ -33,6 +33,7 @@ export const HeightMapConfig = {
     z: -1200,
     intensity: 0.8,
   },
+  numWeeksToShow: 5,
 }
 
 class Heightmap extends GenericGraph {
@@ -106,6 +107,7 @@ class Heightmap extends GenericGraph {
 
     this.data.stationMetaData.forEach((station) => {
       const pollutionStationSettings = PollutionStationSettings;
+      pollutionStationSettings.numWeeksToShow = hmConfig.numWeeksToShow;
       const stationData = this.data.stationsData.find(el => el[0] === station.location)
       stationData[1] = stationData[1].map((el, i) => ({ utc: this.data.stationsData.index[1][i], val: el }))
       this.pollutionStations.push(new PollutionStation(this.scene, this.events, stationData, station, pollutionStationSettings));

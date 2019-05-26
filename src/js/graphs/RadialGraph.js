@@ -13,6 +13,7 @@ export const RadialGraphOptions = {
   pointRadius: 20,
   centerPoint: { x: 0, y: 0 },
   levels: 4,
+  toShowOffset: 4,
   margin: {
     left: 15, top: 15, right: 15, bottom: 15,
   },
@@ -166,10 +167,14 @@ class RadialGraph extends D3Graph {
   }
 
   update(progress) {
+    console.log(progress);
     this.progress = progress;
+
+    const toShowOffsetMultiplier = clamp(mapVal(progress, -0.1, 0, 0, 1), 0, 1);
+    const toShowOffset = Math.floor(toShowOffsetMultiplier * this.cfg.toShowOffset);
     const maxToShow = clamp(Math.round(
       mapVal(progress, 0, 1, 0, this.dataLength),
-    ), 0, this.dataLength);
+    ), 0, this.dataLength) + toShowOffset;
     const formattedData = this.data.map(
       stationData => [stationData[0], stationData[1].slice(0, maxToShow)],
     );

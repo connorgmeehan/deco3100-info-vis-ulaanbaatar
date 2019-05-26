@@ -17,6 +17,8 @@ class Section {
 
   viewportHeight= 0;
 
+  progressScaler = null;
+
   constructor(height, name, settings) {
     console.log(`Section::constructor(height: ${height}, name: ${name})`);
 
@@ -66,11 +68,12 @@ class Section {
       && window.scrollY + window.innerHeight < this.topOffset + this.height) {
         this.stick();
       }
-
+    const scaledProgress = (this.progressScaler !== null
+      ? this.progressScaler.calculate(progress)
+      : progress);
     for (let i = 0; i < this.childElements.length; i++) {
       const el = this.childElements[i];
-
-      el.onScroll(progress, window.scrollY);
+      el.onScroll(scaledProgress, window.scrollY);
     }
   }
 
@@ -105,6 +108,10 @@ class Section {
 
   getBackgroundColor() {
     return this.settings.backgroundColor;
+  }
+
+  setProgressScaler(progressScaler) {
+    this.progressScaler = progressScaler
   }
 }
 

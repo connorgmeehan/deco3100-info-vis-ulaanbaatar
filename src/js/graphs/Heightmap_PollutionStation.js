@@ -61,7 +61,9 @@ class PollutionStation {
     pollutionBlobSettings.origin = this.p;
 
     for (let i = 0; i < this.numWeeksToShow; i++) {
-      this.pollutionBlobs.push(new PollutionBlob(this.scene, this.events, pollutionBlobSettings, this.data, this))
+      this.pollutionBlobs.push(
+        new PollutionBlob(this.scene, this.events, pollutionBlobSettings, this.data, this),
+        )
     }
 
     // Bind app state listener

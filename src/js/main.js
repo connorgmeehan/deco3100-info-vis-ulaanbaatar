@@ -9,6 +9,7 @@ import Section, { SectionSettings } from './components/Section';
 import { GraphOptions } from './graphs/GenericGraph';
 import RadialGraph, { RadialGraphOptions } from './graphs/RadialGraph';
 import HeightMap, { HeightMapConfig } from './graphs/Heightmap';
+import ProgressScaler from './helpers/ProgressScaler';
 
 const main = () => {
   // Initialise Observer App State
@@ -42,6 +43,7 @@ const main = () => {
     }
   });
 
+
   // Format data to be more easily segmented for each component
   const formattedData = Object.entries(pivotArray(weatherPollutionData));
   window.stationMetaData = stationMetaData;
@@ -57,6 +59,10 @@ const main = () => {
   const sectionMapSettings = SectionSettings;
   const SectionMap = new Section(2000, 'Intro', sectionMapSettings);
 
+  // build progressscaler for section
+  const sectionMapProgressScaler = new ProgressScaler(0.1, 0.9);
+  SectionMap.setProgressScaler(sectionMapProgressScaler);
+
   // HeightMap
   const hmGraphOptions = new GraphOptions(50, 50, 1200, 800, 'left');
   const hmConfig = HeightMapConfig;
@@ -69,6 +75,7 @@ const main = () => {
   const radialGraphOptions = RadialGraphOptions;
   radialGraphOptions.width = 500;
   radialGraphOptions.height = 500;
+  radialGraphOptions.toShowOffset = hmConfig.numWeeksToShow;
   const radialGraph = new RadialGraph('Radial', genericOptionsRadial, stationsData, radialGraphOptions);
   SectionMap.addChild(radialGraph);
 
