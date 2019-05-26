@@ -10,6 +10,7 @@ import GenericGraph from './GenericGraph';
 import PollutionStation, { PollutionStationSettings } from './Heightmap_PollutionStation';
 import MultiTextureLoader from '../helpers/MultiTextureLoader';
 import mapVal from '../helpers/mapVal';
+import NorthPointer, { NorthPointerSettings } from './Heightmap_NorthPointer';
 
 export const HeightMapConfig = {
   width: 1024,
@@ -117,9 +118,11 @@ class Heightmap extends GenericGraph {
 
     this.buildOrbitCam()
 
+    const northPointerSettings = NorthPointerSettings;
+    this.northPointer = new NorthPointer(this.scene, this.cam, northPointerSettings);
+
     window.appState.camera.subscribe(data => this._onCameraChange(data));
     window.appState.isViewingStation.subscribe(data => this._onisViewingStationChange(data));
-
 
     this.render();
   }
@@ -164,6 +167,8 @@ class Heightmap extends GenericGraph {
 
   render = () => {
     this.stats.begin();
+
+    this.northPointer.animate();
 
     TWEEN.update();
     if (this.shouldUpdateControls) {

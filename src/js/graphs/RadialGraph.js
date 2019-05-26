@@ -110,7 +110,6 @@ class RadialGraph extends D3Graph {
       })
       .attr('y', (d, i) => {
         const theta = this._getThetaFromUTC(d)
-        console.log(d);
         return this.rScale(this.maxValue * this.cfg.labelFactor) * Math.sin(theta);
       })
       .text((d) => {
