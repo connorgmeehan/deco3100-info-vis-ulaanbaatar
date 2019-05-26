@@ -17,8 +17,40 @@ body {
   margin: 0;
 }
 
+h1 { // Main title
+  font-size: 50px;
+  color:#A44647;
+  font-weight: 600;
+}
+
+h2 { // Subtitle 
+  color: white;
+  text-transform: uppercase; 
+  font-weight: 400;
+}
+
+h3 { // Graph title
+  color: white;
+  text-align: center;
+  font-weight: 500;
+}
+
+h4 { // Graph title
+  font-size: 24px;
+  color: white;
+  text-align: left;
+  font-weight: 500;
+}
+h5 { // Sources
+  font-size: 14px;
+  color: grey;
+  text-align: left;
+  font-weight: 500;
+}
+
 @import "./fonts.css";
 
+@import './intro.scss';
 @import './title.scss';
 @import './radar.scss';
 @import './page.scss';
