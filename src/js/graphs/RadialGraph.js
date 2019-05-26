@@ -51,6 +51,8 @@ class RadialGraph extends D3Graph {
     window.appState.hoveredStation.subscribe(this._onStationStateChange);
     window.appState.hoveredTime.subscribe(this._onTimeStateChange);
 
+    console.log(this);
+
     this.init(data);
   }
 

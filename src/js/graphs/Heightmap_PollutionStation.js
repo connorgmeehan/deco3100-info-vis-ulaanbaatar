@@ -43,6 +43,7 @@ class PollutionStation {
     this.previewPaneSettings = PreviewPlaneSettings;
     this.previewPaneSettings.location = stationMetaData.location;
     this.previewPaneSettings.filename = stationMetaData.filename;
+    this.color = stationMetaData.color;
     this.previewPaneSettings.position = this.p;
     this.previewPlane = new PreviewPlane(this.scene, this.events, this.previewPaneSettings);
 
@@ -51,7 +52,7 @@ class PollutionStation {
 
   init() {
     this.geometry = new THREE.BoxGeometry(1, 1, 1);
-    this.material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    this.material = new THREE.MeshBasicMaterial({ color: this.color });
     this.cube = new THREE.Mesh(this.geometry, this.material);
     this.cube.position.set(this.p.x, this.p.y, this.p.z);
 
@@ -95,9 +96,9 @@ class PollutionStation {
 
   _onStationStateChange = (data) => {
     if (data === this.name) {
-      this.material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-    } else {
       this.material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    } else {
+      this.material = new THREE.MeshBasicMaterial({ color: this.color });
     }
     this.cube.material = this.material;
   }

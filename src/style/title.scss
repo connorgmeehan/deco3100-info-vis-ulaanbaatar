@@ -40,7 +40,6 @@ body {
     h1 { // Main title
         font-size: 50px;
         color:#A44647;
-        padding: 200,200,20,200;
         font-weight: 600;
     }
 
@@ -54,5 +53,16 @@ body {
         color: white;
         text-align: center;
         font-weight: 500;
+    }
+
+    .Graph_HeightmapSection_TitleBlock {
+        margin-left: 20px;
+        margin-top: 30px;
+        h1 {
+            margin-bottom: 0;
+        }
+        h2 {
+            margin-top: 0;
+        }
     }
 }
