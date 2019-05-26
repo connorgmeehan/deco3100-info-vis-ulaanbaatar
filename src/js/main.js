@@ -63,7 +63,7 @@ const main = () => {
   // Stores the main visualisation, including THREE.js map and timeline
   const sectionMapSettings = SectionSettings;
   sectionMapSettings.backgroundColor = 'rgb(41,41,41)';
-  const sectionMap = new Section(2000, 'HeightMap', sectionMapSettings);
+  const sectionMap = new Section(6000, 'HeightMap', sectionMapSettings);
 
   // build progressscaler for section
   const sectionMapProgressScaler = new ProgressScaler(0.1, 0.9);
@@ -73,7 +73,7 @@ const main = () => {
   const sectionMapTitleOptions = new GraphOptions(25, 0, 1920, 50);
   const sectionMapTitleData = [
     { tag: 'h1', className: 'HeightmapSection_Title', content: 'Ulaanbaatar: Choked by Pollution - Part 2' },
-    { tag: 'h2', className: 'HeightmapSection_Subtitle', content: 'How time, space and weather shapes Ulaanbaatar\'s pollution' },
+    { tag: 'h2', className: 'HeightmapSection_Subtitle', content: 'The factors that shape Ulaanbaatar’s pollution problem' },
   ];
   const sectionMapTitle = new TextBlock('HeightmapSection_TitleBlock', sectionMapTitleOptions, sectionMapTitleData);
   sectionMapTitle.alwaysShow();
@@ -122,6 +122,55 @@ const main = () => {
   const radialGraphTitle = new TextBlock('RadialGraph_TitleBlock', radialGraphTitleOptions, RadialGraphTitleData);
   radialGraphTitle.alwaysShow();
   sectionMap.addChild(radialGraphTitle);
+
+  // Add context text
+  const contextTextOptions = new GraphOptions(
+    radialGraphOptions.x, radialGraphOptions.y - 200,
+    radialGraphOptions.width, 200, 'right',
+  );
+
+  // For each text that we want to show
+  const contextText1Data = [
+    { tag: 'h4', className: 'SectionMap_ContextText', content: 'Taking a closer look at Ulaanbaatar reveals how factors such as seasonal temperatures and location play a role in its unique pollution problem.' },
+  ];
+  const contextText1 = new TextBlock('ContextText_TextBlock', contextTextOptions, contextText1Data) // make sure last parameter = the new data.
+  contextText1.setShowRange(0.02, 0.27);
+  sectionMap.addChild(contextText1);
+
+  const contextText2Data = [
+    { tag: 'h4', className: 'SectionMap_ContextText', content: 'As the coldest capital city, residents without access to electricity are forced to burn coal, wood and sometimes rubbish to stay warm in the freezing temperatures.' },
+  ];
+  const contextText2 = new TextBlock('ContextText_TextBlock', contextTextOptions, contextText2Data) // make sure last parameter = the new data.
+  contextText2.setShowRange(0.29, 0.49);
+  sectionMap.addChild(contextText2);
+
+  const contextText3Data = [
+    { tag: 'h4', className: 'SectionMap_ContextText', content: 'These residents typically live in ger areas which are sprawling informal settlements on the city’s outskirts.' },
+  ];
+  const contextText3 = new TextBlock('ContextText_TextBlock', contextTextOptions, contextText3Data) // make sure last parameter = the new data.
+  contextText3.setShowRange(0.51, 0.63);
+  sectionMap.addChild(contextText3);
+
+  const contextText4Data = [
+    { tag: 'h4', className: 'SectionMap_ContextText', content: 'This map shows how ‘ger’ areas are exposed to significantly higher levels of pollution than ‘non-ger’ areas.' },
+  ];
+  const contextText4 = new TextBlock('ContextText_TextBlock', contextTextOptions, contextText4Data) // make sure last parameter = the new data.
+  contextText4.setShowRange(0.65, 0.79);
+  sectionMap.addChild(contextText4);
+
+  const contextText5Data = [
+    { tag: 'h4', className: 'SectionMap_ContextText', content: 'These levels spike particularly in the winter months as temperatures drop to below zero.' },
+  ];
+  const contextText5 = new TextBlock('ContextText_TextBlock', contextTextOptions, contextText5Data) // make sure last parameter = the new data.
+  contextText5.setShowRange(0.82, 0.90);
+  sectionMap.addChild(contextText5);
+
+  const contextText6Data = [
+    { tag: 'h5', className: 'SectionMap_ContextText', content: 'Ger / Non Ger defined by: Purevtseren, M., Tsegmid, B., Indra, M. and Sugar, M. (2018). The Fractal Geometry of Urban Land Use: The Case of Ulaanbaatar City, Mongolia. Land, 7(2), p.67. \n PM2.5 Readings: OpenAQ, 2019, Mongolia. 2017 Obtained from: https://openaq.org/#/countries/MN?_k=dp8u8e [Accessed 26 May. 2019]. \n Weather: Rp5.ru. 2019. Weather archive in Ulan Bator 2017-2018. Obtained from: https://rp5.ru/Weather_archive_in_Ulan_Bator [Accessed 14 Apr. 2019].' },
+  ];
+  const contextText6 = new TextBlock('ContextText_TextBlock', contextTextOptions, contextText6Data) // make sure last parameter = the new data.
+  contextText6.setShowRange(0.92, 1.2);
+  sectionMap.addChild(contextText6);
 
   sectionMap.runUpdate();
 

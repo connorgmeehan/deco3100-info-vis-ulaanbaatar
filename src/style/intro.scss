@@ -1,0 +1,24 @@
+.Intro {
+    &_Heading {
+
+    }
+
+    &_Subheading {
+        color: grey;
+    }
+
+    &_Content {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+
+    &_Image {
+        width: auto;
+        height: 70vh;
+    }
+
+    &_Description {
+        font-size: 1.2rem;
+    }
+}

@@ -35,26 +35,8 @@ body {
     width: 500px;
   }
 }
-
+  
 #Section_HeightMap {
-    h1 { // Main title
-        font-size: 50px;
-        color:#A44647;
-        font-weight: 600;
-    }
-
-    h2 { // Subtitle 
-        color: white;
-        text-transform: uppercase; 
-        font-weight: 400;
-    }
-
-    h3 { // Graph title
-        color: white;
-        text-align: center;
-        font-weight: 500;
-    }
-
     .Graph_HeightmapSection_TitleBlock {
         margin-left: 20px;
         margin-top: 30px;

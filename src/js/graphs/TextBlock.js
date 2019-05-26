@@ -44,7 +44,7 @@ class TextBlock extends GenericGraph {
     }
   }
 
-  setShowRange(endProgress, startProgress) {
+  setShowRange(startProgress, endProgress) {
     this.startProgress = startProgress;
     this.endProgress = endProgress;
   }
