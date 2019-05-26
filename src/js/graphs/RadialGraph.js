@@ -5,7 +5,7 @@ import D3Graph from './D3Graph';
 import dateToString from '../helpers/dateToString';
 import mapVal from '../helpers/mapVal';
 
-export const RadialGraphOptions = {
+export const RadialGraphSettings = {
   width: 200,
   height: 200,
   innerRadius: 50,
@@ -167,7 +167,6 @@ class RadialGraph extends D3Graph {
   }
 
   update(progress) {
-    console.log(progress);
     this.progress = progress;
 
     const toShowOffsetMultiplier = clamp(mapVal(progress, -0.1, 0, 0, 1), 0, 1);

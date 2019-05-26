@@ -24,7 +24,7 @@ export const HeightMapConfig = {
   camera: {
     x: 0,
     y: 30,
-    z: 70,
+    z: 60,
     viewAngle: 45,
   },
   light: {

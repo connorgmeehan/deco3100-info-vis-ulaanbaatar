@@ -7,7 +7,7 @@ import weatherPollutionData from '../public/station_pollution_weather_data.csv'
 import AppState from './state/AppState';
 import Section, { SectionSettings } from './components/Section';
 import { GraphOptions } from './graphs/GenericGraph';
-import RadialGraph, { RadialGraphOptions } from './graphs/RadialGraph';
+import RadialGraph, { RadialGraphSettings } from './graphs/RadialGraph';
 import HeightMap, { HeightMapConfig } from './graphs/Heightmap';
 import ProgressScaler from './helpers/ProgressScaler';
 import TextBlock from './graphs/TextBlock';
@@ -55,41 +55,68 @@ const main = () => {
   // Use utc as index of data
   stationsData.index = formattedData.reduce((acc, cur) => (acc[0] === 'utc' ? acc : cur));
 
-  // Section Map
+  /*
+   *    SECTION MAP
+   */
   // Stores the main visualisation, including THREE.js map and timeline
   const sectionMapSettings = SectionSettings;
-  const SectionMap = new Section(2000, 'Intro', sectionMapSettings);
+  const sectionMap = new Section(2000, 'Intro', sectionMapSettings);
 
   // build progressscaler for section
   const sectionMapProgressScaler = new ProgressScaler(0.1, 0.9);
-  SectionMap.setProgressScaler(sectionMapProgressScaler);
+  sectionMap.setProgressScaler(sectionMapProgressScaler);
 
-  // HeightMap
-  const hmGraphOptions = new GraphOptions(50, 50, 1200, 800, 'left');
+  // Section Title
+  const sectionMapTitleOptions = new GraphOptions(25, 0, 1920, 50);
+  const sectionMapTitleData = [
+    { tag: 'h2', className: 'HeightmapSection_Title', content: 'Ulaanbaatar: Choked by Pollution - Part 2' },
+    { tag: 'h3', className: 'HeightmapSection_Subtitle', content: 'How time, space and weather shapes Ulaanbaatar\'s pollution' },
+  ];
+  const sectionMapTitle = new TextBlock('HeightmapSection_TitleBlock', sectionMapTitleOptions, sectionMapTitleData);
+  sectionMapTitle.alwaysShow();
+  sectionMap.addChild(sectionMapTitle);
+
+  // Heightmap
+  const hmGraphOptions = new GraphOptions(50, 150, 1000, 800, 'left');
   const hmConfig = HeightMapConfig;
   const heightMapData = { stationMetaData, stationsData, weatherData };
   const heightMap = new HeightMap('Heightmap', hmGraphOptions, heightMapData, hmConfig);
-  SectionMap.addChild(heightMap);
+  sectionMap.addChild(heightMap);
+
+  // Heightmap title
+  const heightmapTitleOptons = new GraphOptions(
+    hmGraphOptions.x, hmGraphOptions.y + hmGraphOptions.height - 220,
+    hmGraphOptions.width, 50,
+  );
+  const heightmapTitleData = [
+    { tag: 'h3', className: 'HeightmapSection_Metatitle', content: 'Map of Ulaanbaatar, its Air Quality Stations and weekly PM2.5 levels (May 2017 to May 2018)' },
+  ];
+  const heightmapTitle = new TextBlock('Heightmap_TitleBlock', heightmapTitleOptons, heightmapTitleData);
+  heightmapTitle.alwaysShow();
+  sectionMap.addChild(heightmapTitle);
+
 
   // Radial Graph
-  const genericOptionsRadial = new GraphOptions(50, 300, 500, 500, 'right');
-  const radialGraphOptions = RadialGraphOptions;
+  const radialGraphOptions = new GraphOptions(50, hmGraphOptions.y + 75, 500, 500, 'right');
+  const radialGraphSettings = RadialGraphSettings;
   radialGraphOptions.width = 500;
   radialGraphOptions.height = 500;
   radialGraphOptions.toShowOffset = hmConfig.numWeeksToShow;
-  const radialGraph = new RadialGraph('Radial', genericOptionsRadial, stationsData, radialGraphOptions);
-  SectionMap.addChild(radialGraph);
+  const radialGraph = new RadialGraph('Radial', radialGraphOptions, stationsData, radialGraphSettings);
+  sectionMap.addChild(radialGraph);
 
-  // Heightmap Title
-  const heightmapTitleOptions = new GraphOptions(50, 20, hmGraphOptions.getWidth(), 30);
-  const heightMapTitleData = [
-    { tag: 'h2', className: 'Heightmap_Title', content: 'Ulaanbaatar: Choked by Pollution - Part 2' },
+  const radialGraphTitleOptions = new GraphOptions(
+    radialGraphOptions.x, radialGraphOptions.y + radialGraphOptions.height,
+    radialGraphOptions.width, 50, radialGraphOptions.alignment,
+  );
+  const RadialGraphTitleData = [
+    { tag: 'h3', className: 'RadialGraph_Metatitle', content: 'Ulaanbaatar, PM2.5 levels by Pollution Station, weekly (May 2017 to May 2018)' },
   ];
-  const heightmapTitle = new TextBlock('Heightmap_Title', heightmapTitleOptions, heightMapTitleData);
-  heightmapTitle.alwaysShow();
-  SectionMap.addChild(heightmapTitle);
+  const radialGraphTitle = new TextBlock('RadialGraph_TitleBlock', radialGraphTitleOptions, RadialGraphTitleData);
+  radialGraphTitle.alwaysShow();
+  sectionMap.addChild(radialGraphTitle);
 
-  SectionMap.runUpdate();
+  sectionMap.runUpdate();
 
   console.log('ready');
 }

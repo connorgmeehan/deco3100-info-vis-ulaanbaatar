@@ -24,7 +24,7 @@ class TextBlock extends GenericGraph {
 
     for (let i = 0; i < data.length; i++) {
       const node = document.createElement(data[i].tag);
-      node.id = `${this.name}_${data[i].className}`;
+      node.id = `${name}_${data[i].className}`;
       node.className = data[i].className;
       const textNode = document.createTextNode(data[i].content);
       node.appendChild(textNode);
