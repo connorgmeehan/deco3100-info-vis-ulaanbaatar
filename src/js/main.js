@@ -54,6 +54,7 @@ const main = () => {
   const weatherData = formattedData.find(el => el[0] === 'Weather (C)');
   // Use utc as index of data
   stationsData.index = formattedData.reduce((acc, cur) => (acc[0] === 'utc' ? acc : cur));
+  const weatherTimeData = weatherData[1].map((el, i) => ({ temp: el, utc: stationsData.index[1][i] }));
 
   /*
    *    SECTION MAP
@@ -103,7 +104,7 @@ const main = () => {
   radialGraphOptions.width = 500;
   radialGraphOptions.height = 500;
   radialGraphOptions.toShowOffset = hmConfig.numWeeksToShow;
-  const radialGraph = new RadialGraph('Radial', radialGraphOptions, { stationsData, stationMetaData }, radialGraphSettings);
+  const radialGraph = new RadialGraph('Radial', radialGraphOptions, { stationsData, stationMetaData, weatherTimeData }, radialGraphSettings);
   sectionMap.addChild(radialGraph);
 
   const radialGraphTitleOptions = new GraphOptions(

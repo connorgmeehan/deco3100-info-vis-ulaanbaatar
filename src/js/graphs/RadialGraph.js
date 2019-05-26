@@ -36,6 +36,7 @@ class RadialGraph extends D3Graph {
     };
     console.log(data);
     this.data = data.stationsData;
+    this.weatherTimeData = data.weatherTimeData;
     this.stationsMetaData = data.stationMetaData;
     this.index = this.data.index;
     this.maxValue = d3.max(this.data, row => d3.max(row[1]));
@@ -59,6 +60,7 @@ class RadialGraph extends D3Graph {
 
   init(data) {
     console.log(`RadialGraph::init(data.legth: ${data.length})`);
+
     // Setup d3 scales
     this.rScale = d3.scaleLinear()
       .range([this.cfg.innerRadius, this.cfg.outerRadius])
@@ -171,6 +173,37 @@ class RadialGraph extends D3Graph {
       .attr('opacity', 0)
       .attr('stroke', 'white')
       .attr('stroke-width', '2px');
+
+    const maxTemp = d3.max(this.weatherTimeData.map(el => el.temp));
+    const minTemp = d3.min(this.weatherTimeData.map(el => el.temp));
+    this.temperaturePoints = this.graph.selectAll('.TemperaturePoints')
+      .append('g')
+      .attr('class', 'TemperaturePoints')
+      .data(this.weatherTimeData)
+      .enter()
+      .append('circle')
+      .attr('class', 'TempPoint')
+      .attr('cx', (d) => {
+        const theta = this._getThetaFromUTC(d.utc)
+        return this.rScale(this.maxValue) * Math.cos(theta);
+      })
+      .attr('cy', (d) => {
+        const theta = this._getThetaFromUTC(d.utc)
+        return this.rScale(this.maxValue) * Math.sin(theta);
+      })
+      .attr('r', 5)
+      .attr('fill', (d) => {
+        const val = mapVal(d.temp, minTemp, maxTemp, 255, 0);
+        return `hsl(${val}, 100%, 50%)`;
+      });
+
+    this.temperaturePoints.on('mouseover', (d, i) => {
+      window.appState.hoveredTime.notify(d.utc);
+      console.log(`hovering temperature points ${d.temp} ${d.utc}`);
+    })
+    .on('mouseout', (d, i) => {
+      window.appState.hoveredTime.notify(null);
+    })
   }
 
   update(progress) {
