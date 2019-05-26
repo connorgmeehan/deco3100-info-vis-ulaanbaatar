@@ -1,0 +1,11 @@
+@font-face {
+  font-family: Avenir;
+  src: url('/public/AvenirNextLTPro-Regular.otf');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: Avenir;
+  src: url('/public/AvenirNextLTPro-DemiCn.otf');
+  font-weight: 600;
+}

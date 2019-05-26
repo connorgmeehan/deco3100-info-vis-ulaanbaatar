@@ -12,11 +12,12 @@
   pointer-events: none;
 }
 
-
 body {
   color: blue;
   margin: 0;
 }
+
+@import "./fonts.css";
 
 @import './title.scss';
 @import './radar.scss';
