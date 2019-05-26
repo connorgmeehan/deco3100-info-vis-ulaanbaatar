@@ -96,7 +96,13 @@ const main = () => {
     hmGraphOptions.width, 50,
   );
   const heightmapTitleData = [
-    { tag: 'h3', className: 'HeightmapSection_Metatitle', content: 'Map of Ulaanbaatar, its Air Quality Stations and weekly PM2.5 levels (May 2017 to May 2018)' },
+    {
+      tag: 'h3',
+      className: 'HeightmapSection_Metatitle',
+      content: `Map of Ulaanbaatar, its Air Quality Stations and weekly PM2.5 levels (May 2017 to May 2018)<br>
+      <span style="color: rgb(106, 213, 11)">&#9608;</span> Non-Ger     
+      <span style="color: rgb(212, 171, 77); margin-left: 20px;"">&#9608;</span> Ger`,
+    },
   ];
   const heightmapTitle = new TextBlock('Heightmap_TitleBlock', heightmapTitleOptons, heightmapTitleData);
   heightmapTitle.alwaysShow();
