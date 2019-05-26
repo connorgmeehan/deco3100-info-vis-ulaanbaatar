@@ -49,7 +49,7 @@ class PollutionBlob {
   }
 
   updateData(d, dataOffsetIndex) {
-    if (d && dataOffsetIndex && this.dataOffsetIndex !== dataOffsetIndex) {
+    if (this.dataOffsetIndex !== dataOffsetIndex) {
       this.d = d;
 
       this.radius = (d.val !== null
@@ -75,7 +75,7 @@ class PollutionBlob {
   setY(y) {
     this.mesh.position.setY(y + STATION_OFFSET);
     const dist = Math.abs(y - this.origin.y);
-    const scale = dist / (1 + dist) * this.settings.scale;
+    const scale = (dist + 0.0000001) / (1 + dist) * this.settings.scale;
     this.mesh.scale.set(scale, scale, scale);
   }
 
