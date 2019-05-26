@@ -96,6 +96,7 @@ class PollutionBlob {
   _onMouseOut = () => {
     this.isMouseOver = false;
     if (window.appState.hoveredTime.data === this.d.utc) {
+      console.log(window.appState.hoveredTime.data, this.d.utc, window.appState.hoveredTime.data === this.d.utc)
       window.appState.hoveredTime.notify(null);
     }
     this.parent._onMouseOut();

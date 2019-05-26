@@ -6,6 +6,7 @@ import weatherPollutionData from '../public/station_pollution_weather_data.csv'
 
 import AppState from './state/AppState';
 import Section, { SectionSettings } from './components/Section';
+import ToolTip from './components/ToolTip';
 import { GraphOptions } from './graphs/GenericGraph';
 import RadialGraph, { RadialGraphSettings } from './graphs/RadialGraph';
 import HeightMap, { HeightMapConfig } from './graphs/Heightmap';
@@ -77,6 +78,10 @@ const main = () => {
   const sectionMapTitle = new TextBlock('HeightmapSection_TitleBlock', sectionMapTitleOptions, sectionMapTitleData);
   sectionMapTitle.alwaysShow();
   sectionMap.addChild(sectionMapTitle);
+
+  const tooltipGraphOptions = new GraphOptions(-200, -200, 200, 100);
+  const tooltip = new ToolTip('ToolTip', tooltipGraphOptions, { stationsData, weatherTimeData });
+  sectionMap.addChild(tooltip);
 
   // Heightmap
   const hmGraphOptions = new GraphOptions(50, 150, 1000, 800, 'left');

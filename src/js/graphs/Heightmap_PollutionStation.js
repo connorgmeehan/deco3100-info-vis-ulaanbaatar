@@ -101,37 +101,16 @@ class PollutionStation {
   _onStationStateChange = (data) => {
     if (data === this.name) {
       this.material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-      this.ratioText = new TextSprite({
-        material: {
-          color: 0xffffff,
-          fog: true,
-          depthTest: false,
-          depthWrite: false,
-        },
-        redrawInterval: 250,
-        textSize: 0.5,
-        texture: {
-          fontFamily: 'Arial, Helvetica, sans-serif',
-          text: `
-          location: ${this.name}
-          ger/non-ger: ${(this.stationMetaData.isGer === 'yes' ? 'ger' : 'non-ger')}`,
-        },
-      });
-      const textPos = new THREE.Vector3(this.p.x, this.p.y + 4, this.p.z).lerp(this.camera.position, 0.5);
-      this.ratioText.position.set(textPos.x, textPos.y, textPos.z);
-      this.scene.add(this.ratioText);
     } else {
       this.material = new THREE.MeshBasicMaterial({ color: this.color });
-      if (this.ratioText) {
-        this.scene.remove(this.ratioText);
-        this.ratioText = null;
-      }
     }
     this.cube.material = this.material;
   }
 
   _onMouseOver = () => {
-    window.appState.hoveredStation.notify(this.name);
+    if (window.appState.hoveredStation.data !== this.name) {
+      window.appState.hoveredStation.notify(this.name);
+    }
   }
 
   _onMouseOut = () => {

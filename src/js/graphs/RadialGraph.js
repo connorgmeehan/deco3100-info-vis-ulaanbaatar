@@ -199,10 +199,11 @@ class RadialGraph extends D3Graph {
 
     this.temperaturePoints.on('mouseover', (d, i) => {
       window.appState.hoveredTime.notify(d.utc);
-      console.log(`hovering temperature points ${d.temp} ${d.utc}`);
     })
     .on('mouseout', (d, i) => {
-      window.appState.hoveredTime.notify(null);
+      if (window.appState.hoveredTime.data === d.utc) {
+        window.appState.hoveredTime.notify(null);
+      }
     })
   }
 

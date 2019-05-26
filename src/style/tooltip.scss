@@ -1,0 +1,28 @@
+
+.ToolTip {
+  z-index: 100000000;
+  opacity: 0;
+  transition: opacity 100ms ease-in-out !important;
+  @include noselect();
+  @include nopointer();
+
+  &__Show {
+    opacity: 1;
+  }
+}
+
+.Graph_ToolTip {
+  background: white;
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: black;
+  font-family: 'Avenir';
+
+  h5 {
+    margin: 2px 0;
+  }
+
+  h6 {
+    margin: 2px 0;
+  }
+}

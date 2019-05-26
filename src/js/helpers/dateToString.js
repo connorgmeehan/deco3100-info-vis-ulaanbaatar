@@ -16,6 +16,7 @@ const MON = [
 export default function dateToString(utc) {
   const date = new Date(utc);
   return {
+    year: date.getFullYear(),
     month: MON[date.getMonth()],
     day: date.getDate(),
   }
