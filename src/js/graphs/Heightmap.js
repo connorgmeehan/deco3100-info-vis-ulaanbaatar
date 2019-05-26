@@ -9,7 +9,6 @@ import THREEx from '../state/Threex.DomEvents';
 import GenericGraph from './GenericGraph';
 import PollutionStation, { PollutionStationSettings } from './Heightmap_PollutionStation';
 import MultiTextureLoader from '../helpers/MultiTextureLoader';
-import mapVal from '../helpers/mapVal';
 import NorthPointer, { NorthPointerSettings } from './Heightmap_NorthPointer';
 
 export const HeightMapConfig = {
@@ -64,13 +63,13 @@ class Heightmap extends GenericGraph {
 
     this.heightMapConfig = hmConfig;
 
-    const texLoader = new MultiTextureLoader((texs) => {
-      this.init(graphOptions, texs, hmConfig);
+    const texLoader = new MultiTextureLoader((textures) => {
+      this.init(graphOptions, textures, hmConfig);
     })
-    texLoader.addTexture(hmConfig.textureMapSrc);
-    texLoader.addHeightmap(hmConfig.heightmapSrc);
-    texLoader.addNormalMap(hmConfig.normalMapSrc);
-    texLoader.addAlphaMap(hmConfig.alphamapSrc);
+    texLoader.addTexture(hmConfig.textureMapSrc, 'texturemap');
+    texLoader.addTexture(hmConfig.heightmapSrc, 'heightmap');
+    texLoader.addTexture(hmConfig.normalMapSrc, 'normalmap');
+    texLoader.addTexture(hmConfig.alphamapSrc, 'alphamap');
 
     this.dataLength = this.data.stationsData.index[1].length;
   }
@@ -79,7 +78,7 @@ class Heightmap extends GenericGraph {
     console.log(`Heightmap::init(graphOptions: ${graphOptions}, textures: ${textures}, hmConfig: ${hmConfig})`);
     this.scene = new THREE.Scene();
     this.scene.add(new THREE.AmbientLight(0xeeeeee, 0.5));
-
+    
     this.cam = new THREE.PerspectiveCamera(
       hmConfig.camera.viewAngle,
       graphOptions.width / graphOptions.height,
@@ -167,8 +166,6 @@ class Heightmap extends GenericGraph {
 
   render = () => {
     this.stats.begin();
-
-    this.northPointer.animate();
 
     TWEEN.update();
     if (this.shouldUpdateControls) {

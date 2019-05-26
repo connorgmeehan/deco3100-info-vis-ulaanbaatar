@@ -6,48 +6,22 @@ class MultiTextureLoader {
 
   constructor(callback) {
     this.callback = callback;
+    this.toLoad = [];
     this.loader = new THREE.TextureLoader();
   }
 
-  addTexture(path) {
-    this.textures.texturemap = null;
+  addTexture(path, key) {
+    this.textures[key] = null;
     this.loader.load(path,
       (tex) => {
-        this.textures.texturemap = tex;
-        this.checkLoadeded();
-      });
-  }
-
-  addHeightmap(path) {
-    this.textures.heightmap = null;
-    this.loader.load(path,
-      (tex) => {
-        this.textures.heightmap = tex;
-        this.checkLoadeded();
-      });
-  }
-
-  addNormalMap(path) {
-    this.textures.normalmap = null;
-    this.loader.load(path,
-      (tex) => {
-        this.textures.normalmap = tex;
-        this.checkLoadeded();
-      });
-  }
-
-  addAlphaMap(path) {
-    this.textures.alphamap = null;
-    this.loader.load(path,
-      (tex) => {
-        this.textures.alphamap = tex;
+        this.textures[key] = tex;
         this.checkLoadeded();
       });
   }
 
   checkLoadeded() {
     // eslint-disable-next-line no-restricted-syntax
-    for (let key in this.textures) {
+    for (const key in this.textures) {
       if (this.textures[key] === null) {
         return;
       }

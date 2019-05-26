@@ -1,8 +1,10 @@
 import * as THREE from 'three';
 
+import TextSprite from 'three.textsprite';
+
 export const NorthPointerSettings = {
   origin: { x: 0, y: 2, z: 0 },
-  sceneRadius: 26,
+  sceneRadius: 28,
   realRadius: 22000,
   northDirection: { x: 0, y: 0, z: -1 },
   segmentCount: 50,
@@ -11,13 +13,13 @@ export const NorthPointerSettings = {
 };
 
 class NorthPointer {
-  constructor(scene, camera, northPointerSettings, parent) {
+  constructor(scene, camera, northPointerSettings) {
     this.scene = scene;
     this.camera = camera;
     this.origin = northPointerSettings.origin;
     this.sceneRadius = northPointerSettings.sceneRadius;
     this.realRadius = northPointerSettings.realRadius;
-    this.ratio = this.realRadius / this.sceneRadius;
+    this.ratio = Math.round(this.realRadius / this.sceneRadius);
 
     this.circleGeometry = new THREE.CircleGeometry(this.sceneRadius, northPointerSettings.segmentCount);
     this.circleGeometry.vertices.shift();
@@ -46,10 +48,28 @@ class NorthPointer {
     this.northFigure = new THREE.Line(this.northFigureGeometry, this.material)
     this.northFigure.position.set(this.origin.x, this.origin.y, this.origin.z);
     this.scene.add(this.northFigure);
-  }
 
-  animate() {
-    console.log(this.northLine);
+    this.ratioText = new TextSprite({
+      material: {
+        color: 0xffbbff,
+        fog: true,
+      },
+      redrawInterval: 250,
+      textSize: 1.2,
+      texture: {
+        fontFamily: 'Arial, Helvetica, sans-serif',
+        text: `
+        radius: ${this.realRadius / 1000}km
+        ratio: 1:${this.ratio}`,
+      },
+    });
+    this.ratioText.position.set(
+      this.origin.x,
+      this.origin.y + 4,
+      this.origin.z - this.sceneRadius * (1.1 + northPointerSettings.lineSize) - 1,
+    );
+
+    this.scene.add(this.ratioText);
   }
 }
 
