@@ -77,7 +77,12 @@ class ToolTip extends GenericGraph {
     console.log(stationData);
     const pollutionVal = stationData[1].find(el => el.utc === this.utc);
     console.log(stationData, pollutionVal);
-    return pollutionVal.val;
+    if (pollutionVal) {
+      // eslint-disable-next-line no-unneeded-ternary
+      console.log(pollutionVal, (pollutionVal ? true : false))
+      return pollutionVal.val;
+    }
+    return null;
   }
 
   _updateElement() {
