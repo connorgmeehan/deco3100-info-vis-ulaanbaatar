@@ -4,6 +4,7 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+
     {
       "type": "chrome",
       "request": "attach",
@@ -12,5 +13,18 @@
       "urlFilter": "http://localhost:8080/",
       "webRoot": "${workspaceFolder}/dist"
     },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "runtimeExecutable": "/usr/bin/chromium",
+      "runtimeArgs": [
+        "--remote-debugging-port=9222",
+        "–new-window=\"https://localhost:8080/\""
+      ],
+      "port": 9222,
+      "name": "Launch Chrome",
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}"
+    }
   ]
 }

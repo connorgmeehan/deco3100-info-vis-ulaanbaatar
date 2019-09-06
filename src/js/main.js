@@ -47,6 +47,7 @@ const main = () => {
 
   // Format data to be more easily segmented for each component
   const formattedData = Object.entries(pivotArray(weatherPollutionData));
+  console.log(formattedData);
   window.stationMetaData = stationMetaData;
 
   const stations = stationMetaData.map(row => row.location);
