@@ -19,7 +19,7 @@ class ProgressScaler {
   calculate(progress) {
     if (this.shouldClamp) {
       return clamp(mapVal(progress, this.startVal, this.endVal, -0.1, 1.1), -0.1, 1.1);
-    } 
+    }
     return mapVal(progress, this.startVal, this.endVal, -0.1, 1.1);
   }
 

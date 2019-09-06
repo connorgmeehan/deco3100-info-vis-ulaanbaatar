@@ -18,30 +18,35 @@ body {
 }
 
 h1 { // Main title
+  z-index: 1;
   font-size: 50px;
   color:#A44647;
   font-weight: 600;
 }
 
 h2 { // Subtitle 
+  z-index: 1;
   color: white;
   text-transform: uppercase; 
   font-weight: 400;
 }
 
 h3 { // Graph title
+  z-index: 1;
   color: white;
   text-align: center;
   font-weight: 500;
 }
 
 h4 { // Graph title
+  z-index: 1;
   font-size: 24px;
   color: white;
   text-align: left;
   font-weight: 500;
 }
 h5 { // Sources
+  z-index: 1;
   font-size: 14px;
   color: grey;
   text-align: left;

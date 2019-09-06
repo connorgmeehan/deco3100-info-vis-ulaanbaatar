@@ -9,6 +9,7 @@ import THREEx from '../../state/Threex.DomEvents';
 
 import SegmentManager from './SegmentManager';
 import NorthPointer from './NorthPointer';
+import BackgroundUpdater from './BackgroundUpdater';
 
 export const HeightMapConfig = {
     width: 1024,
@@ -45,9 +46,10 @@ export const HeightMapConfig = {
     oldCameraPosition = { x: 0, y: 0, z: 0 };
     oldTargetPositon = { x: 0, y: 0, z: 0 };
 
-    constructor(name, graphOptions, data, hmConfig = null) {
+    constructor(name, graphOptions, data, hmConfig = HeightMapConfig, sectionParent = null) {
       super(name, graphOptions, data);
       console.log(data);
+      this.sectionParent = sectionParent;
 
       this.heightMapConfig = hmConfig;
 
@@ -70,6 +72,9 @@ export const HeightMapConfig = {
       this.scene.add(this.plane);
       this.segmentManager = new SegmentManager(this.scene, this.camera, this.events, this.data);
       this.NorthPointer = new NorthPointer(this.scene, this.camera);
+      if (this.sectionParent) {
+        this.backgroundUpdater = new BackgroundUpdater(this.renderer, this.sectionParent, data);
+      }
       this.render();
     }
 

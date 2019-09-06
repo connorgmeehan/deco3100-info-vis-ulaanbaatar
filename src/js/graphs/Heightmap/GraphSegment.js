@@ -4,6 +4,7 @@ import TemperatureDisk, { TemperatureDiskSettings } from './TemperatureDisk';
 
 export const GraphSegmentSettings = {
     segmentStepDistance: 2,
+    scrollUtcOffset: 2,
 }
 
 export class GraphSegmentVm {
@@ -49,6 +50,10 @@ export default class GraphSegment {
             this.temperatureDisk.setVisible(false);
             this.pollutionBlobs.forEach((blob) => { blob.setVisible(false); });
         } else {
+            const { scrollUtcOffset, segmentStepDistance } = this.settings;
+            if (y > (scrollUtcOffset - 1) * segmentStepDistance && scrollUtcOffset * segmentStepDistance > y) {
+                window.newAppState.scrollUTC.notify(this.utc);
+            }
             this.temperatureDisk.setVisible(true);
             this.pollutionBlobs.forEach((blob) => { blob.setVisible(true); });
         }

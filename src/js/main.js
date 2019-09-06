@@ -5,6 +5,7 @@ import stationMetaData from '../public/station_meta_data.csv';
 import weatherPollutionData from '../public/station_pollution_weather_data.csv'
 
 import AppState from './state/AppState';
+import NewAppState from './state/NewAppState';
 import Section, { SectionSettings } from './components/Section';
 import ToolTip from './components/ToolTip';
 import { GraphOptions } from './graphs/GenericGraph';
@@ -14,6 +15,11 @@ import TextBlock from './graphs/TextBlock';
 
 const main = () => {
   // Initialise Observer App State
+  window.newAppState = NewAppState;
+  window.newAppState.scrollUTC.subscribe((utc) => {
+    console.log(`NewAppState: scrollUTC = ${utc}`);
+  });
+
   window.appState = AppState;
   window.appState.selectedStation.subscribe((station) => {
     if (station) {
@@ -84,17 +90,12 @@ const main = () => {
   sectionMap.addChild(tooltip);
 
   // Heightmap
-  const hmGraphOptions = new GraphOptions(50, 150, 1000, 800, 'left');
+  const hmGraphOptions = new GraphOptions(null, null, 1000, 800);
   const hmConfig = HeightMapConfig;
   const heightMapData = { stationMetaData, stationsData, weatherData };
-  const heightMap = new HeightMap('Heightmap', hmGraphOptions, heightMapData, hmConfig);
+  const heightMap = new HeightMap('Heightmap', hmGraphOptions, heightMapData, hmConfig, sectionMap.element);
   sectionMap.addChild(heightMap);
 
-  // Heightmap title
-  const heightmapTitleOptons = new GraphOptions(
-    hmGraphOptions.x, hmGraphOptions.y + hmGraphOptions.height - 220,
-    hmGraphOptions.width, 50,
-  );
   const heightmapTitleData = [
     {
       tag: 'h3',
@@ -104,7 +105,7 @@ const main = () => {
       <span style="color: rgb(212, 171, 77); margin-left: 20px;"">&#9608;</span> Ger`,
     },
   ];
-  const heightmapTitle = new TextBlock('Heightmap_TitleBlock', heightmapTitleOptons, heightmapTitleData);
+  const heightmapTitle = new TextBlock('Heightmap_TitleBlock', null, heightmapTitleData);
   heightmapTitle.alwaysShow();
   sectionMap.addChild(heightmapTitle);
 

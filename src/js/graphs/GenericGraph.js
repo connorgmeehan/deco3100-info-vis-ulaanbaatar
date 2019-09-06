@@ -45,10 +45,13 @@ class GenericGraph {
     this.element.classList.add(`Graph_${name}`);
     this.element.id = `Graph_${name}`;
 
-    this.element.style.width = graphOptions.getWidth();
-    this.element.style.height = graphOptions.getHeight();
-    this.element.style[graphOptions.getAlignment()] = graphOptions.getX();
-    this.element.style[graphOptions.getVerticleAlignment()] = graphOptions.getY();
+    if (graphOptions) {
+      this.element.style.width = graphOptions.getWidth();
+      this.element.style.height = graphOptions.getHeight();
+      this.element.style[graphOptions.getAlignment()] = graphOptions.getX();
+      this.element.style[graphOptions.getVerticleAlignment()] = graphOptions.getY();
+    }
+
 
     this.data = data;
     this.graphOptions = graphOptions;

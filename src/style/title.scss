@@ -35,21 +35,29 @@ body {
     width: 500px;
   }
 }
-  
+ 
+.Graph {
+  &_Heightmap {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    &_Titleblock {
+      width: 100%;
+    }
+  }
+}
+
 #Section_HeightMap {
-    .Graph_HeightmapSection_TitleBlock {
-        margin-left: 20px;
-        margin-top: 30px;
+    .Graph_Heightmap_TitleBlock {
+        position: absolute;
+        left: 50%;
+        top: 80%;
+        transform: translate(-50%, -50%);
         h1 {
             margin-bottom: 0;
         }
         h2 {
             margin-top: 0;
         }
-    }
-
-    .HeightmapSection_Metatitle {
-      text-align: left;
-      margin-left: 40px;
     }
 }
