@@ -8,6 +8,7 @@ import { GraphSegmentVm } from './GraphSegment';
 import THREEx from '../../state/Threex.DomEvents';
 
 import SegmentManager from './SegmentManager';
+import NorthPointer from './NorthPointer';
 
 export const HeightMapConfig = {
     width: 1024,
@@ -68,7 +69,7 @@ export const HeightMapConfig = {
       this.plane = this.createHeightmap(textures);
       this.scene.add(this.plane);
       this.segmentManager = new SegmentManager(this.scene, this.camera, this.events, this.data);
-
+      this.NorthPointer = new NorthPointer(this.scene, this.camera);
       this.render();
     }
 
