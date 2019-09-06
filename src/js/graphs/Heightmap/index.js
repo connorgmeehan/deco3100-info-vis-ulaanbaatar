@@ -4,7 +4,7 @@ import TWEEN from '@tweenjs/tween.js';
 
 import GenericGraph from '../GenericGraph';
 import MultiTextureLoader from '../../helpers/MultiTextureLoader';
-import DataSegment from './DataSegment';
+import { GraphSegmentSettings } from './DataSegment';
 import THREEx from '../../state/Threex.DomEvents';
 
 import SegmentManager from './SegmentManager';
@@ -101,7 +101,7 @@ export const HeightMapConfig = {
           stations[key] = data.stationsData.find(el => el[0] === key)[1][i];
         });
 
-        dataSegments[i] = new DataSegment(utc, temperature, stations);
+        dataSegments[i] = new GraphSegmentSettings(utc, temperature, stations);
       }
 
       return { dataSegments, metaData };
