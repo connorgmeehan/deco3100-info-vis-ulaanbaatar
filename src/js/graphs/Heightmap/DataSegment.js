@@ -23,10 +23,16 @@ export default class GraphSegment {
 
     initObject() {
         this.obj = new THREE.Object3D();
+        this.obj.position.set(0, 0, 0);
+        this.scene.add(this.obj);
     }
 
     addStationBlob(name, pollution, x, z) {
-        const blob = new PollutionBlob(this.scene, this.events, pollution);
+        const blob = new PollutionBlob(this.obj, this.events, pollution);
         blob.setPosition(x, 0, z);
+    }
+
+    setY(y) {
+        this.obj.position.setY(y);
     }
 }

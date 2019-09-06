@@ -137,7 +137,7 @@ export const HeightMapConfig = {
       this.cam.lookAt(this.scene.position);
 
       this.controls = new OrbitControls(this.cam, this.renderer.domElement);
-      this.controls.maxPolarAngle = Math.PI / 2 - 0.3;
+      // this.controls.maxPolarAngle = Math.PI / 2 - 0.3;
       this.controls.enableZoom = false;
       this.controls.enablePan = false;
       this.controls.enableKeys = false;

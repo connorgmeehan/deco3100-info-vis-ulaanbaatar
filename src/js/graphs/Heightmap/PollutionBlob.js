@@ -13,14 +13,19 @@ export const PollutionBlobSettings = {
 
 export default class PollutionBlob {
     parent;
+    events;
+    name;
     val;
+    settings;
+
     geometry;
     material;
     mesh;
 
-    constructor(parent, events, val, settings = PollutionBlobSettings) {
+    constructor(parent, events, name, val, settings = PollutionBlobSettings) {
         this.parent = parent;
         this.events = events;
+        this.name = name;
         this.val = val;
         this.settings = settings;
 
@@ -37,16 +42,11 @@ export default class PollutionBlob {
           transparent: true,
         });
         this.mesh = new THREE.Mesh(this.geometry, this.material);
-        this.obj = new THREE.Object3D();
         this.parent.add(this.mesh);
     }
 
     setPosition(x, y, z) {
-        this.obj.position.set(x, y, z);
-    }
-
-    sety(y) {
-        this.obj.position.setY(y);
+        this.mesh.position.set(x, y, z);
     }
 
     calculateRadius = () => this.val / ((4 / 3) * Math.PI) / this.settings.maxPollution;
