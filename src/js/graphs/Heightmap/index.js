@@ -1,8 +1,13 @@
 import * as THREE from 'three';
+import OrbitControls from 'three-orbitcontrols';
+import TWEEN from '@tweenjs/tween.js';
 
 import GenericGraph from '../GenericGraph';
 import MultiTextureLoader from '../../helpers/MultiTextureLoader';
 import DataSegment from './DataSegment';
+import THREEx from '../../state/Threex.DomEvents';
+
+import SegmentManager from './SegmentManager';
 
 export const HeightMapConfig = {
     width: 1024,
@@ -55,18 +60,37 @@ export const HeightMapConfig = {
     }
 
     init(graphOptions, textures, hmConfig, data) {
-        this.data = this.formatData(data);
-        this.buildScene(graphOptions, hmConfig)
+      this.data = this.formatData(data);
+      this.buildScene(graphOptions, hmConfig)
+      this.element.appendChild(this.renderer.domElement);
+      this.buildCamera(graphOptions, hmConfig);
+      this.events = new THREEx.DomEvents(this.cam, this.renderer.domElement);
+      this.plane = this.createHeightmap(textures);
+      this.scene.add(this.plane);
+      this.segmentManager = new SegmentManager(this.scene, this.camera, this.events, this.data);
+
+      this.render();
     }
 
+    render = () => {
+      TWEEN.update();
+      if (this.shouldUpdateControls) {
+        this.controls.update();
+      }
+      this.renderer.render(this.scene, this.cam);
+
+      requestAnimationFrame(this.render);
+    }
+
+    // eslint-disable-next-line class-methods-use-this
     formatData(data) {
-      this.metaData = data.stationMetaData;
+      const metaData = data.stationMetaData;
 
       // Format Data Segments
       const datalength = data.weatherData[1].length;
       console.log(data.stationsData.length);
       console.log(Object.keys(data.stationsData.length))
-      this.dataSegments = new Array(datalength);
+      const dataSegments = new Array(datalength);
 
       for (let i = 0; i < datalength; i++) {
         const utc = data.stationsData.index[1][i];
@@ -77,23 +101,75 @@ export const HeightMapConfig = {
           stations[key] = data.stationsData.find(el => el[0] === key)[1][i];
         });
 
-        this.dataSegments[i] = new DataSegment(utc, temperature, stations);
+        dataSegments[i] = new DataSegment(utc, temperature, stations);
       }
+
+      return { dataSegments, metaData };
     }
 
     buildScene(graphOptions, hmConfig) {
-        // Build scene renderer and light
-        this.scene = new THREE.Scene();
-        this.scene.add(new THREE.AmbientLight(0xeeeeee, 0.5));
+      // Build scene renderer and light
+      this.scene = new THREE.Scene();
+      this.scene.add(new THREE.AmbientLight(0xeeeeee, 0.5));
 
-        this.renderer = new THREE.WebGLRenderer();
-        this.renderer.setClearColor(this.parentSection.settings.backgroundColor, 1.0);
-        this.renderer.setSize(graphOptions.width, graphOptions.height);
+      this.renderer = new THREE.WebGLRenderer();
+      this.renderer.setClearColor(this.parentSection.settings.backgroundColor, 1.0);
+      this.renderer.setSize(graphOptions.width, graphOptions.height);
 
-        this.light = new THREE.DirectionalLight();
-        this.light.position.set(hmConfig.light.x, hmConfig.light.y, hmConfig.light.z);
-        this.light.intensity = hmConfig.light.intensity;
-        this.scene.add(this.light);
+      this.light = new THREE.DirectionalLight();
+      this.light.position.set(hmConfig.light.x, hmConfig.light.y, hmConfig.light.z);
+      this.light.intensity = hmConfig.light.intensity;
+      this.scene.add(this.light);
+    }
+
+    buildCamera(graphOptions, hmConfig) {
+      // Build camera and orbit controls
+      this.cam = new THREE.PerspectiveCamera(
+        hmConfig.camera.viewAngle,
+        graphOptions.width / graphOptions.height,
+        0.1,
+        1000,
+      );
+
+      this.cam.position.x = hmConfig.camera.x;
+      this.cam.position.y = hmConfig.camera.y;
+      this.cam.position.z = hmConfig.camera.z;
+      this.cam.lookAt(this.scene.position);
+
+      this.controls = new OrbitControls(this.cam, this.renderer.domElement);
+      this.controls.maxPolarAngle = Math.PI / 2 - 0.3;
+      this.controls.enableZoom = false;
+      this.controls.enablePan = false;
+      this.controls.enableKeys = false;
+      this.controls.autoRotate = true;
+      this.controls.autoRotateSpeed = 0.1;
+    }
+
+    createHeightmap(textures) {
+      const {
+        heightmap, normalmap, texturemap, alphamap,
+       } = textures;
+
+      const planeGeometry = new THREE.PlaneGeometry(
+        60, 60,
+        heightmap.image.naturalWidth - 1, heightmap.image.naturalHeight - 1,
+      );
+
+      const material = new THREE.MeshStandardMaterial({
+        color: 0xFFFFFF,
+        metalness: 0,
+        roughness: 1,
+        map: texturemap,
+        alphaMap: alphamap,
+        normalMap: normalmap,
+        displacementMap: heightmap,
+        displacementScale: this.heightMapConfig.heightScale,
+        transparent: true,
+      })
+
+      const plane = new THREE.Mesh(planeGeometry, material);
+      plane.rotation.x = -Math.PI / 2;
+      return plane;
     }
 }
 
