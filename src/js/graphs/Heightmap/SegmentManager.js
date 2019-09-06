@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import GraphSegment from './DataSegment';
+import Station from './Station';
 
 export const SegmentManagerSettings = {
     segmentStepDistance: 2,
@@ -14,7 +15,13 @@ export default class SegmentManager {
         this.data = data;
         this.settings = settings;
 
+        this.stations = [];
         this.segments = [];
+
+        this.data.metaData.forEach((md) => {
+            const station = new Station(this.scene, this.events, md.location, md.x, md.y);
+            this.stations.push(station);
+        })
 
         this.data.dataSegments.forEach((ds, i) => {
             const segment = new GraphSegment(this.scene, this.events, ds.utc, ds.temperature);

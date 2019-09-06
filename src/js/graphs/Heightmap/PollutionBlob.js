@@ -29,9 +29,6 @@ export default class PollutionBlob {
         this.val = val;
         this.settings = settings;
 
-        // eslint-disable-next-line prefer-rest-params
-        console.log(name, val);
-
         this.init();
     }
 
