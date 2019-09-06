@@ -1,7 +1,12 @@
 import * as THREE from 'three';
 import PollutionBlob from './PollutionBlob';
+import TemperatureDisk, { TemperatureDiskSettings } from './TemperatureDisk';
 
- export class GraphSegmentSettings {
+export const GraphSegmentSettings = {
+    segmentStepDistance: 2,
+}
+
+export class GraphSegmentVm {
     constructor(utc, temperature, stations) {
         this.utc = utc;
         this.temperature = temperature;
@@ -10,21 +15,26 @@ import PollutionBlob from './PollutionBlob';
 }
 
 export default class GraphSegment {
-    constructor(scene, events, utc, temperature) {
+    constructor(scene, events, utc, temperature, settings = GraphSegmentSettings) {
         this.scene = scene;
         this.events = events;
         this.utc = utc;
         this.temperature = temperature;
+        this.settings = settings;
 
-        this.initObject();
+        this.init();
 
         this.pollutionBlobs = [];
     }
 
-    initObject() {
+    init() {
         this.obj = new THREE.Object3D();
         this.obj.position.set(0, 0, 0);
         this.scene.add(this.obj);
+
+        const temperatureDiskSettings = TemperatureDiskSettings;
+        temperatureDiskSettings.height = this.settings.segmentStepDistance;
+        this.temperatureDisk = new TemperatureDisk(this.scene, this.obj, this.events, this.utc, this.temperature, temperatureDiskSettings);
     }
 
     addStationBlob(name, pollution, x, z) {
@@ -35,15 +45,12 @@ export default class GraphSegment {
 
     setY(y) {
         this.obj.position.setY(y);
-        const distance = y - 0;
-        const clampedDistance = distance > 1.0 ? 1.0 : 0; 
-        this.pollutionBlobs.forEach((blob) => {
-            if (y < 0) {
-                // update size
-                blob.setScale(0);
-            } else {
-                blob.setScale(clampedDistance);
-            }
-        });
+        if (y < 0) {
+            this.temperatureDisk.setVisible(false);
+            this.pollutionBlobs.forEach((blob) => { blob.setVisible(false); });
+        } else {
+            this.temperatureDisk.setVisible(true);
+            this.pollutionBlobs.forEach((blob) => { blob.setVisible(true); });
+        }
     }
 }

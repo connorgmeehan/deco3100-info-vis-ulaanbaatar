@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import GraphSegment from './GraphSegment';
+import GraphSegment, { GraphSegmentSettings } from './GraphSegment';
 import Station from './Station';
 
 export const SegmentManagerSettings = {
@@ -33,9 +33,10 @@ export default class SegmentManager {
             const station = new Station(this.scene, this.events, md.location, md.x, md.y);
             this.stations.push(station);
         })
-
+        const graphSegmentSettings = GraphSegmentSettings;
+        graphSegmentSettings.segmentStepDistance = this.segmentStepDist;
         this.data.dataSegments.forEach((ds, i) => {
-            const segment = new GraphSegment(this.scene, this.events, ds.utc, ds.temperature);
+            const segment = new GraphSegment(this.scene, this.events, ds.utc, ds.temperature, graphSegmentSettings);
 
             this.data.metaData.forEach((station) => {
                 segment.addStationBlob(station.location, ds.stations[station.location], station.x, station.y);

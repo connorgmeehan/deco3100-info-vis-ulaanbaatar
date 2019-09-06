@@ -6,7 +6,7 @@ const HEIGHT_SEGMENTS = 8;
 
 export const PollutionBlobSettings = {
     maxPollution: 500,
-    scale: 10,
+    scale: 30,
     widthSegments: 8,
     heightSegments: 8,
     hoverDarkenAmount: 0.2,
@@ -34,15 +34,16 @@ export default class PollutionBlob {
     }
 
     init() {
-        const colors = this.calculateColor();
+        const color = this.calculateColor();
         const radius = this.calculateRadius();
         this.geometry = new THREE.SphereGeometry(radius, WIDTH_SEGMENTS, HEIGHT_SEGMENTS);
         this.material = new THREE.MeshBasicMaterial({
-          color: new THREE.Color(colors.r, colors.g, colors.b),
+          color: new THREE.Color(color.r, color.g, color.b),
           opacity: 1.0,
           transparent: true,
         });
         this.mesh = new THREE.Mesh(this.geometry, this.material);
+        
         this.parent.add(this.mesh);
     }
 
@@ -53,9 +54,11 @@ export default class PollutionBlob {
     setOpacity(opacity) {
         this.material.opacity = opacity;
     }
-
     setScale(scale) {
         this.mesh.scale.set(scale, scale, scale);
+    }
+    setVisible(isVisible) {
+        this.mesh.visible = isVisible;
     }
 
     calculateRadius() {
