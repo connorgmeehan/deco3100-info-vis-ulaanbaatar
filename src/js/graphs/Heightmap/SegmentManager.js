@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import GraphSegment from './DataSegment';
+import GraphSegment from './GraphSegment';
 import Station from './Station';
 
 export const SegmentManagerSettings = {
@@ -41,7 +41,7 @@ export default class SegmentManager {
                 segment.addStationBlob(station.location, ds.stations[station.location], station.x, station.y);
             });
 
-            segment.setY(-i * this.settings.segmentStepDistance);
+            segment.setY(-i * this.segmentStepDist);
 
             this.segments.push(segment);
         });

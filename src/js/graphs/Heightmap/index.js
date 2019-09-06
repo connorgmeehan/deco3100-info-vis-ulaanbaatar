@@ -4,7 +4,7 @@ import TWEEN from '@tweenjs/tween.js';
 
 import GenericGraph from '../GenericGraph';
 import MultiTextureLoader from '../../helpers/MultiTextureLoader';
-import { GraphSegmentSettings } from './DataSegment';
+import { GraphSegmentSettings } from './GraphSegment';
 import THREEx from '../../state/Threex.DomEvents';
 
 import SegmentManager from './SegmentManager';

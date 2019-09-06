@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } from 'constants';
 
 const WIDTH_SEGMENTS = 8;
 const HEIGHT_SEGMENTS = 8;
@@ -47,6 +48,14 @@ export default class PollutionBlob {
 
     setPosition(x, y, z) {
         this.mesh.position.set(x, y, z);
+    }
+
+    setOpacity(opacity) {
+        this.material.opacity = opacity;
+    }
+
+    setScale(scale) {
+        this.mesh.scale.set(scale, scale, scale);
     }
 
     calculateRadius() {

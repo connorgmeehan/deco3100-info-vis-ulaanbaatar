@@ -18,7 +18,7 @@ export default class GraphSegment {
 
         this.initObject();
 
-        this.stationBlobs = [];
+        this.pollutionBlobs = [];
     }
 
     initObject() {
@@ -30,9 +30,20 @@ export default class GraphSegment {
     addStationBlob(name, pollution, x, z) {
         const blob = new PollutionBlob(this.obj, this.events, name, pollution);
         blob.setPosition(x, 0, z);
+        this.pollutionBlobs.push(blob);
     }
 
     setY(y) {
         this.obj.position.setY(y);
+        const distance = y - 0;
+        const clampedDistance = distance > 1.0 ? 1.0 : 0; 
+        this.pollutionBlobs.forEach((blob) => {
+            if (y < 0) {
+                // update size
+                blob.setScale(0);
+            } else {
+                blob.setScale(clampedDistance);
+            }
+        });
     }
 }
