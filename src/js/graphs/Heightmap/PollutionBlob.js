@@ -52,7 +52,7 @@ export default class PollutionBlob {
     calculateRadius() {
         return (
             this.val !== null
-            ? this.val / ((4 / 3) * Math.PI) / this.settings.maxPollution
+            ? (this.val / ((4 / 3) * Math.PI) / this.settings.maxPollution) * this.settings.scale
             : 0.000001
         );
     }

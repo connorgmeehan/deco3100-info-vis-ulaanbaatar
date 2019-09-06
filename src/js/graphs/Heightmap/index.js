@@ -171,6 +171,12 @@ export const HeightMapConfig = {
       plane.rotation.x = -Math.PI / 2;
       return plane;
     }
+
+    update(progress) {
+      if (this.segmentManager) {
+        this.segmentManager.update(progress);
+      }
+    }
 }
 
 export default Heightmap;
