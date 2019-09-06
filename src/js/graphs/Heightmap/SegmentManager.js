@@ -51,7 +51,6 @@ export default class SegmentManager {
         const { segmentStepDist, scrollMultiplier } = this;
         this.segments.forEach((segment, i) => {
             const y = -i * segmentStepDist + progress * scrollMultiplier;
-            console.log(y);
             segment.setY(y);
         });
     }
