@@ -29,6 +29,9 @@ export default class PollutionBlob {
         this.val = val;
         this.settings = settings;
 
+        // eslint-disable-next-line prefer-rest-params
+        console.log(name, val);
+
         this.init();
     }
 
@@ -49,8 +52,14 @@ export default class PollutionBlob {
         this.mesh.position.set(x, y, z);
     }
 
-    calculateRadius = () => this.val / ((4 / 3) * Math.PI) / this.settings.maxPollution;
-    calculateColor = (darkenAmount = 0) => {
+    calculateRadius() {
+        return (
+            this.val !== null
+            ? this.val / ((4 / 3) * Math.PI) / this.settings.maxPollution
+            : 0.000001
+        );
+    }
+    calculateColor(darkenAmount = 0) {
         const r = this.val / this.settings.maxPollution * 0.5 - darkenAmount;
         const g = this.val / this.settings.maxPollution * darkenAmount;
         const b = this.val / this.settings.maxPollution * darkenAmount;

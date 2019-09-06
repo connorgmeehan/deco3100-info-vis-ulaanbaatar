@@ -28,7 +28,7 @@ export default class GraphSegment {
     }
 
     addStationBlob(name, pollution, x, z) {
-        const blob = new PollutionBlob(this.obj, this.events, pollution);
+        const blob = new PollutionBlob(this.obj, this.events, name, pollution);
         blob.setPosition(x, 0, z);
     }
 
