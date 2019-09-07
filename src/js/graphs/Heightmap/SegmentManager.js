@@ -3,7 +3,7 @@ import Station from './Station';
 
 export const SegmentManagerSettings = {
     maxHeight: 400,
-    paddingTop: 0.3,
+    paddingTop: 0.1,
     paddingBottom: -0.25,
 }
 

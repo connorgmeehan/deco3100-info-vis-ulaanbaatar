@@ -19,9 +19,9 @@ const main = () => {
 
   window.step0Progress = -10;
   window.step1Progress = -0.35;
-  window.step2Progress = -0.15;
-  window.step3Progress = 0.1;
-  window.step4Progress = 0.2;
+  window.step2Progress = -0.2;
+  window.step3Progress = -0.1;
+  window.step4Progress = 0.0;
   window.step8Progress = 1.2;
   window.stepFinal = 10;
   // window.newAppState.scrollUTC.subscribe((utc) => {
@@ -129,7 +129,7 @@ const main = () => {
     },
   ];
   const heightmapTitle = new TextBlock('Heightmap_Meta', null, heightmapTitleData);
-  heightmapTitle.setShowRange(window.step4Progress, 2.0);
+  heightmapTitle.setShowRange(window.step4Progress, window.step8Progress);
   sectionMap.addChild(heightmapTitle);
 
   const introData = [
