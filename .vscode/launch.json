@@ -19,7 +19,6 @@
       "runtimeExecutable": "/usr/bin/chromium",
       "runtimeArgs": [
         "--remote-debugging-port=9222",
-        "–new-window=\"https://localhost:8080/\""
       ],
       "port": 9222,
       "name": "Launch Chrome",

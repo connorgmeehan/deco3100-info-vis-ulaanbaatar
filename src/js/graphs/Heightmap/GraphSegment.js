@@ -26,6 +26,8 @@ export default class GraphSegment {
         this.init();
 
         this.pollutionBlobs = [];
+
+        this.notifyUTCCallback = this.notifyUTCCallback.bind(this);
     }
 
     init() {
@@ -39,7 +41,7 @@ export default class GraphSegment {
     }
 
     addStationBlob(name, pollution, x, z) {
-        const blob = new PollutionBlob(this.obj, this.events, name, pollution);
+        const blob = new PollutionBlob(this.obj, this.events, name, pollution, this.notifyUTCCallback);
         blob.setPosition(x, 0, z);
         this.pollutionBlobs.push(blob);
     }
@@ -53,9 +55,20 @@ export default class GraphSegment {
             const { scrollUtcOffset, segmentStepDistance } = this.settings;
             if (y > (scrollUtcOffset - 1) * segmentStepDistance && scrollUtcOffset * segmentStepDistance > y) {
                 window.newAppState.scrollUTC.notify(this.utc);
+                window.newAppState.scrollTemperature.notify(this.temperature);
             }
             this.temperatureDisk.setVisible(true);
             this.pollutionBlobs.forEach((blob) => { blob.setVisible(true); });
+        }
+    }
+
+    notifyUTCCallback(mouseOver = false) {
+        if (mouseOver) {
+            window.newAppState.selectedUTC.notify(this.utc);
+            window.newAppState.selectedTemperature.notify(this.temperature);
+        } else {
+            window.newAppState.selectedUTC.notify(null);
+            window.newAppState.selectedTemperature.notify(null);
         }
     }
 }

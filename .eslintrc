@@ -28,6 +28,6 @@
     "no-trailing-spaces": "warn",
     "prefer-destructuring": "warn",
     "prefer-const": "warn",
-    "max-len": "warn"
+    "max-len": "off",
   }
 }

@@ -1,25 +1,82 @@
 
-.ToolTip {
-  z-index: 100000000;
-}
+$font-size-meta: 1.2rem;
+$font-size-main: 3.5rem;
+$font-size-secondary: 2rem;
 
-.Graph_ToolTip {
-  background: rgb(230, 230, 230);
+$color-emphasis : #FFF;
+$color-base : #DDD;
+$color-deemphasis : #CCC;
+
+.Tooltip {
+  position: absolute;
+  z-index: 2000;
+  left: calc(50% + 450px);
+  bottom: 23%;
+  width: 200px;
   border-radius: 5px;
-  padding: 20px 20px;
-  color: #222;
+  padding: 20px 30px;
+  color: $color-emphasis;
   font-family: 'Avenir';
 
-  &_Title {
-    font-size: 1.2rem;
-    &_Time {
-      font-size: 0.6rem;
-      color: #777;
+  transition: opacity 0.4s ease-in-out;
+
+  &_Hidden {
+    opacity: 0;
+  }
+
+  &_Time {
+    font-weight: 600;
+    font-size: $font-size-meta;
+    color: $color-base;
+    &_Header {
+      font-size: $font-size-meta;
+      color: $color-deemphasis;
     }
   }
 
-  h6 {
-    font-size: 0.9rem;
-    margin: 2px 0;
+  &_Station {
+    font-weight: 600;
+    font-size: $font-size-meta;
+    color: $color-base;
+    &_Header {
+      font-size: $font-size-meta;
+      color: $color-deemphasis;
+    }
+  }
+
+  &_Weather {
+    display: inline-block;
+    margin: 1rem 0 0.2rem;
+    margin-left: -2px;
+    font-size: $font-size-main;
+    color: $color-emphasis;
+    &::before {
+      position: absolute;
+      display: inline-block;
+      width: 13px;
+      left: 6px;
+      content: " ";
+      color: $color-emphasis;
+    }
+    &_Negative::before {
+      content: "-";
+    }
+
+    &_Header {
+      font-weight: 300;
+      font-size: $font-size-secondary;
+      color: $color-deemphasis;
+    }
+  }
+
+  &_Pollution {
+    color: $color-base;
+    font-weight: 500;
+    font-size: $font-size-secondary;
+
+    &_Header {
+      font-size: $font-size-meta;
+      color: $color-deemphasis;
+    }
   }
 }

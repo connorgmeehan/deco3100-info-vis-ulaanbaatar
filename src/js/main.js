@@ -19,6 +19,18 @@ const main = () => {
   window.newAppState.scrollUTC.subscribe((utc) => {
     console.log(`NewAppState: scrollUTC = ${utc}`);
   });
+  window.newAppState.scrollTemperature.subscribe((temp) => {
+    console.log(`NewAppState: scrollTemperature = ${temp}`);
+  });
+  window.newAppState.selectedUTC.subscribe((utc) => {
+    console.log(`NewAppState: selectedUTC = ${utc}`);
+  });
+  window.newAppState.selectedPollution.subscribe((pollution) => {
+    console.log(`NewAppState: selectedPollution = ${pollution}`);
+  });
+  window.newAppState.selectedStation.subscribe((station) => {
+    console.log(`NewAppState: selectedStation = ${station}`);
+  });
 
   window.appState = AppState;
   window.appState.selectedStation.subscribe((station) => {
@@ -85,8 +97,7 @@ const main = () => {
   sectionMapTitle.alwaysShow();
   sectionMap.addChild(sectionMapTitle);
 
-  const tooltipGraphOptions = new GraphOptions(200, 200, 300, 500, 'right', 'bottom');
-  const tooltip = new ToolTip('ToolTip', tooltipGraphOptions, { stationsData, weatherTimeData });
+  const tooltip = new ToolTip(document.getElementById('tooltip'));
   sectionMap.addChild(tooltip);
 
   // Heightmap

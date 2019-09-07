@@ -6,6 +6,12 @@
 
 @font-face {
   font-family: Avenir;
+  src: url('/public/AvenirNextLTPro-Medium.otf');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: Avenir;
   src: url('/public/AvenirNextLTPro-Demi.otf');
   font-weight: 600;
 }

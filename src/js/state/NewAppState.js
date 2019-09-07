@@ -30,6 +30,11 @@ class Observable {
 
 const NewAppState = {
     scrollUTC: new Observable(),
+    scrollTemperature: new Observable(),
+    selectedUTC: new Observable(),
+    selectedPollution: new Observable(),
+    selectedStation: new Observable(),
+    selectedTemperature: new Observable(),
 };
 
 export default NewAppState;
