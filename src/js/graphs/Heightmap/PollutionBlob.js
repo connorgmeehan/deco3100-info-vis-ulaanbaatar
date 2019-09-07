@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import TWEEN from '@tweenjs/tween.js';
 
 const WIDTH_SEGMENTS = 8;
 const HEIGHT_SEGMENTS = 8;
@@ -58,11 +59,9 @@ export default class PollutionBlob {
     }
 
     setOpacity(opacity) {
-        this.material.opacity = opacity;
+        this.material.opacity = opacity
     }
-    setScale(scale) {
-        this.mesh.scale.set(scale, scale, scale);
-    }
+
     setVisible(isVisible) {
         this.mesh.visible = isVisible;
     }

@@ -84,7 +84,6 @@ const main = () => {
   const weatherData = formattedData.find(el => el[0] === 'Weather (C)');
   // Use utc as index of data
   stationsData.index = formattedData.reduce((acc, cur) => (acc[0] === 'utc' ? acc : cur));
-  const weatherTimeData = weatherData[1].map((el, i) => ({ temp: el, utc: stationsData.index[1][i] }));
 
   /*
    *    SECTION MAP
@@ -137,7 +136,7 @@ const main = () => {
     {
       tag: 'h2',
       className: 'Title',
-      content: 'This is Ulaanbaatarr',      
+      content: 'This is Ulaanbaatarr',
     },
     {
       tag: 'p',
@@ -153,7 +152,7 @@ const main = () => {
     {
       tag: 'h2',
       className: 'Title',
-      content: 'Why is it like this?',      
+      content: 'Why is it like this?',
     },
     {
       tag: 'p',
@@ -164,7 +163,7 @@ const main = () => {
   const introTitle2 = new TextBlock('Heightmap_Intro', null, introData2);
   introTitle2.setShowRange(window.step3Progress, window.step4Progress);
   sectionMap.addChild(introTitle2);
-  
+
   sectionMap.runUpdate();
   console.log('ready');
 }

@@ -70,6 +70,12 @@ export default class SegmentManager {
         })
     }
 
+    setOpacityOnSegments(opacity) {
+        this.segments.forEach((segment) => {
+            segment.setOpacity(opacity);
+        })
+    }
+
     showBlobsAsGraph() {
         console.log('showBlobsAsGraph')
         const newPositions = [];

@@ -42,6 +42,12 @@ export default class GraphSegment {
         this.pollutionBlobs.push(blob);
     }
 
+    setOpacity(opacity) {
+        this.pollutionBlobs.forEach((blob) => {
+            blob.setOpacity(opacity);
+        });
+    }
+
     setY(y) {
         this.obj.position.setY(y);
         if (y < 0) {

@@ -80,6 +80,7 @@ export const HeightMapConfig = {
       if (this.sectionParent) {
         this.backgroundUpdater = new BackgroundUpdater(this.renderer, this.sectionParent, data);
       }
+
       this.render();
     }
 
@@ -150,8 +151,6 @@ export const HeightMapConfig = {
       this.controls.enableZoom = false;
       this.controls.enablePan = false;
       this.controls.enableKeys = false;
-      this.controls.autoRotate = true;
-      this.controls.autoRotateSpeed = 0.1;
       this.cameraPosition = this.cam.position;
       this.cameraTarget = this.scene.position;
     }
@@ -202,6 +201,8 @@ export const HeightMapConfig = {
     }
 
     bindGraphEvents() {
+      window.newAppState.activeStation.subscribe(station => this.handleActiveStation(station));
+
       this.hideMap = this.hideMap.bind(this);
       this.showMap = this.showMap.bind(this);
       this.addProgressEvent(window.step2Progress, 2, () => this.showMap(), () => this.hideMap());
@@ -217,6 +218,25 @@ export const HeightMapConfig = {
       this.showAsChart = this.showAsChart.bind(this);
       this.showAsMap = this.showAsMap.bind(this);
       this.addProgressEvent(window.step8Progress, window.stepFinal, () => this.showAsChart(), () => this.showAsMap());
+    }
+
+    handleActiveStation(station) {
+      const stationData = this.data.metaData.find(s => s.location === station);
+      if (stationData) {
+        const focalPoint = { x: stationData.x, y: 1, z: stationData.y };
+        const targetPosition = { x: stationData.x, y: 8, z: stationData.y + 0.02 };
+        this.tweenCamera(focalPoint, targetPosition);
+        this.segmentManager.setOpacityOnSegments(0);
+      } else {
+        const { x, y, z } = this.heightMapConfig.camera;
+        const focalPoint = { x: 0, y: 0, z: 0 };
+        const cameraPosition = { x, y, z };
+        this.segmentManager.setOpacityOnSegments(1);
+        this.tweenCamera(
+          focalPoint,
+          cameraPosition,
+        )
+      }
     }
 
     hideMap() {
@@ -284,15 +304,13 @@ export const HeightMapConfig = {
     }
 
     startRotateMap() {
-      this.rotateAmount = 0;
-      this.rotateMapInterval = setInterval(() => {
-        this.rotateAmount += 0.0002;
-        this.plane.rotation.y = this.rotateAmount;
-      }, 20);
+      this.controls.autoRotate = true;
+      this.controls.autoRotateSpeed = 0.1;
     }
 
     endRotateMap() {
-      clearInterval(this.rotateMapInterval);
+      this.controls.autoRotate = false;
+      this.controls.autoRotateSpeed = 0.1;
     }
 
     showAsChart() {

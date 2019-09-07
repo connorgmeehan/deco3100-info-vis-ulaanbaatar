@@ -17,6 +17,8 @@ export default class Station {
         this.x = x;
         this.z = z;
 
+        this.color = new THREE.Color(0, 1, 0);
+
         this.init();
         this.bindEvents();
     }
