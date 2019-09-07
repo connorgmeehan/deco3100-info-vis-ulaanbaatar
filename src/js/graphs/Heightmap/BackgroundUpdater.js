@@ -24,6 +24,8 @@ class BackgroundUpdater {
             return new THREE.Color(threeColor.r, threeColor.g, threeColor.b);
         });
         this.color = this.colors[0];
+        this.sectionDomElement.style.background = `rgb(${this.color.r * 255}, ${this.color.g * 255}, ${this.color.b * 255})`;
+        this.renderer.setClearColor(this.color);
 
         console.log(data);
 
@@ -37,7 +39,7 @@ class BackgroundUpdater {
     _onUTCUpdate(utc) {
         const color = this._getColorFromUTC(utc);
         this.colorTween = new TWEEN.Tween(this.color)
-            .to(color, 200)
+            .to(color, 300)
             .easing(TWEEN.Easing.Quadratic.InOut)
             .onUpdate(() => {
                 this.renderer.setClearColor(this.color);

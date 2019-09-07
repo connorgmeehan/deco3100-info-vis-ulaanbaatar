@@ -47,17 +47,42 @@ body {
   }
 }
 
-#Section_HeightMap {
-    .Graph_Heightmap_TitleBlock {
-        position: absolute;
-        left: 50%;
-        top: 80%;
-        transform: translate(-50%, -50%);
-        h1 {
-            margin-bottom: 0;
-        }
-        h2 {
-            margin-top: 0;
-        }
+.Graph {
+  &_Heightmap {
+    &_TitleBlock {
+      @include noselect();
+      @include nopointer();
+      z-index: 9999;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      text-align: center;
     }
+
+    &_Intro {
+      @include noselect();
+      @include nopointer();
+      z-index: 9999;
+      top: 20%;
+      left: 50%;
+      width: 60%;
+      transform: translate(-50%, -50%);
+    }
+
+    &_Meta {
+      @include noselect();
+      @include nopointer();
+      left: 50%;
+      top: 80%;
+      text-align: center;
+      transform: translate(-50%, -50%);
+      h1 {
+          margin-bottom: 0;
+      }
+      h2 {
+          margin-top: 0;
+      }
+    }
+  }
 }

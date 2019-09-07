@@ -19,13 +19,14 @@ body {
 
 h1 { // Main title
   z-index: 1;
-  font-size: 50px;
+  font-size: 3rem;
   color:#A44647;
   font-weight: 600;
 }
 
 h2 { // Subtitle 
   z-index: 1;
+  font-size: 2rem;
   color: white;
   text-transform: uppercase; 
   font-weight: 400;
@@ -33,6 +34,7 @@ h2 { // Subtitle
 
 h3 { // Graph title
   z-index: 1;
+  font-size: 1.8rem;
   color: white;
   text-align: center;
   font-weight: 500;
@@ -40,17 +42,22 @@ h3 { // Graph title
 
 h4 { // Graph title
   z-index: 1;
-  font-size: 24px;
+  font-size: 1.5rem;
   color: white;
   text-align: left;
   font-weight: 500;
 }
 h5 { // Sources
   z-index: 1;
-  font-size: 14px;
+  font-size: 1rem;
   color: grey;
   text-align: left;
   font-weight: 500;
+}
+
+p {
+  font-size: 1.3rem;
+  color: white;
 }
 
 @import "./fonts.css";

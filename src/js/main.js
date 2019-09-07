@@ -17,6 +17,7 @@ const main = () => {
   // Initialise Observer App State
   window.newAppState = NewAppState;
 
+  window.step0Progress = -10;
   window.step1Progress = -0.35;
   window.step2Progress = -0.15;
   window.step3Progress = 0.1;
@@ -93,17 +94,18 @@ const main = () => {
   sectionMap.setProgressScaler(sectionMapProgressScaler);
 
   // Section Title
-  const sectionMapTitleOptions = new GraphOptions(25, 0, 1920, 50);
+  const sectionMapTitleOptions = new GraphOptions(null, null, null, null);
   const sectionMapTitleData = [
-    { tag: 'h1', className: 'HeightmapSection_Title', content: 'Ulaanbaatar: Choked by Pollution - Part 2' },
-    { tag: 'h2', className: 'HeightmapSection_Subtitle', content: 'The factors that shape Ulaanbaatar’s pollution problem' },
+    { tag: 'h1', className: 'Heightmap_Title', content: 'Ulaanbaatar: Choked by Pollution' },
+    { tag: 'h2', className: 'Heightmap_Subtitle', content: 'The factors that shape Ulaanbaatar’s pollution problem' },
   ];
-  const sectionMapTitle = new TextBlock('HeightmapSection_TitleBlock', sectionMapTitleOptions, sectionMapTitleData);
-  sectionMapTitle.setShowRange(window.step1Progress, window.step2Progress);
+  const sectionMapTitle = new TextBlock('Heightmap_TitleBlock', sectionMapTitleOptions, sectionMapTitleData);
+  sectionMapTitle.setShowRange(window.step0Progress, window.step2Progress);
+  sectionMapTitle.show();
   sectionMap.addChild(sectionMapTitle);
 
   const tooltip = new ToolTip(document.getElementById('tooltip'));
-  tooltip.setShowRange(window.step3Progress, 2.0);
+  tooltip.setShowRange(window.step4Progress, 2.0);
   sectionMap.addChild(tooltip);
 
   // Heightmap
@@ -115,19 +117,33 @@ const main = () => {
 
   const heightmapTitleData = [
     {
-      tag: 'h3',
-      className: 'HeightmapSection_Metatitle',
+      tag: 'p',
+      className: 'Heightmap_Meta_Title',
       content: `Map of Ulaanbaatar, its Air Quality Stations and weekly PM2.5 levels (May 2017 to May 2018)<br>
       <span style="color: rgb(106, 213, 11)">&#9608;</span> Non-Ger     
       <span style="color: rgb(212, 171, 77); margin-left: 20px;"">&#9608;</span> Ger`,
     },
   ];
-  const heightmapTitle = new TextBlock('Heightmap_TitleBlock', null, heightmapTitleData);
-  heightmapTitle.setShowRange(window.step3Progress, 2.0);
+  const heightmapTitle = new TextBlock('Heightmap_Meta', null, heightmapTitleData);
+  heightmapTitle.setShowRange(window.step4Progress, 2.0);
   sectionMap.addChild(heightmapTitle);
 
+  const introData = [
+    {
+      tag: 'h2',
+      className: 'Title',
+      content: 'This is Ulaanbaatarr',      
+    },
+    {
+      tag: 'p',
+      className: 'Content',
+      content: 'The 2017 most polluted capital city in the world.  What\'s interesting is that content content content content content content content content content content content ',
+    },
+  ]
+  const introTitle = new TextBlock('Heightmap_Intro', null, introData);
+  introTitle.setShowRange(window.step2Progress, window.step3Progress);
+  sectionMap.addChild(introTitle);
   sectionMap.runUpdate();
-
   console.log('ready');
 }
 
