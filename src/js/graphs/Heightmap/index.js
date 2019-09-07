@@ -287,6 +287,8 @@ export const HeightMapConfig = {
 
     hideGraphElements() {
       console.log('hide graph elements');
+      window.newAppState.activeStation.notify(null);
+
       const scale = { x: 1, y: 1, z: 1 };
       const target = { x: 0, y: 0, z: 0 };
       this.scaleTween = new TWEEN.Tween(scale)
@@ -315,6 +317,7 @@ export const HeightMapConfig = {
 
     showAsChart() {
       this.segmentManager.showBlobsAsGraph();
+      window.newAppState.activeStation.notify(null);
       this.showingAsChart = true;
       const chartHeight = this.segmentManager.getTotalBlobHeight();
       const focalPoint = { x: 0, y: chartHeight / 2, z: 0 };

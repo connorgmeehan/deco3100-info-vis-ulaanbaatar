@@ -62,6 +62,12 @@ export default class PollutionBlob {
         this.material.opacity = opacity
     }
 
+    setOpacityWithTransition(opacity) {
+        this.opacityTween = new TWEEN.Tween(this.material)
+            .to({ opacity })
+            .start();
+    }
+
     setVisible(isVisible) {
         this.mesh.visible = isVisible;
     }

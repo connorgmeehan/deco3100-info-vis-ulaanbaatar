@@ -72,7 +72,7 @@ export default class SegmentManager {
 
     setOpacityOnSegments(opacity) {
         this.segments.forEach((segment) => {
-            segment.setOpacity(opacity);
+            segment.setOpacityWithTransition(opacity);
         })
     }
 

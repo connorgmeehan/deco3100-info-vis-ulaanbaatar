@@ -48,6 +48,12 @@ export default class GraphSegment {
         });
     }
 
+    setOpacityWithTransition(opacity) {
+        this.pollutionBlobs.forEach((blob) => {
+            blob.setOpacityWithTransition(opacity);
+        });
+    }
+
     setY(y) {
         this.obj.position.setY(y);
         if (y < 0) {
