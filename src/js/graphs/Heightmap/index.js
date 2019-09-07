@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import OrbitControls from 'three-orbitcontrols';
 import TWEEN from '@tweenjs/tween.js';
 
-import GenericGraph from '../GenericGraph';
+import GenericGraph, { GraphEvent } from '../GenericGraph';
 import MultiTextureLoader from '../../helpers/MultiTextureLoader';
 import { GraphSegmentVm } from './GraphSegment';
 import THREEx from '../../state/Threex.DomEvents';
@@ -42,6 +42,8 @@ export const HeightMapConfig = {
     light;
     controls;
 
+    graphEvents = [];
+
     shouldUpdateControls = false;
     oldCameraPosition = { x: 0, y: 0, z: 0 };
     oldTargetPositon = { x: 0, y: 0, z: 0 };
@@ -55,7 +57,8 @@ export const HeightMapConfig = {
 
       const texLoader = new MultiTextureLoader((textures) => {
         this.init(graphOptions, textures, hmConfig, data);
-      })
+        this.bindGraphEvents();
+    })
       texLoader.addTexture(hmConfig.textureMapSrc, 'texturemap');
       texLoader.addTexture(hmConfig.heightmapSrc, 'heightmap');
       texLoader.addTexture(hmConfig.normalMapSrc, 'normalmap');
@@ -70,8 +73,8 @@ export const HeightMapConfig = {
       this.events = new THREEx.DomEvents(this.cam, this.renderer.domElement);
       this.plane = this.createHeightmap(textures);
       this.scene.add(this.plane);
-      this.segmentManager = new SegmentManager(this.scene, this.camera, this.events, this.data);
-      this.NorthPointer = new NorthPointer(this.scene, this.camera);
+      this.segmentManager = new SegmentManager(this.plane, this.camera, this.events, this.data);
+      this.NorthPointer = new NorthPointer(this.plane, this.camera);
       if (this.sectionParent) {
         this.backgroundUpdater = new BackgroundUpdater(this.renderer, this.sectionParent, data);
       }
@@ -160,6 +163,7 @@ export const HeightMapConfig = {
         60, 60,
         heightmap.image.naturalWidth - 1, heightmap.image.naturalHeight - 1,
       );
+      planeGeometry.rotateX(-Math.PI / 2);
 
       const material = new THREE.MeshStandardMaterial({
         color: 0xFFFFFF,
@@ -174,7 +178,7 @@ export const HeightMapConfig = {
       })
 
       const plane = new THREE.Mesh(planeGeometry, material);
-      plane.rotation.x = -Math.PI / 2;
+      plane.scale.set(0, 0, 0);
       return plane;
     }
 
@@ -182,6 +186,48 @@ export const HeightMapConfig = {
       if (this.segmentManager) {
         this.segmentManager.update(progress);
       }
+
+      if (this.graphEvents.length > 0) {
+        this.graphEvents.forEach((event) => {
+          event.update(progress);
+        });
+      }
+    }
+
+    addProgressEvent(min, max, startFn, endFn) {
+      this.graphEvents.push(new GraphEvent(min, max, startFn, endFn));
+    }
+
+    bindGraphEvents() {
+      this.hideMap = this.hideMap.bind(this);
+      this.showMap = this.showMap.bind(this);
+      this.addProgressEvent(-0.1, 2, () => this.showMap(), () => this.hideMap());
+    }
+
+    hideMap() {
+      const scale = { x: this.plane.scale.x, y: this.plane.scale.y, z: this.plane.scale.z };
+      const target = { x: 0, y: 0, z: 0 };
+      this.scaleTween = new TWEEN.Tween(scale)
+        .to(target, 500)
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .onUpdate(() => {
+          console.log(scale);
+          this.plane.scale.set(scale.x, scale.y, scale.z);
+        })
+        .start();
+    }
+
+    showMap() {
+      const scale = { x: this.plane.scale.x, y: this.plane.scale.y, z: this.plane.scale.z };
+      const target = { x: 1, y: 1, z: 1 };
+      this.scaleTween = new TWEEN.Tween(scale)
+        .to(target, 500)
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .onUpdate(() => {
+          console.log(scale);
+          this.plane.scale.set(scale.x, scale.y, scale.z);
+        })
+        .start();
     }
 }
 

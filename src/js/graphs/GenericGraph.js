@@ -1,4 +1,27 @@
 /* eslint-disable no-unused-vars */
+export class GraphEvent {
+  constructor(min, max, startFn, endFn) {
+    this.min = min;
+    this.max = max;
+    this.startFn = startFn;
+    this.endFn = endFn;
+    this.isActive = false;
+  }
+  update(progress) {
+    console.log(this.min, this.max, progress);
+    if (!this.isActive && this.isInsideOf(progress)) {
+      console.log('trigger start event');
+      this.isActive = true;
+      this.startFn.call();
+    } else if (this.isActive && !this.isInsideOf(progress)) {
+      console.log('trigger end event');
+      this.isActive = false;
+      this.endFn.call();
+    }
+  }
+  isInsideOf = progress => this.min < progress && progress < this.max;
+}
+
 export class GraphOptions {
   positions = { x: -1, y: -1 };
   dimensions = { width: -1, height: -1 };
@@ -37,6 +60,7 @@ class GenericGraph {
   element;
   data;
   graphOptions;
+  events = [];
 
   constructor(name, graphOptions = null, data = null) {
     console.log(`GenericGraph::constructor(name: ${name}, options: ${graphOptions})`);
@@ -52,7 +76,6 @@ class GenericGraph {
       this.element.style[graphOptions.getVerticleAlignment()] = graphOptions.getY();
     }
 
-
     this.data = data;
     this.graphOptions = graphOptions;
   }
@@ -65,6 +88,11 @@ class GenericGraph {
   // eslint-disable-next-line class-methods-use-this
   update(_progress, _scrollOffset = 0) {
     // Stub
+  }
+
+  addProgressEvent(min, max, startFn, endFn) {
+    console.log(`Adding new progress event from ${min} to ${max}`, this);
+    this.events.push(new GraphEvent(min, max, startFn, endFn));
   }
 }
 
