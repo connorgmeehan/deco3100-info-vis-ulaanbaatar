@@ -45,8 +45,8 @@ export const HeightMapConfig = {
     graphEvents = [];
 
     shouldUpdateControls = false;
-    oldCameraPosition = { x: 0, y: 0, z: 0 };
-    oldTargetPositon = { x: 0, y: 0, z: 0 };
+    oldCameraTarget = { x: 0, y: 0, z: 0 };
+    oldCameraPosition = { x: 0, y: 30, z: 60 };
 
     constructor(name, graphOptions, data, hmConfig = HeightMapConfig, sectionParent = null) {
       super(name, graphOptions, data);
@@ -85,9 +85,7 @@ export const HeightMapConfig = {
 
     render = () => {
       TWEEN.update();
-      if (this.shouldUpdateControls) {
-        this.controls.update();
-      }
+      this.controls.update();
       this.renderer.render(this.scene, this.cam);
 
       requestAnimationFrame(this.render);
@@ -154,6 +152,8 @@ export const HeightMapConfig = {
       this.controls.enableKeys = false;
       this.controls.autoRotate = true;
       this.controls.autoRotateSpeed = 0.1;
+      this.cameraPosition = this.cam.position;
+      this.cameraTarget = this.scene.position;
     }
 
     createHeightmap(textures) {
@@ -205,7 +205,7 @@ export const HeightMapConfig = {
       this.hideMap = this.hideMap.bind(this);
       this.showMap = this.showMap.bind(this);
       this.addProgressEvent(window.step2Progress, 2, () => this.showMap(), () => this.hideMap());
-      
+
       this.showGraphElements = this.showGraphElements.bind(this);
       this.hideGraphElements = this.hideGraphElements.bind(this);
       this.addProgressEvent(window.step4Progress, 2, () => this.showGraphElements(), () => this.hideGraphElements());
@@ -297,10 +297,50 @@ export const HeightMapConfig = {
 
     showAsChart() {
       this.segmentManager.showBlobsAsGraph();
+      this.showingAsChart = true;
+      const chartHeight = this.segmentManager.getTotalBlobHeight();
+      const focalPoint = { x: 0, y: chartHeight / 2, z: 0 };
+      const cameraPosition = { x: 0, y: chartHeight / 2, z: 600 };
+      this.tweenCamera(
+        focalPoint,
+        cameraPosition,
+        () => {
+          this.controls.target.set(focalPoint.x, focalPoint.y, focalPoint.z);
+        },
+      )
     }
 
     showAsMap() {
       this.segmentManager.showBlobsOnMap();
+      const { x, y, z } = this.heightMapConfig.camera;
+      this.showingAsChart = false;
+      const focalPoint = { x: 0, y: 0, z: 0 };
+      const cameraPosition = { x, y, z };
+      this.tweenCamera(
+        focalPoint,
+        cameraPosition,
+      )
+    }
+
+    tweenCamera(targetFocalPoint, targetPosition, callback = null) {
+      console.log('tween camera', targetFocalPoint, targetPosition);
+      this.targetTween = new TWEEN.Tween(this.controls.target)
+        .to(targetFocalPoint, 2000)
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .start();
+
+      this.positionTween = new TWEEN.Tween(this.cameraPosition)
+        .to(targetPosition, 2000)
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .onUpdate(() => {
+          this.cam.position.set(this.cameraPosition.x, this.cameraPosition.y, this.cameraPosition.z);
+        })
+        .onComplete(() => {
+          if (callback) {
+            callback();
+          }
+        })
+        .start();
     }
 }
 

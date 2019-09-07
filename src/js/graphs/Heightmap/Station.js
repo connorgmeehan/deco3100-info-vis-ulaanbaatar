@@ -28,7 +28,6 @@ export default class Station {
     }
 
     setScale(scale) {
-        console.log(`Station:setScale(${scale}) => cube scale = ${this.cube.scale}`)
         this.cube.scale.set(scale, scale, scale);
     }
 
@@ -37,14 +36,12 @@ export default class Station {
     }
 
     tweenToPosition(newX, newY, newZ) {
-        console.log('tweenToPositon', newX, newY, newZ);
         const stationPosition = this.cube.position;
         const targetPosition = { x: newX, y: newY, z: newZ };
         const moveTween = new TWEEN.Tween(stationPosition)
             .to(targetPosition, 250)
             .easing(TWEEN.Easing.Quadratic.InOut)
             .onUpdate(() => {
-                console.log(this.name, stationPosition);
                 this.cube.position.set(stationPosition.x, stationPosition.y, stationPosition.z);
             })
             .start();

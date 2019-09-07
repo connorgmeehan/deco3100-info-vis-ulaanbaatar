@@ -73,7 +73,7 @@ export default class SegmentManager {
     showBlobsAsGraph() {
         console.log('showBlobsAsGraph')
         const newPositions = [];
-        const lineDistance = 8;
+        const lineDistance = 15;
         const offset = -this.data.metaData.length / 2;
         this.data.metaData.forEach((station, i) => {
             newPositions.push({ name: station.location, x: (offset + i) * lineDistance, z: 0 });
@@ -81,14 +81,13 @@ export default class SegmentManager {
             stationObject.tweenToPosition((offset + i) * lineDistance, 0, 0);
         });
 
-        for (let i = this.segments.length; i > 0; i--) {
-            const segment = this.segments[i];
+        this.segments.forEach((segment, i) => {
             setTimeout(() => {
                 newPositions.forEach((station) => {
                     segment.updatePollutionBlobPosition(station.name, station.x, station.z);
                 })
             }, (this.segments.length - i) * 50)
-        }
+        });
     }
 
     showBlobsOnMap() {
@@ -100,13 +99,16 @@ export default class SegmentManager {
             stationObject.tweenToPosition(station.x, 0, station.y);
         });
 
-        for (let i = this.segments.length; i > 0; i--) {
-            const segment = this.segments[i];
+        this.segments.forEach((segment, i) => {
             setTimeout(() => {
                 newPositions.forEach((station) => {
                     segment.updatePollutionBlobPosition(station.name, station.x, station.z);
                 })
             }, (this.segments.length - i) * 50)
-        }
+        });
+    }
+
+    getTotalBlobHeight() {
+        return this.settings.maxHeight;
     }
 }
