@@ -16,6 +16,11 @@ import TextBlock from './graphs/TextBlock';
 const main = () => {
   // Initialise Observer App State
   window.newAppState = NewAppState;
+
+  window.step1Progress = -0.35;
+  window.step2Progress = -0.15;
+  window.step3Progress = 0.1;
+  window.step4Progress = 0.2;
   // window.newAppState.scrollUTC.subscribe((utc) => {
   //   console.log(`NewAppState: scrollUTC = ${utc}`);
   // });
@@ -94,10 +99,11 @@ const main = () => {
     { tag: 'h2', className: 'HeightmapSection_Subtitle', content: 'The factors that shape Ulaanbaatar’s pollution problem' },
   ];
   const sectionMapTitle = new TextBlock('HeightmapSection_TitleBlock', sectionMapTitleOptions, sectionMapTitleData);
-  sectionMapTitle.alwaysShow();
+  sectionMapTitle.setShowRange(window.step1Progress, window.step2Progress);
   sectionMap.addChild(sectionMapTitle);
 
   const tooltip = new ToolTip(document.getElementById('tooltip'));
+  tooltip.setShowRange(window.step3Progress, 2.0);
   sectionMap.addChild(tooltip);
 
   // Heightmap
@@ -117,7 +123,7 @@ const main = () => {
     },
   ];
   const heightmapTitle = new TextBlock('Heightmap_TitleBlock', null, heightmapTitleData);
-  heightmapTitle.alwaysShow();
+  heightmapTitle.setShowRange(window.step3Progress, 2.0);
   sectionMap.addChild(heightmapTitle);
 
   sectionMap.runUpdate();

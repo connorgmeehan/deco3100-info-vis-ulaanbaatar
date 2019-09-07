@@ -8,13 +8,10 @@ export class GraphEvent {
     this.isActive = false;
   }
   update(progress) {
-    console.log(this.min, this.max, progress);
     if (!this.isActive && this.isInsideOf(progress)) {
-      console.log('trigger start event');
       this.isActive = true;
       this.startFn.call();
     } else if (this.isActive && !this.isInsideOf(progress)) {
-      console.log('trigger end event');
       this.isActive = false;
       this.endFn.call();
     }

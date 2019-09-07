@@ -3,6 +3,7 @@ import dateToString from '../helpers/dateToString';
 class ToolTip {
   element;
   titles = {};
+  isShowing = false;
   constructor(target) {
     this.element = target;
     this.timeTitle = target.querySelector('#Tooltip_Time');
@@ -68,8 +69,33 @@ class ToolTip {
     };
   }
 
-  onScroll() {
-    
+  onScroll(progress) {
+    if (this.isShowing && (progress < this.startProgress || progress > this.endProgress)) {
+      this.hide();
+    } else if (!this.isShowing && progress > this.startProgress && progress < this.endProgress) {
+      this.show();
+    }
+  }
+
+  setShowRange(startProgress, endProgress) {
+    this.startProgress = startProgress;
+    this.endProgress = endProgress;
+  }
+
+  show() {
+    console.log('show');
+    this.isShowing = true;
+    if (this.element.classList.contains('Graph__Hidden')) {
+      this.element.classList.remove('Graph__Hidden');
+    }
+  }
+
+  hide() {
+    console.log('hide');
+    this.isShowing = false;
+    if (!this.element.classList.contains('Graph__Hidden')) {
+      this.element.classList.add('Graph__Hidden');
+    }
   }
 }
 

@@ -25,4 +25,13 @@ export default class Station {
 
         this.scene.add(this.cube);        
     }
+
+    setScale(scale) {
+        console.log(`Station:setScale(${scale}) => cube scale = ${this.cube.scale}`)
+        this.cube.scale.set(scale, scale, scale);
+    }
+
+    setVisible(visible) {
+        this.cube.visible = visible;
+    }
 }

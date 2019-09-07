@@ -44,7 +44,7 @@ export default class PollutionBlob {
           transparent: true,
         });
         this.mesh = new THREE.Mesh(this.geometry, this.material);
-        
+
         this.parent.add(this.mesh);
     }
 

@@ -74,7 +74,9 @@ export const HeightMapConfig = {
       this.plane = this.createHeightmap(textures);
       this.scene.add(this.plane);
       this.segmentManager = new SegmentManager(this.plane, this.camera, this.events, this.data);
-      this.NorthPointer = new NorthPointer(this.plane, this.camera);
+      this.northPointer = new NorthPointer(this.plane, this.camera);
+      this.northPointer.setVisible(false)
+      this.northPointer.setScale(0, 0, 0);
       if (this.sectionParent) {
         this.backgroundUpdater = new BackgroundUpdater(this.renderer, this.sectionParent, data);
       }
@@ -178,7 +180,8 @@ export const HeightMapConfig = {
       })
 
       const plane = new THREE.Mesh(planeGeometry, material);
-      plane.scale.set(0, 0, 0);
+      const initScale = 0.0000001;
+      plane.scale.set(initScale, initScale, initScale);
       return plane;
     }
 
@@ -201,7 +204,10 @@ export const HeightMapConfig = {
     bindGraphEvents() {
       this.hideMap = this.hideMap.bind(this);
       this.showMap = this.showMap.bind(this);
-      this.addProgressEvent(-0.1, 2, () => this.showMap(), () => this.hideMap());
+      this.addProgressEvent(window.step2Progress, 2, () => this.showMap(), () => this.hideMap());
+      this.showGraphElements = this.showGraphElements.bind(this);
+      this.hideGraphElements = this.hideGraphElements.bind(this);
+      this.addProgressEvent(window.step4Progress, 2, () => this.showGraphElements(), () => this.hideGraphElements());
     }
 
     hideMap() {
@@ -211,21 +217,59 @@ export const HeightMapConfig = {
         .to(target, 500)
         .easing(TWEEN.Easing.Quadratic.InOut)
         .onUpdate(() => {
-          console.log(scale);
           this.plane.scale.set(scale.x, scale.y, scale.z);
+        })
+        .onComplete(() => {
+          this.plane.visible = false;
         })
         .start();
     }
 
     showMap() {
+      this.plane.visible = true;
       const scale = { x: this.plane.scale.x, y: this.plane.scale.y, z: this.plane.scale.z };
       const target = { x: 1, y: 1, z: 1 };
       this.scaleTween = new TWEEN.Tween(scale)
         .to(target, 500)
         .easing(TWEEN.Easing.Quadratic.InOut)
         .onUpdate(() => {
-          console.log(scale);
           this.plane.scale.set(scale.x, scale.y, scale.z);
+        })
+        .start();
+    }
+
+    showGraphElements() {
+      console.log('show graph elements');
+      const scale = { x: 0, y: 0, z: 0 };
+      const target = { x: 1, y: 1, z: 1 };
+
+      this.segmentManager.setVisible(true);
+      this.northPointer.setVisible(true);
+
+      this.scaleTween = new TWEEN.Tween(scale)
+        .to(target, 500)
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .onUpdate(() => {
+          this.segmentManager.setScale(scale.x, scale.y, scale.z);
+          this.northPointer.setScale(scale.x, scale.y, scale.z);
+        })
+        .start();
+    }
+
+    hideGraphElements() {
+      console.log('hide graph elements');
+      const scale = { x: 1, y: 1, z: 1 };
+      const target = { x: 0, y: 0, z: 0 };
+      this.scaleTween = new TWEEN.Tween(scale)
+        .to(target, 500)
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .onUpdate(() => {
+          this.segmentManager.setScale(scale.x, scale.y, scale.z);
+          this.northPointer.setScale(scale.x, scale.y, scale.z);
+        })
+        .onComplete(() => {
+          this.segmentManager.setVisible(false);
+          this.northPointer.setVisible(false);
         })
         .start();
     }

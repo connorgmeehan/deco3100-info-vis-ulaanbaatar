@@ -4,7 +4,7 @@ import Station from './Station';
 
 export const SegmentManagerSettings = {
     maxHeight: 400,
-    paddingTop: 0.05,
+    paddingTop: 0.3,
     paddingBottom: 0.05,
 }
 
@@ -31,13 +31,14 @@ export default class SegmentManager {
 
         this.data.metaData.forEach((md) => {
             const station = new Station(this.scene, this.events, md.location, md.x, md.y);
+            station.setScale(0);
+            station.setVisible(false);
             this.stations.push(station);
         })
         const graphSegmentSettings = GraphSegmentSettings;
         graphSegmentSettings.segmentStepDistance = this.segmentStepDist;
         this.data.dataSegments.forEach((ds, i) => {
             const segment = new GraphSegment(this.scene, this.events, ds.utc, ds.temperature, graphSegmentSettings);
-
             this.data.metaData.forEach((station) => {
                 segment.addStationBlob(station.location, ds.stations[station.location], station.x, station.y);
             });
@@ -49,10 +50,23 @@ export default class SegmentManager {
     }
 
     update(progress) {
+        const offsetProgress = progress - this.settings.paddingTop;
         const { segmentStepDist, scrollMultiplier } = this;
         this.segments.forEach((segment, i) => {
-            const y = -i * segmentStepDist + progress * scrollMultiplier;
+            const y = -i * segmentStepDist + offsetProgress * scrollMultiplier;
             segment.setY(y);
         });
+    }
+
+    setScale(x, y, z) {
+        this.stations.forEach((station) => {
+            station.setScale(x, y, z);
+        })
+    }
+
+    setVisible(visible) {
+        this.stations.forEach((station) => {
+            station.setVisible(visible);
+        })
     }
 }

@@ -73,6 +73,20 @@ class NorthPointer {
 
     this.scene.add(this.ratioText);
   }
+
+  setScale(x, y, z) {
+    this.northFigure.scale.set(x, y, z);
+    this.ratioText.scale.set(x, y, z);
+    this.northLine.scale.set(x, y, z);
+    this.circle.scale.set(x, y, z);
+  }
+
+  setVisible(visible) {
+    this.northFigure.visible = visible;
+    this.ratioText.visible = visible;
+    this.northLine.visible = visible;
+    this.circle.visible = visible;
+  }
 }
 
   export default NorthPointer;
