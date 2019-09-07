@@ -10,8 +10,8 @@ $color-deemphasis : #CCC;
 .Tooltip {
   position: absolute;
   z-index: 2000;
-  left: calc(50% + 450px);
-  bottom: 15%;
+  left: calc(50% - 750px);
+  top: 5%;
   width: 200px;
   border-radius: 5px;
   padding: 20px 30px;

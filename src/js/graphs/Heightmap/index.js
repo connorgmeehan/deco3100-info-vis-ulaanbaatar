@@ -205,9 +205,14 @@ export const HeightMapConfig = {
       this.hideMap = this.hideMap.bind(this);
       this.showMap = this.showMap.bind(this);
       this.addProgressEvent(window.step2Progress, 2, () => this.showMap(), () => this.hideMap());
+      
       this.showGraphElements = this.showGraphElements.bind(this);
       this.hideGraphElements = this.hideGraphElements.bind(this);
       this.addProgressEvent(window.step4Progress, 2, () => this.showGraphElements(), () => this.hideGraphElements());
+
+      this.startRotateMap = this.startRotateMap.bind(this);
+      this.startRotateMap = this.startRotateMap.bind(this);
+      this.addProgressEvent(window.step2Progress, window.step4Progress, () => this.startRotateMap(), () => this.endRotateMap());
     }
 
     hideMap() {
@@ -272,6 +277,18 @@ export const HeightMapConfig = {
           this.northPointer.setVisible(false);
         })
         .start();
+    }
+
+    startRotateMap() {
+      this.rotateAmount = 0;
+      this.rotateMapInterval = setInterval(() => {
+        this.rotateAmount += 0.0002;
+        this.plane.rotation.y = this.rotateAmount;
+      }, 20);
+    }
+
+    endRotateMap() {
+      clearInterval(this.rotateMapInterval);
     }
 }
 
