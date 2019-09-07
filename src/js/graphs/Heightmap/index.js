@@ -351,6 +351,8 @@ export const HeightMapConfig = {
 
     showAsChart() {
       window.newAppState.activeStation.notify(null);
+      window.newAppState.scrollUTC.notify(null);
+      window.newAppState.scrollTemperature.notify(null);
       this.hideMap();
       this.hideGraphElements();
 

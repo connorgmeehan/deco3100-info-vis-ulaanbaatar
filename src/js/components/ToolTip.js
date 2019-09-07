@@ -4,8 +4,9 @@ class ToolTip {
   element;
   titles = {};
   isShowing = false;
-  constructor(target) {
+  constructor(target, data) {
     this.element = target;
+    this.data = data;
     this.timeTitle = target.querySelector('#Tooltip_Time');
     this.pollutionTitle = target.querySelector('#Tooltip_Pollution');
     this.weatherTitle = target.querySelector('#Tooltip_Weather');
@@ -55,6 +56,8 @@ class ToolTip {
     let temp;
     if (this.selectedTemp) {
       temp = this.selectedTemp;
+    } else if (utc) {
+      temp = this.getTempFromUtc(utc);
     } else if (this.scrollTemperature) {
       temp = this.scrollTemperature;
     } else {
@@ -96,6 +99,17 @@ class ToolTip {
     if (!this.element.classList.contains('Graph__Hidden')) {
       this.element.classList.add('Graph__Hidden');
     }
+  }
+
+  getTempFromUtc(utc) {
+    console.log(this.data);
+    const index = this.getIndexFromUtc(utc);
+    return this.data.find(d => d[0] === 'Weather (C)')[1][index];
+  }
+
+  getIndexFromUtc(utc) {
+    return this.data.find(d => d[0] === 'utc')[1] // gets the utc data array
+      .findIndex(t => t === utc);
   }
 }
 

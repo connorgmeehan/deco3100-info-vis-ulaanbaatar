@@ -113,7 +113,7 @@ const main = () => {
   sectionMapTitle.show();
   sectionMap.addChild(sectionMapTitle);
 
-  const tooltip = new ToolTip(document.getElementById('tooltip'));
+  const tooltip = new ToolTip(document.getElementById('tooltip'), formattedData);
   tooltip.setShowRange(window.step4Progress, 2.0);
   sectionMap.addChild(tooltip);
 

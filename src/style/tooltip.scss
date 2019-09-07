@@ -1,7 +1,7 @@
 
-$font-size-meta: 1.2rem;
-$font-size-main: 3.5rem;
-$font-size-secondary: 2rem;
+$font-size-meta: 1.3rem;
+$font-size-main: 5rem;
+$font-size-secondary: 2.2rem;
 
 $color-emphasis : #FFF;
 $color-base : #DDD;
@@ -10,9 +10,10 @@ $color-deemphasis : #CCC;
 .Tooltip {
   position: absolute;
   z-index: 2000;
-  left: calc(50% - 750px);
-  top: 5%;
-  width: 200px;
+  left: calc(50% - 550px);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
   border-radius: 5px;
   padding: 20px 30px;
   color: $color-emphasis;
