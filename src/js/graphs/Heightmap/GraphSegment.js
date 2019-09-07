@@ -74,7 +74,6 @@ export default class GraphSegment {
             .to(targetPosition, 250)
             .easing(TWEEN.Easing.Quadratic.InOut)
             .onUpdate(() => {
-                console.log(blobPosition);
                 blob.setPosition(blobPosition.x, blobPosition.y, blobPosition.z);
             })
             .start();

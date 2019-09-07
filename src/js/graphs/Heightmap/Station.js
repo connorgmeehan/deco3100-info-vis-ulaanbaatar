@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import * as TWEEN from '@tweenjs/tween.js';
 
 export const StationSettings = {
     elevationOffset: 1,
@@ -13,7 +14,7 @@ export default class Station {
         this.name = name;
         this.x = x;
         this.z = z;
-        
+
         this.init();
     }
 
@@ -23,7 +24,7 @@ export default class Station {
         this.cube = new THREE.Mesh(this.geometry, this.material);
         this.cube.position.set(this.x, this.settings.elevationOffset, this.z);
 
-        this.scene.add(this.cube);        
+        this.scene.add(this.cube);
     }
 
     setScale(scale) {
@@ -33,5 +34,19 @@ export default class Station {
 
     setVisible(visible) {
         this.cube.visible = visible;
+    }
+
+    tweenToPosition(newX, newY, newZ) {
+        console.log('tweenToPositon', newX, newY, newZ);
+        const stationPosition = this.cube.position;
+        const targetPosition = { x: newX, y: newY, z: newZ };
+        const moveTween = new TWEEN.Tween(stationPosition)
+            .to(targetPosition, 250)
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .onUpdate(() => {
+                console.log(this.name, stationPosition);
+                this.cube.position.set(stationPosition.x, stationPosition.y, stationPosition.z);
+            })
+            .start();
     }
 }

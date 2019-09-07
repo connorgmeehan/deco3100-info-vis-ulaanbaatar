@@ -77,6 +77,8 @@ export default class SegmentManager {
         const offset = -this.data.metaData.length / 2;
         this.data.metaData.forEach((station, i) => {
             newPositions.push({ name: station.location, x: (offset + i) * lineDistance, z: 0 });
+            const stationObject = this.stations.find(obj => obj.name === station.location);
+            stationObject.tweenToPosition((offset + i) * lineDistance, 0, 0);
         });
 
         for (let i = this.segments.length; i > 0; i--) {
@@ -85,9 +87,8 @@ export default class SegmentManager {
                 newPositions.forEach((station) => {
                     segment.updatePollutionBlobPosition(station.name, station.x, station.z);
                 })
-            }, i * 50)
+            }, (this.segments.length - i) * 50)
         }
-
     }
 
     showBlobsOnMap() {
@@ -95,6 +96,8 @@ export default class SegmentManager {
         const newPositions = [];
         this.data.metaData.forEach((station) => {
             newPositions.push({ name: station.location, x: station.x, z: station.y });
+            const stationObject = this.stations.find(obj => obj.name === station.location);
+            stationObject.tweenToPosition(station.x, 0, station.y);
         });
 
         for (let i = this.segments.length; i > 0; i--) {
@@ -103,7 +106,7 @@ export default class SegmentManager {
                 newPositions.forEach((station) => {
                     segment.updatePollutionBlobPosition(station.name, station.x, station.z);
                 })
-            }, i * 50)
+            }, (this.segments.length - i) * 50)
         }
     }
 }
