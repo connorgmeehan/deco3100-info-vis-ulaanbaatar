@@ -84,5 +84,17 @@ body {
           margin-top: 0;
       }
     }
+
+    &_Context {
+      @include noselect();
+      @include nopointer();
+      width: 350px;
+      position: absolute;
+      z-index: 9999;
+
+      left: calc(50% + 650px);
+      top: 30%;
+      transform: translate(-50%, -50%);
+    }
   }
 }

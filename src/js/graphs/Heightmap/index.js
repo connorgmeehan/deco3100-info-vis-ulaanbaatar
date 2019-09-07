@@ -23,9 +23,14 @@ export const HeightMapConfig = {
 
     camera: {
       x: 0,
-      y: 30,
-      z: 60,
+      y: 45,
+      z: 70,
       viewAngle: 45,
+    },
+    target: {
+      x: 0,
+      y: 5,
+      z: 0,
     },
     light: {
       x: 1200,
@@ -43,10 +48,6 @@ export const HeightMapConfig = {
     controls;
 
     graphEvents = [];
-
-    shouldUpdateControls = false;
-    oldCameraTarget = { x: 0, y: 0, z: 0 };
-    oldCameraPosition = { x: 0, y: 30, z: 60 };
 
     constructor(name, graphOptions, data, hmConfig = HeightMapConfig, sectionParent = null) {
       super(name, graphOptions, data);
@@ -144,19 +145,17 @@ export const HeightMapConfig = {
         0.1,
         1000,
       );
-
-      this.cam.position.x = hmConfig.camera.x;
-      this.cam.position.y = hmConfig.camera.y;
-      this.cam.position.z = hmConfig.camera.z;
-      this.cam.lookAt(this.scene.position);
+      
+      this.cam.position.set(hmConfig.camera.x, hmConfig.camera.y, hmConfig.camera.z);
+      this.cam.lookAt(hmConfig.target.x, hmConfig.target.y, hmConfig.target.z);
 
       this.controls = new OrbitControls(this.cam, this.renderer.domElement);
-      // this.controls.maxPolarAngle = Math.PI / 2 - 0.3;
+      this.controls.maxPolarAngle = Math.PI / 2 - 0.3;
       this.controls.enableZoom = false;
       this.controls.enablePan = false;
       this.controls.enableKeys = false;
       this.cameraPosition = this.cam.position;
-      this.cameraTarget = this.scene.position;
+      this.controls.target.set(this.heightMapConfig.target.x, this.heightMapConfig.target.y, this.heightMapConfig.target.z);
     }
 
     createHeightmap(textures) {
@@ -364,18 +363,6 @@ export const HeightMapConfig = {
         focalPoint,
         cameraPosition,
       )
-
-      // const scale = { x: 1, y: 1, z: 1 };
-      // const target = { x: 0, y: 0, z: 0 };
-      // const tween = new TWEEN.Tween(scale)
-      //   .to(target)
-      //   .onUpdate(() => {
-      //     this.segmentManager.setScaleOnStations(scale.x, scale.y, scale.z);
-      //   })
-      //   .onComplete(() => {
-      //     this.segmentManager.setVisibleOnStations(false)
-      //   })
-      //   .start();
     }
 
     showAsMap() {
@@ -384,7 +371,7 @@ export const HeightMapConfig = {
       this.segmentManager.showBlobsOnMap();
       const { x, y, z } = this.heightMapConfig.camera;
       this.showingAsChart = false;
-      const focalPoint = { x: 0, y: 0, z: 0 };
+      const focalPoint = this.heightMapConfig.target;
       const cameraPosition = { x, y, z };
       this.tweenCamera(
         focalPoint,

@@ -1,10 +1,11 @@
+import clamp from 'clamp';
 import GraphSegment, { GraphSegmentSettings } from './GraphSegment';
 import Station from './Station';
 
 export const SegmentManagerSettings = {
     maxHeight: 400,
     paddingTop: 0.1,
-    paddingBottom: -0.25,
+    paddingBottom: -0.0,
 }
 
 export default class SegmentManager {
@@ -50,7 +51,7 @@ export default class SegmentManager {
 
     update(progress) {
         console.log(progress);
-        const offsetProgress = progress - this.settings.paddingTop;
+        const offsetProgress = clamp(progress - this.settings.paddingTop, 0, 1.0 - this.settings.paddingTop);
         const { segmentStepDist, scrollMultiplier } = this;
         this.segments.forEach((segment, i) => {
             const y = -i * segmentStepDist + offsetProgress * scrollMultiplier;

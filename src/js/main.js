@@ -22,7 +22,12 @@ const main = () => {
   window.step2Progress = -0.2;
   window.step3Progress = -0.1;
   window.step4Progress = 0.0;
-  window.step8Progress = 1.2;
+  window.step5Progress = 0.3;
+  window.step6Progress = 0.6;
+  window.step7Progress = 0.9;
+  window.step8Progress = 1.0;
+  window.step9Progress = 1.1;
+  window.step10Progress = 1.2;
   window.stepFinal = 10;
   // window.newAppState.scrollUTC.subscribe((utc) => {
   //   console.log(`NewAppState: scrollUTC = ${utc}`);
@@ -163,6 +168,39 @@ const main = () => {
   const introTitle2 = new TextBlock('Heightmap_Intro', null, introData2);
   introTitle2.setShowRange(window.step3Progress, window.step4Progress);
   sectionMap.addChild(introTitle2);
+
+  const contextData1 = [
+    {
+      tag: 'h3',
+      className: 'Title',
+      content: '1 What you\'re looking at is blah blah blah blah',
+    },
+  ];
+  const contextTitle1 = new TextBlock('Heightmap_Context', null, contextData1);
+  contextTitle1.setShowRange(window.step4Progress, window.step5Progress);
+  sectionMap.addChild(contextTitle1);
+
+  const contextData2 = [
+    {
+      tag: 'h3',
+      className: 'Title',
+      content: '2 What you\'re looking at is blah blah blah blah',
+    },
+  ];
+  const contextTitle2 = new TextBlock('Heightmap_Context', null, contextData2);
+  contextTitle2.setShowRange(window.step5Progress, window.step6Progress);
+  sectionMap.addChild(contextTitle2);
+
+  const contextData3 = [
+    {
+      tag: 'h3',
+      className: 'Title',
+      content: '3 What you\'re looking at is blah blah blah blah',
+    },
+  ];
+  const contextTitle3 = new TextBlock('Heightmap_Context', null, contextData2);
+  contextTitle3.setShowRange(window.step6Progress, window.step7Progress);
+  sectionMap.addChild(contextTitle3);
 
   sectionMap.runUpdate();
   console.log('ready');
