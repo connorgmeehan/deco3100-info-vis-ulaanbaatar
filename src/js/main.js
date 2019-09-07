@@ -97,7 +97,7 @@ const main = () => {
   const sectionMapTitleOptions = new GraphOptions(null, null, null, null);
   const sectionMapTitleData = [
     { tag: 'h1', className: 'Heightmap_Title', content: 'Ulaanbaatar: Choked by Pollution' },
-    { tag: 'h2', className: 'Heightmap_Subtitle', content: 'The factors that shape Ulaanbaatar’s pollution problem' },
+    { tag: 'h3', className: 'Heightmap_Subtitle', content: 'The factors that shape Ulaanbaatar’s pollution problem' },
   ];
   const sectionMapTitle = new TextBlock('Heightmap_TitleBlock', sectionMapTitleOptions, sectionMapTitleData);
   sectionMapTitle.setShowRange(window.step0Progress, window.step2Progress);
@@ -109,7 +109,7 @@ const main = () => {
   sectionMap.addChild(tooltip);
 
   // Heightmap
-  const hmGraphOptions = new GraphOptions(null, null, 1000, 800);
+  const hmGraphOptions = new GraphOptions(null, null, 1200, 1000);
   const hmConfig = HeightMapConfig;
   const heightMapData = { stationMetaData, stationsData, weatherData };
   const heightMap = new HeightMap('Heightmap', hmGraphOptions, heightMapData, hmConfig, sectionMap.element);
@@ -143,6 +143,23 @@ const main = () => {
   const introTitle = new TextBlock('Heightmap_Intro', null, introData);
   introTitle.setShowRange(window.step2Progress, window.step3Progress);
   sectionMap.addChild(introTitle);
+
+  const introData2 = [
+    {
+      tag: 'h2',
+      className: 'Title',
+      content: 'Why is it like this?',      
+    },
+    {
+      tag: 'p',
+      className: 'Content',
+      content: 'Blah blah blah we\'re going to explore, Blah blah blah we\'re going to explore,Blah blah blah we\'re going to explore Blah blah blah we\'re going to explore,Blah blah blah we\'re going to exploreBlah blah blah we\'re going to explore ',
+    },
+  ]
+  const introTitle2 = new TextBlock('Heightmap_Intro', null, introData2);
+  introTitle2.setShowRange(window.step3Progress, window.step4Progress);
+  sectionMap.addChild(introTitle2);
+  
   sectionMap.runUpdate();
   console.log('ready');
 }

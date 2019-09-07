@@ -39,7 +39,7 @@ body {
 .Graph {
   &_Heightmap {
     left: 50%;
-    top: 50%;
+    top: 60%;
     transform: translate(-50%, -50%);
     &_Titleblock {
       width: 100%;
@@ -74,7 +74,7 @@ body {
       @include noselect();
       @include nopointer();
       left: 50%;
-      top: 80%;
+      top: 90%;
       text-align: center;
       transform: translate(-50%, -50%);
       h1 {
