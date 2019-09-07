@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import * as TWEEN from '@tweenjs/tween.js';
 import PollutionBlob from './PollutionBlob';
 
 export const GraphSegmentSettings = {
@@ -35,7 +36,7 @@ export default class GraphSegment {
         this.scene.add(this.obj);
     }
 
-    addStationBlob(name, pollution, x, z) {
+    addPollutionBlob(name, pollution, x, z) {
         const blob = new PollutionBlob(this.obj, this.events, name, pollution, this.notifyUTCCallback);
         blob.setPosition(x, 0, z);
         this.pollutionBlobs.push(blob);
@@ -63,5 +64,19 @@ export default class GraphSegment {
             window.newAppState.selectedUTC.notify(null);
             window.newAppState.selectedTemperature.notify(null);
         }
+    }
+
+    updatePollutionBlobPosition(name, newX, newZ) {
+        const blob = this.pollutionBlobs.find(b => b.name === name);
+        const blobPosition = blob.mesh.position;
+        const targetPosition = { x: newX, y: blobPosition.y, z: newZ };
+        const moveTween = new TWEEN.Tween(blobPosition)
+            .to(targetPosition, 250)
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .onUpdate(() => {
+                console.log(blobPosition);
+                blob.setPosition(blobPosition.x, blobPosition.y, blobPosition.z);
+            })
+            .start();
     }
 }

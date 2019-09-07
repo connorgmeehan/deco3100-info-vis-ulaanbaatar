@@ -22,6 +22,8 @@ const main = () => {
   window.step2Progress = -0.15;
   window.step3Progress = 0.1;
   window.step4Progress = 0.2;
+  window.step8Progress = 1.2;
+  window.stepFinal = 10;
   // window.newAppState.scrollUTC.subscribe((utc) => {
   //   console.log(`NewAppState: scrollUTC = ${utc}`);
   // });

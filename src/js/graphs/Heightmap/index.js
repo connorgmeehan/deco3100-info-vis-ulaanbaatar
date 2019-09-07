@@ -213,6 +213,10 @@ export const HeightMapConfig = {
       this.startRotateMap = this.startRotateMap.bind(this);
       this.startRotateMap = this.startRotateMap.bind(this);
       this.addProgressEvent(window.step2Progress, window.step4Progress, () => this.startRotateMap(), () => this.endRotateMap());
+
+      this.showAsChart = this.showAsChart.bind(this);
+      this.showAsMap = this.showAsMap.bind(this);
+      this.addProgressEvent(window.step8Progress, window.stepFinal, () => this.showAsChart(), () => this.showAsMap());
     }
 
     hideMap() {
@@ -289,6 +293,14 @@ export const HeightMapConfig = {
 
     endRotateMap() {
       clearInterval(this.rotateMapInterval);
+    }
+
+    showAsChart() {
+      this.segmentManager.showBlobsAsGraph();
+    }
+
+    showAsMap() {
+      this.segmentManager.showBlobsOnMap();
     }
 }
 

@@ -1,11 +1,10 @@
-import * as THREE from 'three';
 import GraphSegment, { GraphSegmentSettings } from './GraphSegment';
 import Station from './Station';
 
 export const SegmentManagerSettings = {
     maxHeight: 400,
     paddingTop: 0.3,
-    paddingBottom: 0.05,
+    paddingBottom: -0.25,
 }
 
 export default class SegmentManager {
@@ -40,7 +39,7 @@ export default class SegmentManager {
         this.data.dataSegments.forEach((ds, i) => {
             const segment = new GraphSegment(this.scene, this.events, ds.utc, ds.temperature, graphSegmentSettings);
             this.data.metaData.forEach((station) => {
-                segment.addStationBlob(station.location, ds.stations[station.location], station.x, station.y);
+                segment.addPollutionBlob(station.location, ds.stations[station.location], station.x, station.y);
             });
 
             segment.setY(-i * this.segmentStepDist);
@@ -50,6 +49,7 @@ export default class SegmentManager {
     }
 
     update(progress) {
+        console.log(progress);
         const offsetProgress = progress - this.settings.paddingTop;
         const { segmentStepDist, scrollMultiplier } = this;
         this.segments.forEach((segment, i) => {
@@ -68,5 +68,42 @@ export default class SegmentManager {
         this.stations.forEach((station) => {
             station.setVisible(visible);
         })
+    }
+
+    showBlobsAsGraph() {
+        console.log('showBlobsAsGraph')
+        const newPositions = [];
+        const lineDistance = 8;
+        const offset = -this.data.metaData.length / 2;
+        this.data.metaData.forEach((station, i) => {
+            newPositions.push({ name: station.location, x: (offset + i) * lineDistance, z: 0 });
+        });
+
+        for (let i = this.segments.length; i > 0; i--) {
+            const segment = this.segments[i];
+            setTimeout(() => {
+                newPositions.forEach((station) => {
+                    segment.updatePollutionBlobPosition(station.name, station.x, station.z);
+                })
+            }, i * 50)
+        }
+
+    }
+
+    showBlobsOnMap() {
+        console.log('showBlobsOnMap')
+        const newPositions = [];
+        this.data.metaData.forEach((station) => {
+            newPositions.push({ name: station.location, x: station.x, z: station.y });
+        });
+
+        for (let i = this.segments.length; i > 0; i--) {
+            const segment = this.segments[i];
+            setTimeout(() => {
+                newPositions.forEach((station) => {
+                    segment.updatePollutionBlobPosition(station.name, station.x, station.z);
+                })
+            }, i * 50)
+        }
     }
 }
