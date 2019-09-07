@@ -85,7 +85,7 @@ const main = () => {
   sectionMapTitle.alwaysShow();
   sectionMap.addChild(sectionMapTitle);
 
-  const tooltipGraphOptions = new GraphOptions(-200, -200, 200, 100);
+  const tooltipGraphOptions = new GraphOptions(200, 200, 300, 500, 'right', 'bottom');
   const tooltip = new ToolTip('ToolTip', tooltipGraphOptions, { stationsData, weatherTimeData });
   sectionMap.addChild(tooltip);
 

@@ -19,10 +19,6 @@ class ToolTip extends GenericGraph {
     this.element.style.width = null;
     this.element.style.height = null;
 
-    const title = document.createElement('h5');
-    title.classList.add(`Graph_${name}_Title`);
-    this.element.appendChild(title);
-
     this.timeTitle = document.createElement('h6');
     this.timeTitle.classList.add(`Graph_${name}_Title_Time`);
     this.element.appendChild(this.timeTitle);
@@ -39,80 +35,24 @@ class ToolTip extends GenericGraph {
     this.weatherTitle.classList.add(`Graph_${name}_Title_Weather`);
     this.element.appendChild(this.weatherTitle);
 
+    window.newAppState.scrollUTC.subscribe((utc) => { this.scrollUTC = utc; this.update(); });
 
-    window.appState.hoveredTime.subscribe(this._onHoverTimeChange);
-    window.appState.hoveredStation.subscribe(this._onHoverStationChange);
-    document.addEventListener('mousemove', this._onMouseMove);
+    this.update();
   }
 
-  _onMouseMove = (event) => {
-    this.element.style.left = `${this.xOffset + event.clientX}px`;
-    this.element.style.top = `${this.yOffset + event.clientY}px`;
-  }
-
-  _onHoverTimeChange = (utc) => {
-    this.utc = utc;
-    if (this.utc !== null) {
-      this.weather = this.weatherTimeData.find(el => el.utc === this.utc).temp;
-    }
-    if (this.station !== null) {
-      this.pollution = this._calculatePollution();
-    }
-    this._updateElement();
-  }
-
-  _onHoverStationChange = (station) => {
-    this.station = station;
-    if (this.utc !== null) {
-      this.pollution = this._calculatePollution();
-    }
-    this._updateElement();
-  }
-
-  _calculatePollution() {
-    console.log(this.utc, this.station);
-
-    const stationData = this.stationsData
-      .find(stationRow => stationRow[0] === this.station);
-    console.log(stationData);
-    const pollutionVal = stationData[1].find(el => el.utc === this.utc);
-    console.log(stationData, pollutionVal);
-    if (pollutionVal) {
-      // eslint-disable-next-line no-unneeded-ternary
-      console.log(pollutionVal, (pollutionVal ? true : false))
-      return pollutionVal.val;
-    }
-    return null;
-  }
-
-  _updateElement() {
-    if (this.utc) {
-      const dateObject = dateToString(this.utc);
-      this.timeTitle.innerHTML = `Date: ${dateObject.day}, ${dateObject.month}, ${dateObject.year}`;
-      this.weatherTitle.innerHTML = `Weather: ${this.weather} &deg;C`
+  update() {
+    console.log('_updateElement', this);
+    let activeUTC;
+    if (this.selectedUTC) {
+      activeUTC = this.selectedUTC;
+    } else if (this.scrollUTC) {
+      activeUTC = this.scrollUTC;
     } else {
-      this.timeTitle.innerHTML = '';
+      activeUTC = null;
     }
-    if (this.station) {
-      this.timeTitle.innerHTML = `Station: ${this.station}`;
-    } else {
-      this.timeTitle.innerHTML = '';
-    }
-
-    if (this.pollution) {
-      this.pollutionTitle.innerHTML = `PM2.5 (&micro;/m&sup3;): ${this.pollution}`;
-    } else {
-      this.pollutionTitle.innerHTML = '';
-    }
-
-    if (this.utc || this.station) {
-      console.log('should show')
-      if (!this.element.classList.contains(`${this.name}__Show`)) {
-        this.element.classList.add(`${this.name}__Show`);
-      }
-    } else if (this.element.classList.contains(`${this.name}__Show`)) {
-      this.element.classList.remove(`${this.name}__Show`);
-    }
+    const dateObj = dateToString(activeUTC);
+    this.timeTitle.innerHTML = `Date: ${dateObj.day} ${dateObj.month} ${dateObj.year}`;
+    console.log(this.timeTitle);
   }
 }
 
