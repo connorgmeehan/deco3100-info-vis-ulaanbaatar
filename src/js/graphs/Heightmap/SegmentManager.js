@@ -29,7 +29,7 @@ export default class SegmentManager {
         this.segments = [];
 
         this.data.metaData.forEach((md) => {
-            const station = new Station(this.scene, this.events, md.location, md.x, md.y);
+            const station = new Station(this.scene, this.events, md.location, md.filename, md.x, md.y);
             station.setScale(0);
             station.setVisible(false);
             this.stations.push(station);
@@ -78,7 +78,7 @@ export default class SegmentManager {
         this.data.metaData.forEach((station, i) => {
             newPositions.push({ name: station.location, x: (offset + i) * lineDistance, z: 0 });
             const stationObject = this.stations.find(obj => obj.name === station.location);
-            stationObject.tweenToPosition((offset + i) * lineDistance, 0, 0);
+            stationObject.tweenToPosition((offset + i) * lineDistance, 1, 0);
         });
 
         this.segments.forEach((segment, i) => {
@@ -96,7 +96,7 @@ export default class SegmentManager {
         this.data.metaData.forEach((station) => {
             newPositions.push({ name: station.location, x: station.x, z: station.y });
             const stationObject = this.stations.find(obj => obj.name === station.location);
-            stationObject.tweenToPosition(station.x, 0, station.y);
+            stationObject.tweenToPosition(station.x, 1, station.y);
         });
 
         this.segments.forEach((segment, i) => {

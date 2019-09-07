@@ -35,6 +35,7 @@ const NewAppState = {
     selectedPollution: new Observable(),
     selectedStation: new Observable(),
     selectedTemperature: new Observable(),
+    activeStation: new Observable(),
 };
 
 export default NewAppState;
