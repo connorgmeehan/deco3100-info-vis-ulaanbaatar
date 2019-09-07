@@ -58,22 +58,17 @@ export default class SegmentManager {
         });
     }
 
-    setScale(x, y, z) {
-        this.stations.forEach((station) => {
-            station.setScale(x, y, z);
-        })
+    setVisibleOnStations(visible) {
+        this.stations.forEach((station) => { station.setVisible(visible); });
     }
-
-    setVisible(visible) {
-        this.stations.forEach((station) => {
-            station.setVisible(visible);
-        })
-    }
-
     setOpacityOnSegments(opacity) {
-        this.segments.forEach((segment) => {
-            segment.setOpacityWithTransition(opacity);
-        })
+        this.segments.forEach((segment) => { segment.setOpacityWithTransition(opacity); });
+    }
+    setOpacityOnStations(opacity) {
+        this.stations.forEach((station) => { station.setOpacity(opacity); });
+    }
+    setScaleOnStations(x, y, z) {
+        this.stations.forEach((station) => { station.setScale(x, y, z); });
     }
 
     showBlobsAsGraph() {

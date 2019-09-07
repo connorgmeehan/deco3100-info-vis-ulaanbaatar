@@ -71,10 +71,14 @@ export const HeightMapConfig = {
       this.element.appendChild(this.renderer.domElement);
       this.buildCamera(graphOptions, hmConfig);
       this.events = new THREEx.DomEvents(this.cam, this.renderer.domElement);
-      this.plane = this.createHeightmap(textures);
-      this.scene.add(this.plane);
-      this.segmentManager = new SegmentManager(this.plane, this.camera, this.events, this.data);
-      this.northPointer = new NorthPointer(this.plane, this.camera);
+      const { parent, plane } = this.createHeightmap(textures);
+
+      this.parent = parent;
+      this.plane = plane;
+      this.scene.add(this.parent);
+
+      this.segmentManager = new SegmentManager(this.parent, this.camera, this.events, this.data);
+      this.northPointer = new NorthPointer(this.parent, this.camera);
       this.northPointer.setVisible(false)
       this.northPointer.setScale(0, 0, 0);
       if (this.sectionParent) {
@@ -179,9 +183,12 @@ export const HeightMapConfig = {
       })
 
       const plane = new THREE.Mesh(planeGeometry, material);
+      
+      const parent = new THREE.Object3D();
+      parent.add(plane);
       const initScale = 0.0000001;
-      plane.scale.set(initScale, initScale, initScale);
-      return plane;
+      parent.scale.set(initScale, initScale, initScale);
+      return { parent, plane };
     }
 
     update(progress) {
@@ -203,9 +210,9 @@ export const HeightMapConfig = {
     bindGraphEvents() {
       window.newAppState.activeStation.subscribe(station => this.handleActiveStation(station));
 
-      this.hideMap = this.hideMap.bind(this);
-      this.showMap = this.showMap.bind(this);
-      this.addProgressEvent(window.step2Progress, 2, () => this.showMap(), () => this.hideMap());
+      this.hideScene = this.hideScene.bind(this);
+      this.showScene = this.showScene.bind(this);
+      this.addProgressEvent(window.step2Progress, 2, () => this.showScene(), () => this.hideScene());
 
       this.showGraphElements = this.showGraphElements.bind(this);
       this.hideGraphElements = this.hideGraphElements.bind(this);
@@ -239,10 +246,38 @@ export const HeightMapConfig = {
       }
     }
 
+    hideScene() {
+      const scale = { x: this.parent.scale.x, y: this.parent.scale.y, z: this.parent.scale.z };
+      const target = { x: 0.00001, y: 0.00001, z: 0.00001 };
+      this.sceneScaleTween = new TWEEN.Tween(scale)
+        .to(target, 500)
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .onUpdate(() => {
+          this.parent.scale.set(scale.x, scale.y, scale.z);
+        })
+        .onComplete(() => {
+          this.parent.visible = false;
+        })
+        .start();
+    }
+
+    showScene() {
+      this.parent.visible = true;
+      const scale = { x: this.parent.scale.x, y: this.parent.scale.y, z: this.parent.scale.z };
+      const target = { x: 1, y: 1, z: 1 };
+      this.sceneScaleTween = new TWEEN.Tween(scale)
+        .to(target, 500)
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .onUpdate(() => {
+          this.parent.scale.set(scale.x, scale.y, scale.z);
+        })
+        .start();
+    }
+
     hideMap() {
       const scale = { x: this.plane.scale.x, y: this.plane.scale.y, z: this.plane.scale.z };
-      const target = { x: 0, y: 0, z: 0 };
-      this.scaleTween = new TWEEN.Tween(scale)
+      const target = { x: 0.00001, y: 0.00001, z: 0.00001 };
+      this.mapScaleTween = new TWEEN.Tween(scale)
         .to(target, 500)
         .easing(TWEEN.Easing.Quadratic.InOut)
         .onUpdate(() => {
@@ -258,7 +293,7 @@ export const HeightMapConfig = {
       this.plane.visible = true;
       const scale = { x: this.plane.scale.x, y: this.plane.scale.y, z: this.plane.scale.z };
       const target = { x: 1, y: 1, z: 1 };
-      this.scaleTween = new TWEEN.Tween(scale)
+      this.mapScaleTween = new TWEEN.Tween(scale)
         .to(target, 500)
         .easing(TWEEN.Easing.Quadratic.InOut)
         .onUpdate(() => {
@@ -272,14 +307,14 @@ export const HeightMapConfig = {
       const scale = { x: 0, y: 0, z: 0 };
       const target = { x: 1, y: 1, z: 1 };
 
-      this.segmentManager.setVisible(true);
+      this.segmentManager.setVisibleOnStations(true);
       this.northPointer.setVisible(true);
 
-      this.scaleTween = new TWEEN.Tween(scale)
+      this.graphScaleTween = new TWEEN.Tween(scale)
         .to(target, 500)
         .easing(TWEEN.Easing.Quadratic.InOut)
         .onUpdate(() => {
-          this.segmentManager.setScale(scale.x, scale.y, scale.z);
+          this.segmentManager.setScaleOnStations(scale.x, scale.y, scale.z);
           this.northPointer.setScale(scale.x, scale.y, scale.z);
         })
         .start();
@@ -291,15 +326,15 @@ export const HeightMapConfig = {
 
       const scale = { x: 1, y: 1, z: 1 };
       const target = { x: 0, y: 0, z: 0 };
-      this.scaleTween = new TWEEN.Tween(scale)
+      this.graphScaleTween = new TWEEN.Tween(scale)
         .to(target, 500)
         .easing(TWEEN.Easing.Quadratic.InOut)
         .onUpdate(() => {
-          this.segmentManager.setScale(scale.x, scale.y, scale.z);
+          this.segmentManager.setScaleOnStations(scale.x, scale.y, scale.z);
           this.northPointer.setScale(scale.x, scale.y, scale.z);
         })
         .onComplete(() => {
-          this.segmentManager.setVisible(false);
+          this.segmentManager.setVisibleOnStations(false);
           this.northPointer.setVisible(false);
         })
         .start();
@@ -316,8 +351,11 @@ export const HeightMapConfig = {
     }
 
     showAsChart() {
-      this.segmentManager.showBlobsAsGraph();
       window.newAppState.activeStation.notify(null);
+      this.hideMap();
+      this.hideGraphElements();
+
+      this.segmentManager.showBlobsAsGraph();
       this.showingAsChart = true;
       const chartHeight = this.segmentManager.getTotalBlobHeight();
       const focalPoint = { x: 0, y: chartHeight / 2, z: 0 };
@@ -325,13 +363,24 @@ export const HeightMapConfig = {
       this.tweenCamera(
         focalPoint,
         cameraPosition,
-        () => {
-          this.controls.target.set(focalPoint.x, focalPoint.y, focalPoint.z);
-        },
       )
+
+      // const scale = { x: 1, y: 1, z: 1 };
+      // const target = { x: 0, y: 0, z: 0 };
+      // const tween = new TWEEN.Tween(scale)
+      //   .to(target)
+      //   .onUpdate(() => {
+      //     this.segmentManager.setScaleOnStations(scale.x, scale.y, scale.z);
+      //   })
+      //   .onComplete(() => {
+      //     this.segmentManager.setVisibleOnStations(false)
+      //   })
+      //   .start();
     }
 
     showAsMap() {
+      this.showMap();
+      this.showGraphElements();
       this.segmentManager.showBlobsOnMap();
       const { x, y, z } = this.heightMapConfig.camera;
       this.showingAsChart = false;
@@ -340,7 +389,7 @@ export const HeightMapConfig = {
       this.tweenCamera(
         focalPoint,
         cameraPosition,
-      )
+      );
     }
 
     tweenCamera(targetFocalPoint, targetPosition, callback = null) {
