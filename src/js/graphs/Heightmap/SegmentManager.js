@@ -65,12 +65,13 @@ export default class SegmentManager {
     showBlobsAsGraph() {
         console.log('showBlobsAsGraph')
         const newPositions = [];
-        const lineDistance = 30;
+        const lineDistance = 50;
         const offset = -(this.data.metaData.length / 2) * lineDistance;
         this.data.metaData.forEach((station, i) => {
-            newPositions.push({ name: station.location, x: (offset) + i * lineDistance, z: 0 });
+            const newX = (offset) + i * lineDistance;
+            newPositions.push({ name: station.location, x: newX, z: 0 });
             const stationObject = this.stations.find(obj => obj.name === station.location);
-            stationObject.tweenToPosition((offset + i) * lineDistance, 1, 0);
+            stationObject.tweenToPosition(newX, 1, 0);
         });
         this.segments.forEach((s) => {
             if (s.textDisk) {
@@ -84,6 +85,7 @@ export default class SegmentManager {
     showBlobsOnMap() {
         console.log('showBlobsOnMap')
         const newPositions = [];
+        console.log(this.data.metaData);
         this.data.metaData.forEach((station) => {
             newPositions.push({ name: station.location, x: station.x, z: station.y });
             const stationObject = this.stations.find(obj => obj.name === station.location);

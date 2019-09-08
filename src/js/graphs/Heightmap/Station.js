@@ -5,7 +5,7 @@ import PreviewPlane from './PreviewPlane';
 
 export const StationSettings = {
     elevationOffset: 1,
-    textSize: 5,
+    textSize: 8,
 }
 
 export default class Station {
@@ -26,10 +26,13 @@ export default class Station {
     }
 
     init() {
+        this.obj = new THREE.Object3D();
+        this.obj.position.set(this.x, this.settings.elevationOffset, this.z);
         this.geometry = new THREE.BoxGeometry(1, 1, 1);
         this.material = new THREE.MeshBasicMaterial({ color: this.color });
         this.cube = new THREE.Mesh(this.geometry, this.material);
-        this.cube.position.set(this.x, this.settings.elevationOffset, this.z);
+        this.obj.add(this.cube);
+        this.previewPlane = new PreviewPlane(this.obj, this.events, this.name, this.filename);
 
         this.textObj = new TextSprite({
             material: {
@@ -42,10 +45,8 @@ export default class Station {
                 text: this.name,
             },
         });
-
-        this.previewPlane = new PreviewPlane(this.cube, this.events, this.name, this.filename);
-
-        this.scene.add(this.cube);
+        this.obj.add(this.textObj);
+        this.scene.add(this.obj);
     }
 
     bindEvents() {
@@ -67,7 +68,7 @@ export default class Station {
             .onComplete(() => {
                 if (x === 0 || y === 0 || z === 0) this.cube.visible = false;
             })
-            .start();      
+            .start();
     }
 
     onActiveStationChange(station) {
@@ -84,9 +85,10 @@ export default class Station {
 
     showText(visible) {
         console.log(`Station:showText(visible: ${visible}) on ${this.name}`);
+        const textSize = visible ? this.settings.textSize : 0;
         if (visible === true) this.textObj.visible = true;
         this.textSizeTween = new TWEEN.Tween(this.textObj)
-            .to({ textSize: this.settings.textSize }, 200)
+            .to({ textSize }, 2000)
             .onComplete(() => {
                 if (visible === false) this.textObj.visible = false
                 console.log(`Station:showText(visible: ${visible}) complete ${this.name}`, this);
@@ -94,14 +96,12 @@ export default class Station {
             .start();
     }
 
-    tweenToPosition(newX, newY, newZ) {
-        const stationPosition = this.cube.position;
-        const targetPosition = { x: newX, y: newY, z: newZ };
-        const moveTween = new TWEEN.Tween(stationPosition)
-            .to(targetPosition, 250)
+    tweenToPosition(x, y, z) {
+        this.moveTween = new TWEEN.Tween(this.obj.position)
+            .to({ x, y, z })
             .easing(TWEEN.Easing.Quadratic.InOut)
-            .onUpdate(() => {
-                this.cube.position.set(stationPosition.x, stationPosition.y, stationPosition.z);
+            .onComplete(() => {
+                console.log('tweenToPosition complete on ', this.name, x, y, z);
             })
             .start();
     }
