@@ -66,7 +66,7 @@ export default class SegmentManager {
         console.log('showBlobsAsGraph')
         const newPositions = [];
         const lineDistance = 50;
-        const offset = -(this.data.metaData.length / 2) * lineDistance;
+        const offset = -((this.data.metaData.length - 1) / 2) * lineDistance;
         this.data.metaData.forEach((station, i) => {
             const newX = (offset) + i * lineDistance;
             newPositions.push({ name: station.location, x: newX, z: 0 });
@@ -75,7 +75,7 @@ export default class SegmentManager {
         });
         this.segments.forEach((s) => {
             if (s.textDisk) {
-                s.textDisk.animateTextPosition(offset * 1.5, 0, 0);
+                s.textDisk.animateTextPosition(offset * 1.25, 0, 0);
                 s.textDisk.animateTextSize(7);
             }
         })
@@ -119,7 +119,7 @@ export default class SegmentManager {
         this.stations.forEach((s) => { s.showText(visible) })
     };
     getTotalBlobHeight = () => this.settings.maxHeight;
-    
+
     animateOpacityOnBlobs = opacity => this.segments.forEach((segment) => { segment.animateOpacityOnBlobs(opacity); });
     animateScaleOnStations = (x, y, z) => this.stations.forEach((station) => { station.animateScale(x, y, z); });
     animateScaleOnTextDiskCircles = (x, y, z) => this.segments.forEach(s => s.animateScaleOnTextDiskCircle(x, y, z));
