@@ -46,12 +46,15 @@ export default class GraphSegment {
 
     addSegmentTextDisk = (text) => { this.textDisk = new SegmentTextDisk(this.obj, this.events, this.utc, text) };
     setOpacity = opacity => this.pollutionBlobs.forEach((blob) => { blob.setOpacity(opacity); });
-    setOpacityWithTransition(opacity) { this.pollutionBlobs.forEach((blob) => { blob.setOpacityWithTransition(opacity) }) }
-    setTextVisible(visible) {
-        if (this.textDisk) this.textDisk.setVisible(visible);
+    animateOpacityOnBlobs(opacity) { this.pollutionBlobs.forEach((blob) => { blob.animateOpacity(opacity) }) }
+    setTextCircleVisible(visible) {
+        if (this.textDisk) this.textDisk.setCircleVisible(visible);
     }
     setTextScale(x, y, z) {
         if (this.textDisk) this.textDisk.setScale(x, y, z);
+    }
+    animateScaleOnTextDiskCircle(x, y, z) {
+        if (this.textDisk) this.textDisk.animateScaleOnCircle(x, y, z);
     }
     setY(y) {
         this.obj.position.setY(y);

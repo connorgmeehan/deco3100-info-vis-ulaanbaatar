@@ -54,31 +54,53 @@ export default class SegmentTextDisk {
 
     setVisible(isVisible) {
         this.circle.visible = isVisible;
+        this.textObj.visible = isVisible;
+    }
+    setTextVisible(isVisible) {
+        this.textObj.visible = isVisible;
+    }
+    setCircleVisible(isVisible) {
+        this.circle.visible = isVisible;
     }
 
-    setScale(x, y, z) {
-        this.circle.scale.set(x, y, z);
+    setTextPositionToDefault() {
+        const { x, y, z } = this.defaultPosition;
+        this.animateTextPosition(x, y, z);
     }
 
-    setTextSize(textSize) {
+    setTextSizeToDefault() {
+        this.animateTextSize(this.settings.textSize);
+    }
+
+    animateScaleOnCircle(x, y, z) {
+        if (x !== 0 || y !== 0 || z !== 0) this.circle.visible = true;
+        this.circleScaleTween = new TWEEN.Tween(this.circle.scale)
+            .to({ x, y, z })
+            .onComplete(() => {
+                if (x === 0 || y === 0 || z === 0) this.circle.visible = false;
+            })
+            .start();
+    }
+
+    animateTextSize(textSize) {
         this.textSizeTween = new TWEEN.Tween(this.textObj)
             .to({ textSize }, 2000)
             .start();
     }
 
-    setTextPosition(x, y, z) {
+    animateTextPosition(x, y, z) {
         this.textSizeTween = new TWEEN.Tween(this.textObj.position)
             .to({ x, y, z }, 2000)
             .start();
     }
 
-    setTextPositionToDefault() {
+    animateTextPositionToDefault() {
         console.log(this);
         const { x, y, z } = this.defaultPosition;
-        this.setTextPosition(x, y, z);
+        this.animateTextPosition(x, y, z);
     }
 
-    setTextSizeToDefault() {
-        this.setTextSize(this.settings.textSize);
+    animateTextSizeToDefault() {
+        this.animateTextSize(this.settings.textSize);
     }
 }

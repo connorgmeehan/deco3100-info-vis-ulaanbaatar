@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-
+import TWEEN from '@tweenjs/tween.js';
 import TextSprite from 'three.textsprite';
 
 export const NorthPointerSettings = {
@@ -86,6 +86,20 @@ class NorthPointer {
     this.ratioText.visible = visible;
     this.northLine.visible = visible;
     this.circle.visible = visible;
+  }
+  
+  animateScale(x, y, z) {
+    const tween = this.northFigure.scale;
+    if (x !== 0 || y !== 0 || z !== 0) this.setVisible(true);
+    this.scaleTween = new TWEEN.Tween(tween)
+        .to({ x, y, z })
+        .onUpdate(() => {
+          this.setScale(tween.x, tween.y, tween.z);
+        })
+        .onComplete(() => {
+            if (x === 0 || y === 0 || z === 0) this.setVisible(false);
+        })
+        .start();        
   }
 }
 

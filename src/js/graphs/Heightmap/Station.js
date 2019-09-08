@@ -65,7 +65,7 @@ export default class Station {
         this.scaleTween = new TWEEN.Tween(this.cube.scale)
             .to({ x, y, z })
             .onComplete(() => {
-                if (x === y === z === 0) this.plane.visible = false;
+                if (x === 0 || y === 0 || z === 0) this.cube.visible = false;
             })
             .start();      
     }
@@ -84,11 +84,11 @@ export default class Station {
 
     showText(visible) {
         console.log(`Station:showText(visible: ${visible}) on ${this.name}`);
-        if (visible) this.textObj.visible = visible;
+        if (visible === true) this.textObj.visible = true;
         this.textSizeTween = new TWEEN.Tween(this.textObj)
             .to({ textSize: this.settings.textSize }, 200)
             .onComplete(() => {
-                if (!visible) this.textObj.visible = visible
+                if (visible === false) this.textObj.visible = false
                 console.log(`Station:showText(visible: ${visible}) complete ${this.name}`, this);
             })
             .start();

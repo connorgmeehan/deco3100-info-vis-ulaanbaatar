@@ -209,159 +209,65 @@ export const HeightMapConfig = {
     bindGraphEvents() {
       window.newAppState.activeStation.subscribe(station => this.handleActiveStation(station));
 
-      this.hideScene = this.hideScene.bind(this);
-      this.showScene = this.showScene.bind(this);
-      this.addProgressEvent(window.step2Progress, 2, () => this.showScene(), () => this.hideScene());
+      this.handleStartShowScene = this.handleStartShowScene.bind(this);
+      this.handleEndShowScene = this.handleEndShowScene.bind(this);
+      this.addProgressEvent(window.step2Progress, window.stepFinal, () => this.handleStartShowScene(), () => this.handleEndShowScene());
 
-      this.showGraphElements = this.showGraphElements.bind(this);
-      this.hideGraphElements = this.hideGraphElements.bind(this);
-      this.addProgressEvent(window.step4Progress, 2, () => this.showGraphElements(), () => this.hideGraphElements());
+      this.handleStartGraphElements = this.handleStartGraphElements.bind(this);
+      this.handleEndGraphElements = this.handleEndGraphElements.bind(this);
+      this.addProgressEvent(window.step4Progress, window.step8Progress, () => this.handleStartGraphElements(), () => this.handleEndGraphElements());
 
-      this.startRotateMap = this.startRotateMap.bind(this);
-      this.startRotateMap = this.startRotateMap.bind(this);
-      this.addProgressEvent(window.step2Progress, window.step4Progress, () => this.startRotateMap(), () => this.endRotateMap());
+      this.handleStartRotateMap = this.handleStartRotateMap.bind(this);
+      this.handleEndRotateMap = this.handleEndRotateMap.bind(this);
+      this.addProgressEvent(window.step2Progress, window.step4Progress, () => this.handleStartRotateMap(), () => this.handleEndRotateMap());
 
-      this.showAsChart = this.showAsChart.bind(this);
-      this.showAsMap = this.showAsMap.bind(this);
-      this.addProgressEvent(window.step8Progress, window.stepFinal, () => this.showAsChart(), () => this.showAsMap());
+      this.handleStartShowAsChart = this.handleStartShowAsChart.bind(this);
+      this.handleEndShowAsChart = this.handleEndShowAsChart.bind(this);
+      this.addProgressEvent(window.step8Progress, window.stepFinal, () => this.handleStartShowAsChart(), () => this.handleEndShowAsChart());
     }
 
-    handleActiveStation(station) {
-      const stationData = this.data.metaData.find(s => s.location === station);
-      if (stationData) {
-        const focalPoint = { x: stationData.x, y: 1, z: stationData.y };
-        const targetPosition = { x: stationData.x, y: 8, z: stationData.y + 0.02 };
-        this.tweenCamera(focalPoint, targetPosition);
-        this.segmentManager.setOpacityOnSegments(0);
-      } else {
-        const { x, y, z } = this.heightMapConfig.camera;
-        const focalPoint = { x: 0, y: 0, z: 0 };
-        const cameraPosition = { x, y, z };
-        this.segmentManager.setOpacityOnSegments(1);
-        this.tweenCamera(
-          focalPoint,
-          cameraPosition,
-        )
-      }
+    handleStartShowScene() {
+      console.log('handleStartShowScene');
+      this.setSceneScale(1, 1, 1);
+    }
+    handleEndShowScene() {
+      console.log('handleEndShowScene');
+      this.setSceneScale(0, 0, 0);
     }
 
-    hideScene() {
-      const scale = { x: this.parent.scale.x, y: this.parent.scale.y, z: this.parent.scale.z };
-      const target = { x: 0.00001, y: 0.00001, z: 0.00001 };
-      this.sceneScaleTween = new TWEEN.Tween(scale)
-        .to(target, 500)
-        .easing(TWEEN.Easing.Quadratic.InOut)
-        .onUpdate(() => {
-          this.parent.scale.set(scale.x, scale.y, scale.z);
-        })
-        .onComplete(() => {
-          this.parent.visible = false;
-        })
-        .start();
+    handleStartGraphElements() {
+      console.log('handleStartGraphElements');
+      this.setStationsScale(1, 1, 1);
+      this.setNorthPointerScale(1, 1, 1);
+      this.setTextDiskCircleScale(1, 1, 1);
+    }
+    handleEndGraphElements() {
+      console.log('handleEndGraphElements');
+      this.setStationsScale(0, 0, 0);
+      this.setNorthPointerScale(0, 0, 0);
+      this.setTextDiskCircleScale(0, 0, 0);
     }
 
-    showScene() {
-      this.parent.visible = true;
-      const scale = { x: this.parent.scale.x, y: this.parent.scale.y, z: this.parent.scale.z };
-      const target = { x: 1, y: 1, z: 1 };
-      this.sceneScaleTween = new TWEEN.Tween(scale)
-        .to(target, 500)
-        .easing(TWEEN.Easing.Quadratic.InOut)
-        .onUpdate(() => {
-          this.parent.scale.set(scale.x, scale.y, scale.z);
-        })
-        .start();
-    }
-
-    hideMap() {
-      const scale = { x: this.plane.scale.x, y: this.plane.scale.y, z: this.plane.scale.z };
-      const target = { x: 0.00001, y: 0.00001, z: 0.00001 };
-      this.mapScaleTween = new TWEEN.Tween(scale)
-        .to(target, 500)
-        .easing(TWEEN.Easing.Quadratic.InOut)
-        .onUpdate(() => {
-          this.plane.scale.set(scale.x, scale.y, scale.z);
-        })
-        .onComplete(() => {
-          this.plane.visible = false;
-        })
-        .start();
-    }
-
-    showMap() {
-      this.plane.visible = true;
-      const scale = { x: this.plane.scale.x, y: this.plane.scale.y, z: this.plane.scale.z };
-      const target = { x: 1, y: 1, z: 1 };
-      this.mapScaleTween = new TWEEN.Tween(scale)
-        .to(target, 500)
-        .easing(TWEEN.Easing.Quadratic.InOut)
-        .onUpdate(() => {
-          this.plane.scale.set(scale.x, scale.y, scale.z);
-        })
-        .start();
-    }
-
-    showGraphElements() {
-      console.log('show graph elements');
-      const scale = { x: 0, y: 0, z: 0 };
-      const target = { x: 1, y: 1, z: 1 };
-
-      this.segmentManager.setVisibleOnStations(true);
-      this.northPointer.setVisible(true);
-      this.segmentManager.setVisibleOnTextDisks(true);
-
-      this.graphScaleTween = new TWEEN.Tween(scale)
-        .to(target, 500)
-        .easing(TWEEN.Easing.Quadratic.InOut)
-        .onUpdate(() => {
-          this.segmentManager.setScaleOnStations(scale.x, scale.y, scale.z);
-          this.northPointer.setScale(scale.x, scale.y, scale.z);
-          this.segmentManager.setScaleOnTextDisks(scale.x, scale.y, scale.z);
-        })
-        .start();
-    }
-
-    hideGraphElements() {
-      console.log('hide graph elements');
-      window.newAppState.activeStation.notify(null);
-
-      const scale = { x: 1, y: 1, z: 1 };
-      const target = { x: 0, y: 0, z: 0 };
-      this.graphScaleTween = new TWEEN.Tween(scale)
-        .to(target, 500)
-        .easing(TWEEN.Easing.Quadratic.InOut)
-        .onUpdate(() => {
-          this.segmentManager.setScaleOnStations(scale.x, scale.y, scale.z);
-          this.segmentManager.setScaleOnTextDisks(scale.x, scale.y, scale.z);
-          this.northPointer.setScale(scale.x, scale.y, scale.z);
-        })
-        .onComplete(() => {
-          this.segmentManager.setVisibleOnStations(false);
-          this.segmentManager.setVisibleOnTextDisks(false);
-          this.northPointer.setVisible(false);
-        })
-        .start();
-    }
-
-    startRotateMap() {
+    handleStartRotateMap() {
+      console.log('handleStartRotateMap');
       this.controls.autoRotate = true;
       this.controls.autoRotateSpeed = 0.1;
     }
-
-    endRotateMap() {
+    handleEndRotateMap() {
+      console.log('handleEndRotateMap');
       this.controls.autoRotate = false;
       this.controls.autoRotateSpeed = 0.1;
     }
 
-    showAsChart() {
+    handleStartShowAsChart() {
+      console.log('handleStartShowAsChart');
       window.newAppState.activeStation.notify(null);
       window.newAppState.scrollUTC.notify(null);
       window.newAppState.scrollTemperature.notify(null);
-      this.hideMap();
-      this.hideGraphElements();
-
+      this.setMapScale(0, 0, 0);
+      this.setStationsTextShow(true);
       this.segmentManager.showBlobsAsGraph();
-      this.showingAsChart = true;
+
       const chartHeight = this.segmentManager.getTotalBlobHeight();
       const focalPoint = { x: 0, y: chartHeight / 2, z: 0 };
       const cameraPosition = { x: 0, y: chartHeight / 2, z: 600 };
@@ -370,19 +276,79 @@ export const HeightMapConfig = {
         cameraPosition,
       )
     }
-
-    showAsMap() {
-      this.showMap();
-      this.showGraphElements();
+    handleEndShowAsChart() {
+      console.log('handleEndShowAsChart');
+      this.setMapScale(1, 1, 1);
+      this.setStationsTextShow(false);
       this.segmentManager.showBlobsOnMap();
+
       const { x, y, z } = this.heightMapConfig.camera;
-      this.showingAsChart = false;
       const focalPoint = this.heightMapConfig.target;
       const cameraPosition = { x, y, z };
       this.tweenCamera(
         focalPoint,
         cameraPosition,
       );
+    }
+
+    handleActiveStation(station) {
+      console.log('handleActiveStation', station);
+      const stationData = this.data.metaData.find(s => s.location === station);
+      if (stationData) {
+        const focalPoint = { x: stationData.x, y: 1, z: stationData.y };
+        const targetPosition = { x: stationData.x, y: 8, z: stationData.y + 0.02 };
+        this.tweenCamera(focalPoint, targetPosition);
+        this.setBlobOpacity(0);
+      } else {
+        const { x, y, z } = this.heightMapConfig.camera;
+        const focalPoint = { x: 0, y: 0, z: 0 };
+        const cameraPosition = { x, y, z };
+        this.setBlobOpacity(1);
+        this.tweenCamera(
+          focalPoint,
+          cameraPosition,
+        )
+      }
+    }
+
+    setSceneScale(x, y, z) {
+      console.log('setSceneScale', x, y, z);
+      const target = { x, y, z };
+      if (x !== 0 || y !== 0 || z !== 0) this.parent.visible = true;
+      this.sceneScaleTween = new TWEEN.Tween(this.parent.scale)
+        .to(target, 500)
+        .onComplete(() => {
+          console.log('setSceneScale', x, y, z);
+          if (x === 0 || y === 0 || z === 0) this.parent.visible = false;
+        })
+        .start();
+    }
+    setMapScale(x, y, z) {
+      console.log('setMapScale', x, y, z);
+      const target = { x, y, z };
+      if (x !== 0 || y !== 0 || z !== 0) this.plane.visible = true;
+      this.mapScaleTween = new TWEEN.Tween(this.plane.scale)
+        .to(target, 500)
+        .onComplete(() => {
+        console.log('setMapScale done ', x, y, z);
+          if (x === 0 || y === 0 || z === 0) this.plane.visible = false;
+        })
+        .start();
+    }
+    setStationsScale(x, y, z) {
+        this.segmentManager.animateScaleOnStations(x, y, z);
+    }
+    setNorthPointerScale(x, y, z) {
+      this.northPointer.animateScale(x, y, z);
+    }
+    setTextDiskCircleScale(x, y, z) {
+      this.segmentManager.animateScaleOnTextDiskCircles(x, y, z);
+    }
+    setStationsTextShow(show) {
+      this.segmentManager.showStationsText(show);
+    }
+    setBlobOpacity(opacity) {
+      this.segmentManager.animateOpacityOnBlobs(opacity);
     }
 
     tweenCamera(targetFocalPoint, targetPosition, callback = null) {

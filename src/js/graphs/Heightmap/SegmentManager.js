@@ -74,8 +74,8 @@ export default class SegmentManager {
         });
         this.segments.forEach((s) => {
             if (s.textDisk) {
-                s.textDisk.setTextPosition(offset * 1.5, 0, 0);
-                s.textDisk.setTextSize(7);
+                s.textDisk.animateTextPosition(offset * 1.5, 0, 0);
+                s.textDisk.animateTextSize(7);
             }
         })
         this.mapBlobsToNewPosition(newPositions);
@@ -110,9 +110,15 @@ export default class SegmentManager {
     setVisibleOnStations = visible => this.stations.forEach((station) => { station.setVisible(visible); });
     setOpacityOnStations = opacity => this.stations.forEach((station) => { station.setOpacity(opacity); });
     setScaleOnStations = (x, y, z) => this.stations.forEach((station) => { station.setScale(x, y, z); });
-    setOpacityOnSegments = opacity => this.segments.forEach((segment) => { segment.setOpacityWithTransition(opacity); });
-    setVisibleOnTextDisks = visible => this.segments.forEach((s) => { s.setTextVisible(visible) })
-    setScaleOnTextDisks = (x, y, z) => this.segments.forEach((s) => { s.setTextScale(x, y, z) })
-
+    setVisibleOnTextDisksCircle = visible => this.segments.forEach((s) => { s.setTextCircleVisible(visible) });
+    setScaleOnTextDisks = (x, y, z) => this.segments.forEach((s) => { s.setTextScale(x, y, z) });
+    showStationsText = (visible) => {
+        console.log(visible)
+        this.stations.forEach((s) => { s.showText(visible) })
+    };
     getTotalBlobHeight = () => this.settings.maxHeight;
+    
+    animateOpacityOnBlobs = opacity => this.segments.forEach((segment) => { segment.animateOpacityOnBlobs(opacity); });
+    animateScaleOnStations = (x, y, z) => this.stations.forEach((station) => { station.animateScale(x, y, z); });
+    animateScaleOnTextDiskCircles = (x, y, z) => this.segments.forEach(s => s.animateScaleOnTextDiskCircle(x, y, z));
 }
