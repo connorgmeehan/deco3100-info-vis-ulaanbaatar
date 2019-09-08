@@ -224,6 +224,14 @@ export const HeightMapConfig = {
       this.handleStartShowAsChart = this.handleStartShowAsChart.bind(this);
       this.handleEndShowAsChart = this.handleEndShowAsChart.bind(this);
       this.addProgressEvent(window.step8Progress, window.stepFinal, () => this.handleStartShowAsChart(), () => this.handleEndShowAsChart());
+
+      this.handleStartShowAsChart = this.handleStartShowAsChart.bind(this);
+      this.handleEndShowAsChart = this.handleEndShowAsChart.bind(this);
+      this.addProgressEvent(window.step8Progress, window.stepFinal, () => this.handleStartShowAsChart(), () => this.handleEndShowAsChart());
+
+      this.handleStartShowSeperated = this.handleStartShowSeperated.bind(this);
+      this.handleEndShowSeperated = this.handleEndShowSeperated.bind(this);
+      this.addProgressEvent(window.step9Progress, window.stepFinal, () => this.handleStartShowSeperated(), () => this.handleEndShowSeperated());
     }
 
     handleStartShowScene() {
@@ -289,6 +297,13 @@ export const HeightMapConfig = {
         focalPoint,
         cameraPosition,
       );
+    }
+
+    handleStartShowSeperated() {
+      this.segmentManager.showBlobsAsGraphCategorised();
+    }
+    handleEndShowSeperated() {
+      this.segmentManager.showBlobsAsGraph();
     }
 
     handleActiveStation(station) {

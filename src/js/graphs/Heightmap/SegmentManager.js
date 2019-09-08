@@ -82,6 +82,41 @@ export default class SegmentManager {
         this.mapBlobsToNewPosition(newPositions);
     }
 
+    showBlobsAsGraphCategorised() {
+        console.log('showBlobsAsGraph')
+        const newPositions = [];
+        const lineDistance = 50;
+        const offset = -((this.data.metaData.length) / 2) * lineDistance;
+
+        const gerStations = this.data.metaData.filter(s => s.isGer === 'yes');
+        const nonGerStations = this.data.metaData.filter(s => s.isGer === 'no');
+
+        let currentX = offset;
+        gerStations.forEach((station) => {
+            newPositions.push({ name: station.location, x: currentX, z: 0 });
+            const stationObject = this.stations.find(obj => obj.name === station.location);
+            stationObject.tweenToPosition(currentX, 1, 0);
+            currentX += lineDistance;
+        });
+        currentX += lineDistance;
+
+        nonGerStations.forEach((station) => {
+            newPositions.push({ name: station.location, x: currentX, z: 0 });
+            const stationObject = this.stations.find(obj => obj.name === station.location);
+            stationObject.tweenToPosition(currentX, 1, 0);
+            currentX += lineDistance;
+        });
+
+        this.mapBlobsToNewPosition(newPositions);
+
+        this.segments.forEach((s) => {
+            if (s.textDisk) {
+                s.textDisk.animateTextPosition(offset * 1.25, 0, 0);
+                s.textDisk.animateTextSize(7);
+            }
+        })
+    }
+
     showBlobsOnMap() {
         console.log('showBlobsOnMap')
         const newPositions = [];
