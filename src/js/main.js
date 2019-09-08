@@ -89,7 +89,7 @@ const main = () => {
   const weatherData = formattedData.find(el => el[0] === 'Weather (C)');
   // Use utc as index of data
   stationsData.index = formattedData.reduce((acc, cur) => (acc[0] === 'utc' ? acc : cur));
-
+  const textData = formattedData.find(col => col[0] === 'Text');
   /*
    *    SECTION MAP
    */
@@ -120,7 +120,9 @@ const main = () => {
   // Heightmap
   const hmGraphOptions = new GraphOptions(null, null, 1200, 1000);
   const hmConfig = HeightMapConfig;
-  const heightMapData = { stationMetaData, stationsData, weatherData };
+  const heightMapData = {
+ stationMetaData, stationsData, weatherData, textData,
+};
   const heightMap = new HeightMap('Heightmap', hmGraphOptions, heightMapData, hmConfig, sectionMap.element);
   sectionMap.addChild(heightMap);
 
@@ -198,7 +200,7 @@ const main = () => {
       content: '3 What you\'re looking at is blah blah blah blah',
     },
   ];
-  const contextTitle3 = new TextBlock('Heightmap_Context', null, contextData2);
+  const contextTitle3 = new TextBlock('Heightmap_Context', null, contextData3);
   contextTitle3.setShowRange(window.step6Progress, window.step7Progress);
   sectionMap.addChild(contextTitle3);
 

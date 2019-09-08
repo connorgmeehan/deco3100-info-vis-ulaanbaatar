@@ -110,13 +110,14 @@ export const HeightMapConfig = {
       for (let i = 0; i < datalength; i++) {
         const utc = data.stationsData.index[1][i];
         const temperature = data.weatherData[1][i];
+        const text = data.textData[1][i];
         const stations = {};
         Object.values(data.stationMetaData).forEach((val) => {
           const key = val.location;
           stations[key] = data.stationsData.find(el => el[0] === key)[1][i];
         });
 
-        dataSegments[i] = new GraphSegmentVm(utc, temperature, stations);
+        dataSegments[i] = new GraphSegmentVm(utc, temperature, stations, text);
       }
 
       return { dataSegments, metaData };
@@ -145,7 +146,7 @@ export const HeightMapConfig = {
         0.1,
         1000,
       );
-      
+
       this.cam.position.set(hmConfig.camera.x, hmConfig.camera.y, hmConfig.camera.z);
 
       this.controls = new OrbitControls(this.cam, this.renderer.domElement);
@@ -181,7 +182,7 @@ export const HeightMapConfig = {
       })
 
       const plane = new THREE.Mesh(planeGeometry, material);
-      
+
       const parent = new THREE.Object3D();
       parent.add(plane);
       const initScale = 0.0000001;
@@ -307,6 +308,7 @@ export const HeightMapConfig = {
 
       this.segmentManager.setVisibleOnStations(true);
       this.northPointer.setVisible(true);
+      this.segmentManager.setVisibleOnTextDisks(true);
 
       this.graphScaleTween = new TWEEN.Tween(scale)
         .to(target, 500)
@@ -314,6 +316,7 @@ export const HeightMapConfig = {
         .onUpdate(() => {
           this.segmentManager.setScaleOnStations(scale.x, scale.y, scale.z);
           this.northPointer.setScale(scale.x, scale.y, scale.z);
+          this.segmentManager.setScaleOnTextDisks(scale.x, scale.y, scale.z);
         })
         .start();
     }
@@ -329,10 +332,12 @@ export const HeightMapConfig = {
         .easing(TWEEN.Easing.Quadratic.InOut)
         .onUpdate(() => {
           this.segmentManager.setScaleOnStations(scale.x, scale.y, scale.z);
+          this.segmentManager.setScaleOnTextDisks(scale.x, scale.y, scale.z);
           this.northPointer.setScale(scale.x, scale.y, scale.z);
         })
         .onComplete(() => {
           this.segmentManager.setVisibleOnStations(false);
+          this.segmentManager.setVisibleOnTextDisks(false);
           this.northPointer.setVisible(false);
         })
         .start();

@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import * as TWEEN from '@tweenjs/tween.js';
 import PollutionBlob from './PollutionBlob';
+import SegmentTextDisk from './SegmentTextDisk';
 
 export const GraphSegmentSettings = {
     segmentStepDistance: 2,
@@ -8,10 +9,11 @@ export const GraphSegmentSettings = {
 }
 
 export class GraphSegmentVm {
-    constructor(utc, temperature, stations) {
+    constructor(utc, temperature, stations, text) {
         this.utc = utc;
         this.temperature = temperature;
         this.stations = stations;
+        this.text = text !== 'na' ? text : null;
     }
 }
 
@@ -42,27 +44,31 @@ export default class GraphSegment {
         this.pollutionBlobs.push(blob);
     }
 
-    setOpacity(opacity) {
-        this.pollutionBlobs.forEach((blob) => {
-            blob.setOpacity(opacity);
-        });
+    addSegmentTextDisk = (text) => { this.textDisk = new SegmentTextDisk(this.obj, this.events, this.utc, text) };
+    setOpacity = opacity => this.pollutionBlobs.forEach((blob) => { blob.setOpacity(opacity); });
+    setOpacityWithTransition(opacity) { this.pollutionBlobs.forEach((blob) => { blob.setOpacityWithTransition(opacity) }) }
+    setTextVisible(visible) {
+        if (this.textDisk) this.textDisk.setVisible(visible);
     }
-
-    setOpacityWithTransition(opacity) {
-        this.pollutionBlobs.forEach((blob) => {
-            blob.setOpacityWithTransition(opacity);
-        });
+    setTextScale(x, y, z) {
+        if (this.textDisk) this.textDisk.setScale(x, y, z);
     }
-
     setY(y) {
         this.obj.position.setY(y);
         if (y < 0) {
             this.pollutionBlobs.forEach((blob) => { blob.setVisible(false); });
+            if (this.textDisk) {
+                this.textDisk.setVisible(false);
+            }
         } else {
             const { scrollUtcOffset, segmentStepDistance } = this.settings;
             if (y > (scrollUtcOffset - 1) * segmentStepDistance && scrollUtcOffset * segmentStepDistance > y) {
                 window.newAppState.scrollUTC.notify(this.utc);
                 window.newAppState.scrollTemperature.notify(this.temperature);
+            }
+
+            if (this.textDisk) {
+                this.textDisk.setVisible(true);
             }
             this.pollutionBlobs.forEach((blob) => { blob.setVisible(true); });
         }

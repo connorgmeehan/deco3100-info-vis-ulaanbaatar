@@ -102,7 +102,6 @@ class ToolTip {
   }
 
   getTempFromUtc(utc) {
-    console.log(this.data);
     const index = this.getIndexFromUtc(utc);
     return this.data.find(d => d[0] === 'Weather (C)')[1][index];
   }
