@@ -1,9 +1,11 @@
 import * as THREE from 'three';
 import * as TWEEN from '@tweenjs/tween.js';
+import TextSprite from 'three.textsprite';
 import PreviewPlane from './PreviewPlane';
 
 export const StationSettings = {
     elevationOffset: 1,
+    textSize: 5,
 }
 
 export default class Station {
@@ -29,6 +31,18 @@ export default class Station {
         this.cube = new THREE.Mesh(this.geometry, this.material);
         this.cube.position.set(this.x, this.settings.elevationOffset, this.z);
 
+        this.textObj = new TextSprite({
+            material: {
+                color: this.color,
+            },
+            redrawInterval: 250,
+            textSize: 0,
+            texture: {
+                fontFamily: 'Arial, Helvetica, sans-serif',
+                text: this.name,
+            },
+        });
+
         this.previewPlane = new PreviewPlane(this.cube, this.events, this.name, this.filename);
 
         this.scene.add(this.cube);
@@ -46,6 +60,15 @@ export default class Station {
     setScale(scale) {
         this.cube.scale.set(scale, scale, scale);
     }
+    animateScale(x, y, z) {
+        if (x !== 0 || y !== 0 || z !== 0) this.cube.visible = true;
+        this.scaleTween = new TWEEN.Tween(this.cube.scale)
+            .to({ x, y, z })
+            .onComplete(() => {
+                if (x === y === z === 0) this.plane.visible = false;
+            })
+            .start();      
+    }
 
     onActiveStationChange(station) {
         if (station === this.name) {
@@ -57,6 +80,18 @@ export default class Station {
 
     setVisible(visible) {
         this.cube.visible = visible;
+    }
+
+    showText(visible) {
+        console.log(`Station:showText(visible: ${visible}) on ${this.name}`);
+        if (visible) this.textObj.visible = visible;
+        this.textSizeTween = new TWEEN.Tween(this.textObj)
+            .to({ textSize: this.settings.textSize }, 200)
+            .onComplete(() => {
+                if (!visible) this.textObj.visible = visible
+                console.log(`Station:showText(visible: ${visible}) complete ${this.name}`, this);
+            })
+            .start();
     }
 
     tweenToPosition(newX, newY, newZ) {
