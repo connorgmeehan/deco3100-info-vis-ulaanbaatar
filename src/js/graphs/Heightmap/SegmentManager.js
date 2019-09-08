@@ -75,7 +75,7 @@ export default class SegmentManager {
         this.segments.forEach((s) => {
             if (s.textDisk) {
                 s.textDisk.setTextPosition(offset * 1.5, 0, 0);
-                s.textDisk.setTextSize(10);
+                s.textDisk.setTextSize(7);
             }
         })
         this.mapBlobsToNewPosition(newPositions);
