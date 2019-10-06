@@ -22,8 +22,11 @@ const main = () => {
   window.step2Progress = -0.2;
   window.step3Progress = -0.1;
   window.step4Progress = 0.0;
-  window.step5Progress = 0.3;
-  window.step6Progress = 0.6;
+  window.step5Progress = 0.15;
+  window.step5aProgress = 0.35;
+  window.step6Progress = 0.45;
+  window.step6aProgress = 0.6;
+  window.step6bProgress = 0.7;
   window.step7Progress = 0.9;
   window.step8Progress = 1.0;
   window.step9Progress = 1.1;
@@ -148,7 +151,8 @@ const main = () => {
     {
       tag: 'p',
       className: 'Content',
-      content: 'The 2017 most polluted capital city in the world.  What\'s interesting is that content content content content content content content content content content content ',
+      content: 'The 2016 most polluted capital city in the world.  What we found interesting, however, is that pollution is remains at low-moderate levels year round but in winter becomes the most polluted place on earth.<br><br>'
+      + 'Through this interactive visualisation we\'re going to explore the reasons why this is the case and the ways pollution differs depending on where you live in the capital',
     },
   ]
   const introTitle = new TextBlock('Heightmap_Intro', null, introData);
@@ -164,7 +168,8 @@ const main = () => {
     {
       tag: 'p',
       className: 'Content',
-      content: 'Blah blah blah we\'re going to explore, Blah blah blah we\'re going to explore,Blah blah blah we\'re going to explore Blah blah blah we\'re going to explore,Blah blah blah we\'re going to exploreBlah blah blah we\'re going to explore ',
+      content: 'You can see a scattering of settlements on the peripheries of the city, extending up into the hillsides.  These are known as Ger districts, where some 62% of the population resides, and are some of the most affected by pollution.<br><br>'
+      + '<i>Click and Drag to navigate around the map<i><br>',
     },
   ]
   const introTitle2 = new TextBlock('Heightmap_Intro', null, introData2);
@@ -174,34 +179,67 @@ const main = () => {
   const contextData1 = [
     {
       tag: 'h3',
-      className: 'Title',
-      content: '1 What you\'re looking at is blah blah blah blah',
+      className: 'Ger and Non-ger districts',
+      content: 'Each marker represents a pollution monitoring stations.',
     },
   ];
   const contextTitle1 = new TextBlock('Heightmap_Context', null, contextData1);
   contextTitle1.setShowRange(window.step4Progress, window.step5Progress);
   sectionMap.addChild(contextTitle1);
 
+  const contextData1a = [
+    {
+      tag: 'h3',
+      className: 'Ger and Non-ger districts',
+      content: 'Hover over the blobs as you scroll to view pollution levels at that station for that week.',
+    },
+  ];
+  const contextTitle1a = new TextBlock('Heightmap_Context', null, contextData1a);
+  contextTitle1a.setShowRange(window.step5Progress, window.step5aProgress);
+  sectionMap.addChild(contextTitle1a);
+
   const contextData2 = [
     {
       tag: 'h3',
-      className: 'Title',
-      content: '2 What you\'re looking at is blah blah blah blah',
+      className: 'Temperature and pollution',
+      content: 'During the warmer times of the year, pollution remains relatively low...',
     },
   ];
   const contextTitle2 = new TextBlock('Heightmap_Context', null, contextData2);
-  contextTitle2.setShowRange(window.step5Progress, window.step6Progress);
+  contextTitle2.setShowRange(window.step5aProgress, window.step6Progress);
   sectionMap.addChild(contextTitle2);
+  
+  const contextData2a = [
+    {
+      tag: 'h3',
+      className: 'Temperature and pollution',
+      content: 'However as the temperatures drop, residents of ger districts are forced to burn coal to stay warm.',
+    },
+  ];
+  const contextTitle2a = new TextBlock('Heightmap_Context', null, contextData2a);
+  contextTitle2a.setShowRange(window.step6Progress, window.step6aProgress);
+  sectionMap.addChild(contextTitle2a);
+
+  const contextData2b = [
+    {
+      tag: 'h3',
+      className: 'Temperature and pollution',
+      content: 'As a result they experience the highest levels of pm2.5 pollution, with the highest occuring weekly average topping at 722.1 in the Baynkhoshuu district.',
+    },
+  ];
+  const contextTitle2b = new TextBlock('Heightmap_Context', null, contextData2b);
+  contextTitle2b.setShowRange(window.step6aProgress, window.step6bProgress);
+  sectionMap.addChild(contextTitle2b);
 
   const contextData3 = [
     {
       tag: 'h3',
       className: 'Title',
-      content: '3 What you\'re looking at is blah blah blah blah',
+      content: 'Click on the station for Bayankhoshuu, compare that to a more central pollution station that experienced lower PM2.5 levels.',
     },
   ];
   const contextTitle3 = new TextBlock('Heightmap_Context', null, contextData3);
-  contextTitle3.setShowRange(window.step6Progress, window.step7Progress);
+  contextTitle3.setShowRange(window.step6bProgress, window.step7Progress);
   sectionMap.addChild(contextTitle3);
 
   sectionMap.runUpdate();
