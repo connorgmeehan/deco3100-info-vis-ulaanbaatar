@@ -100,7 +100,7 @@ export default class PollutionBlob {
     }
 
     onMouseOut() {
-        window.newAppState.selectedStation.notify(this.name);
+        window.newAppState.selectedStation.notify(null);
         window.newAppState.selectedPollution.notify(null);
         this.notifyUTCCallback(false);
 

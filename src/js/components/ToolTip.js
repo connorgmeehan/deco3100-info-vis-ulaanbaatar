@@ -77,9 +77,7 @@ class ToolTip {
     }
 
     if (pollution) {
-      console.log(pollution);
       const pollutionBarHeight = (pollution / pollutionMax) * pollutionHeight;
-      console.log(pollutionBarHeight);
       this.pollutionBar.style.height = `${pollutionBarHeight + thermometerExtraPx}px`;
       this.pollutionBar.style.top = `${thermometerHeight - pollutionBarHeight - thermometerExtraPx}px`;
 

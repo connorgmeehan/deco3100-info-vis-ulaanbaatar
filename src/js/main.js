@@ -44,8 +44,8 @@ const main = () => {
   // window.newAppState.selectedPollution.subscribe((pollution) => {
   //   console.log(`NewAppState: selectedPollution = ${pollution}`);
   // });
-  window.newAppState.scrollPollution.subscribe((el) => {
-    console.log(`NewAppState: scrollPollution = ${el}`);
+  window.newAppState.selectedStation.subscribe((el) => {
+    console.log(`NewAppState: selectedStation = ${el}`);
   });
   window.newAppState.activeStation.subscribe((station) => {
     console.log(`NewAppState: activeStation = ${station}`);
