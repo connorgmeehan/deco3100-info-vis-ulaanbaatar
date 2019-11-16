@@ -26,6 +26,12 @@ class Observable {
       this.data = data;
       this.observers.forEach(observer => observer(data));
     }
+
+    tryUnset(data) {
+      if (this.data === data) {
+        this.notify(null);
+      }
+    }
 }
 
 const NewAppState = {

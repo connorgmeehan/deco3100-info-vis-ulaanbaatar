@@ -86,8 +86,8 @@ export default class GraphSegment {
             window.newAppState.selectedUTC.notify(this.utc);
             window.newAppState.selectedTemperature.notify(this.temperature);
         } else {
-            window.newAppState.selectedUTC.notify(null);
-            window.newAppState.selectedTemperature.notify(null);
+            window.newAppState.selectedUTC.tryUnset(this.utc);
+            window.newAppState.selectedTemperature.tryUnset(this.temperature);
         }
     }
 

@@ -100,8 +100,8 @@ export default class PollutionBlob {
     }
 
     onMouseOut() {
-        window.newAppState.selectedStation.notify(null);
-        window.newAppState.selectedPollution.notify(null);
+        window.newAppState.selectedPollution.tryUnset(this.val);
+        window.newAppState.selectedStation.tryUnset(this.name);
         this.notifyUTCCallback(false);
 
         const color = this.calculateColor(0);

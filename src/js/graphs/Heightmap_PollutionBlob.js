@@ -97,7 +97,7 @@ class PollutionBlob {
     this.isMouseOver = false;
     if (window.appState.hoveredTime.data === this.d.utc) {
       console.log(window.appState.hoveredTime.data, this.d.utc, window.appState.hoveredTime.data === this.d.utc)
-      window.appState.hoveredTime.notify(null);
+      window.appState.hoveredTime.tryUnset(this.d.utc);
     }
     this.parent._onMouseOut();
     this._calculateMaterialColor(this.d.val, 0.0);

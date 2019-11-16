@@ -115,7 +115,7 @@ class PollutionStation {
 
   _onMouseOut = () => {
     if (window.appState.hoveredStation.data === this.name) {
-      window.appState.hoveredStation.notify(null);
+      window.appState.hoveredStation.tryUnset(this.name);
     }
   }
 
