@@ -1,0 +1,78 @@
+$thermometer-offset-left: 70px;
+$thermometer-height: 200px;
+$thermometer-bar-width: 10px;
+$thermometer-tube-width: 30px;
+
+$thermometer-tube-border-width: ($thermometer-tube-width - $thermometer-bar-width)/2; 
+$thermometer-tube-height: $thermometer-height;
+.Thermometer {
+  position: relative;
+  height: $thermometer-height;
+  width: 100%;
+
+  &_Bar {
+    position: absolute;
+    top: 0;
+    left: $thermometer-offset-left;
+    transform: translateX(-50%);
+    width: 10px;
+    height: $thermometer-height;
+    background: red;
+    border-radius: 10px;
+    animation: all 0.2s ease-in-out;
+    padding-bottom: 20px;
+  }
+
+  &_Tube {
+    position: absolute;
+    left: $thermometer-offset-left;
+    transform: translateX(-50%);
+    width: $thermometer-tube-width;
+    border-radius: $thermometer-tube-width;
+    background: white;
+    height: $thermometer-tube-height + 30px;
+  }
+
+  &_Markings {
+    position: absolute;
+    height: $thermometer-height + 20px;
+    width: auto;
+    left: $thermometer-offset-left - 40px;
+    top: -10px;
+
+    margin-block-start: 0;
+    margin-block-end: 0;
+    padding-inline-start: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    list-style: none;
+  }
+
+  &_Marking {
+    text-align: right;
+    position: relative;
+    
+    &__Negative {
+      &:before {
+        position: absolute;
+        content: "-";
+        left: -6px;
+        top: -2px;
+      }
+    }
+  }
+
+  &_Ball {
+    position: absolute;
+    left: $thermometer-offset-left;
+    transform:translateX(-50%);
+    top: $thermometer-height;
+    background: red;
+    border: $thermometer-tube-border-width solid white;
+    border-radius: 100%;
+    width: 20px;
+    height: 20px;
+  }
+}

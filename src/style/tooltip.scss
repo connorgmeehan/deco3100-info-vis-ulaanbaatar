@@ -1,7 +1,7 @@
 
-$font-size-meta: 1.3rem;
-$font-size-main: 5rem;
-$font-size-secondary: 2.2rem;
+$font-size-meta: 1rem;
+$font-size-main: 2rem;
+$font-size-secondary: 1.5rem;
 
 $color-emphasis : #FFF;
 $color-base : #DDD;
@@ -13,13 +13,33 @@ $color-deemphasis : #CCC;
   left: calc(50% - 550px);
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 300px;
+  width: 250px;
   border-radius: 5px;
   padding: 20px 30px;
   color: $color-emphasis;
   font-family: 'Avenir';
 
   transition: opacity 0.4s ease-in-out;
+
+  &_BarCharts {
+    display: flex;
+    flex-direction: row;
+
+    margin-bottom: 3rem;
+  }
+
+  &_Row__Center {
+    height: 40px;
+    text-align: center;
+  }
+
+  &_WeatherColumn {
+    width: 50%;
+  }
+
+  &_PollutionColumn {
+    width: 50%;
+  }
 
   &_Hidden {
     opacity: 0;
@@ -47,15 +67,14 @@ $color-deemphasis : #CCC;
 
   &_Weather {
     display: inline-block;
-    margin: 1rem 0 0.2rem;
+    margin: 0 0 0.7rem;
+    height: 20px;
     margin-left: -2px;
     font-size: $font-size-main;
     color: $color-emphasis;
     &::before {
-      position: absolute;
       display: inline-block;
       width: 13px;
-      left: 6px;
       content: " ";
       color: $color-emphasis;
     }
@@ -65,15 +84,16 @@ $color-deemphasis : #CCC;
 
     &_Header {
       font-weight: 300;
-      font-size: $font-size-secondary;
+      font-size: $font-size-meta;
       color: $color-deemphasis;
     }
   }
 
   &_Pollution {
-    color: $color-base;
+    color: $color-emphasis;
+    margin: 0 0 0.7rem;
     font-weight: 500;
-    font-size: $font-size-secondary;
+    font-size: $font-size-main;
 
     &_Header {
       font-size: $font-size-meta;

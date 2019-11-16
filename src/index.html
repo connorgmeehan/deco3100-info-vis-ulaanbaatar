@@ -14,9 +14,46 @@
   </div>
 
   <div class="Tooltip Graph__Hidden" id="tooltip">
-    <div class="Tooltip_Row">
-      <span class="Tooltip_Weather" id="Tooltip_Weather"></span>
-      <span class="Tooltip_Weather_Header">℃</span>
+    <div class="Tooltip_BarCharts">
+
+      <div class="Tooltip_WeatherColumn">
+        <div class="Tooltip_Row Tooltip_Row__Center">
+          <span class="Tooltip_Weather" id="Tooltip_Weather"></span>
+          <span class="Tooltip_Weather_Header">℃</span>
+        </div>
+        <div class="Thermometer">
+          <ul class="Thermometer_Markings">
+            <li class="Thermometer_Marking">30</li>
+            <li class="Thermometer_Marking">20</li>
+            <li class="Thermometer_Marking">10</li>
+            <li class="Thermometer_Marking">0</li>
+            <li class="Thermometer_Marking Thermometer_Marking__Negative">10</li>
+            <li class="Thermometer_Marking Thermometer_Marking__Negative">20</li>
+            <li class="Thermometer_Marking Thermometer_Marking__Negative">30</li>
+            <li class="Thermometer_Marking Thermometer_Marking__Negative">40</li>
+          </ul>
+          <div class="Thermometer_Tube"></div>
+          <div class="Thermometer_Ball"></div>
+          <div class="Thermometer_Bar" id="Thermometer_Bar"></div>
+        </div>
+      </div>
+
+      <div class="Tooltip_PollutionColumn">
+        <div class="Tooltip_Row Tooltip_Row__Center">
+          <span class="Tooltip_Pollution" id="Tooltip_Pollution"></span>
+          <span class="Tooltip_Pollution_Header">ppm</span>
+        </div>
+        <div class="Pollution">
+          <div class="Pollution_Outline"></div>
+          <div class="Pollution_Bar" id="Pollution_Bar"></div>
+          <div class="Pollution_Grades">
+            <div class="Pollution_Grade Pollution_Grade__Danger"></div>
+            <div class="Pollution_Grade Pollution_Grade__Warning"></div>
+            <div class="Pollution_Grade Pollution_Grade__Ok"></div>
+          </div>
+        </div>
+      </div>
+
     </div>
     <div class="Tooltip_Row">
       <span class="Tooltip_Time_Header">date:</span>
@@ -25,10 +62,6 @@
     <div class="Tooltip_Row">
       <span class="Tooltip_Station_Header">station: </span>
       <span class="Tooltip_Station" id="Tooltip_Station"></span>
-    </div>
-    <div class="Tooltip_Row">
-      <span class="Tooltip_Pollution" id="Tooltip_Pollution"></span>
-      <span class="Tooltip_Pollution_Header">ppm</span>
     </div>
   </div>
 

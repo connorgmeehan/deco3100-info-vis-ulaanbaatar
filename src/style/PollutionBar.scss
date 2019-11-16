@@ -1,0 +1,74 @@
+$pollution-offset-left: $thermometer-offset-left - 25px;
+
+$ok-height: 50/700*200px;
+$warning-height: 200/700*200px;
+$hazardous-height: 200px - $ok-height - $warning-height;
+
+.Pollution {
+  position: relative;
+  height: $thermometer-height;
+  width: 100%;
+
+  &_Outline {
+    position: absolute;
+    left: $pollution-offset-left;
+    transform: translateX(-50%);
+    width: $thermometer-tube-width+2px;
+    background: #333;
+    height: $thermometer-height;
+  }
+
+  &_Bar {
+    position: absolute;
+    left: $pollution-offset-left;
+    transform: translateX(-50%);
+    width: $thermometer-tube-width;
+    background: white;
+    top: 100px;
+    height: 100px;
+  }
+
+  &_Grades {
+    position: absolute;
+    left: $pollution-offset-left;
+    transform: translateX(-50%);
+    width: $thermometer-tube-width;
+    mix-blend-mode: darken;
+  }
+
+  &_Grade {
+    opacity: 0.5;
+    text-align: right;
+    &:before {
+      position: relative;
+      left: 40px;
+      top: 50%;
+    }
+    &__Ok {
+      &:before {
+        content: "safe";
+      }
+      top: $thermometer-height - $ok-height;
+      height: $ok-height;
+      background: lightgreen;
+    }
+
+    &__Warning {
+      &:before {
+        content: "unhealthy";
+      }
+      top: $thermometer-height - $ok-height - $warning-height;
+      height: $warning-height;
+      background: orange;
+    }
+
+    &__Danger {
+      &:before {
+        content: "hazardous";
+      }
+      top: 0px;
+      height: $hazardous-height;
+      background: red;
+    }
+  }
+}
