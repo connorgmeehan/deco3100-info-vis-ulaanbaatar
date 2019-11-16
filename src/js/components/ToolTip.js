@@ -23,6 +23,7 @@ class ToolTip {
     this.pollutionBar = target.querySelector('#Pollution_Bar');
     this.weatherTitle = target.querySelector('#Tooltip_Weather');
     this.thermometerBar = target.querySelector('#Thermometer_Bar');
+    this.stationRow = target.querySelector('#Tooltip_StationRow');
     this.stationTitle = target.querySelector('#Tooltip_Station');
 
     window.newAppState.scrollUTC.subscribe((utc) => { this.scrollUTC = utc; this.update(); });
@@ -53,7 +54,15 @@ class ToolTip {
     } else {
       this.timeTitle.innerHTML = '';
     }
-    this.stationTitle.innerText = station !== null ? `${station}` : ' ';
+    if (station) {
+      this.stationTitle.innerText = station;
+      this.stationRow.classList.remove('Tooltip_StationRow__Average');
+      this.stationRow.classList.add('Tooltip_StationRow__Specific');
+    } else {
+      this.stationRow.classList.remove('Tooltip_StationRow__Specific');
+      this.stationRow.classList.add('Tooltip_StationRow__Average');
+    }
+
     const thermometerBarRatio = (temp - thermometerMin) / thermometerRange;
     const thermometerBarHeight = thermometerBarRatio * thermometerHeight;
 

@@ -53,6 +53,10 @@ $thermometer-tube-height: $thermometer-height;
   &_Marking {
     text-align: right;
     position: relative;
+
+    &:first-child {
+      visibility: hidden;
+    }
     
     &__Negative {
       &:before {

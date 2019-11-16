@@ -55,13 +55,25 @@ $color-deemphasis : #CCC;
     }
   }
 
+  &_StationRow {
+    position: relative;
+    left: -17px;
+    height: 40px;
+    text-align: center;
+  }
+
   &_Station {
     font-weight: 600;
     font-size: $font-size-meta;
     color: $color-base;
-    &_Header {
-      font-size: $font-size-meta;
-      color: $color-deemphasis;
+    display: none;
+
+    .Tooltip_StationRow__Average &__Average {
+      display: block;
+    } 
+
+    .Tooltip_StationRow__Specific &__Specific {
+      display: block;
     }
   }
 

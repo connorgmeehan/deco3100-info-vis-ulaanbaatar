@@ -8,7 +8,7 @@ $hazardous-height: 200px - $ok-height - $warning-height;
   position: relative;
   height: $thermometer-height;
   width: 100%;
-
+  margin-bottom: 1rem;
   &_Outline {
     position: absolute;
     left: $pollution-offset-left;
@@ -42,7 +42,7 @@ $hazardous-height: 200px - $ok-height - $warning-height;
     &:before {
       position: relative;
       left: 40px;
-      top: 50%;
+      top: calc(50% - 8px);
     }
     &__Ok {
       &:before {
