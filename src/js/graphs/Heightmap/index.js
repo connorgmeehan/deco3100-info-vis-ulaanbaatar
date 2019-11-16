@@ -111,13 +111,17 @@ export const HeightMapConfig = {
         const utc = data.stationsData.index[1][i];
         const temperature = data.weatherData[1][i];
         const text = data.textData[1][i];
+
+        let averagePollution = 0;
         const stations = {};
         Object.values(data.stationMetaData).forEach((val) => {
           const key = val.location;
           stations[key] = data.stationsData.find(el => el[0] === key)[1][i];
+          averagePollution += stations[key];
         });
+        averagePollution /= Object.keys(stations).length;
 
-        dataSegments[i] = new GraphSegmentVm(utc, temperature, stations, text);
+        dataSegments[i] = new GraphSegmentVm(utc, averagePollution, temperature, stations, text);
       }
 
       return { dataSegments, metaData };

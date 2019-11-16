@@ -27,11 +27,12 @@ class ToolTip {
 
     window.newAppState.scrollUTC.subscribe((utc) => { this.scrollUTC = utc; this.update(); });
     window.newAppState.scrollTemperature.subscribe((temp) => { this.scrollTemperature = temp; this.update(); });
+    window.newAppState.scrollPollution.subscribe((temp) => { this.scrollPollution = temp; this.update(); });
     window.newAppState.selectedUTC.subscribe((utc) => { this.selectedUTC = utc; this.update(); });
     window.newAppState.selectedPollution.subscribe((pollution) => { this.selectedPollution = pollution; this.update(); });
     window.newAppState.selectedStation.subscribe((station) => { this.selectedStation = station; this.update(); });
     window.newAppState.selectedTemperature.subscribe((temp) => { this.selectedTemperature = temp; this.update(); });
-    
+
     this.thermometerBar.style.top = `${thermometerHeight}px`;
     this.thermometerBar.style.height = '0px';
 
@@ -69,10 +70,10 @@ class ToolTip {
     if (pollution) {
       console.log(pollution);
       const pollutionBarHeight = (pollution / pollutionMax) * pollutionHeight;
-      console.log(pollutionBarHeight);  
+      console.log(pollutionBarHeight);
       this.pollutionBar.style.height = `${pollutionBarHeight + thermometerExtraPx}px`;
       this.pollutionBar.style.top = `${thermometerHeight - pollutionBarHeight - thermometerExtraPx}px`;
-  
+
       this.pollutionTitle.innerText = pollution ? `${pollution.toFixed(0)}` : '';
     }
   }
@@ -98,8 +99,16 @@ class ToolTip {
       temp = null;
     }
 
+    let pollution;
+    if (this.selectedPollution) {
+      pollution = this.selectedPollution;
+    } else if (this.scrollPollution) {
+      pollution = this.scrollPollution;
+    } else {
+      pollution = null;
+    }
+
     const station = this.selectedStation ? this.selectedStation : null;
-    const pollution = this.selectedPollution ? this.selectedPollution : null;
 
     return {
       utc, temp, station, pollution,

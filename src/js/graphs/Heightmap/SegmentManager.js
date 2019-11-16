@@ -40,7 +40,7 @@ export default class SegmentManager {
         const graphSegmentSettings = GraphSegmentSettings;
         graphSegmentSettings.segmentStepDistance = this.segmentStepDist;
         this.data.dataSegments.forEach((ds, i) => {
-            const segment = new GraphSegment(this.scene, this.events, ds.utc, ds.temperature, graphSegmentSettings);
+            const segment = new GraphSegment(this.scene, this.events, ds.utc, ds.temperature, ds.averagePollution, graphSegmentSettings);
             segment.setY(-i * this.segmentStepDist);
             this.data.metaData.forEach((station) => {
                 segment.addPollutionBlob(station.location, ds.stations[station.location], station.x, station.y);

@@ -9,8 +9,10 @@ export const GraphSegmentSettings = {
 }
 
 export class GraphSegmentVm {
-    constructor(utc, temperature, stations, text) {
+    constructor(utc, averagePollution, temperature, stations, text) {
         this.utc = utc;
+        this.averagePollution = averagePollution;
+        console.log(this);
         this.temperature = temperature;
         this.stations = stations;
         this.text = text !== 'na' ? text : null;
@@ -18,11 +20,12 @@ export class GraphSegmentVm {
 }
 
 export default class GraphSegment {
-    constructor(scene, events, utc, temperature, settings = GraphSegmentSettings) {
+    constructor(scene, events, utc, temperature, averagePollution, settings = GraphSegmentSettings) {
         this.scene = scene;
         this.events = events;
         this.utc = utc;
         this.temperature = temperature;
+        this.averagePollution = averagePollution;
         this.settings = settings;
 
         this.init();
@@ -68,6 +71,7 @@ export default class GraphSegment {
             if (y > (scrollUtcOffset - 1) * segmentStepDistance && scrollUtcOffset * segmentStepDistance > y) {
                 window.newAppState.scrollUTC.notify(this.utc);
                 window.newAppState.scrollTemperature.notify(this.temperature);
+                window.newAppState.scrollPollution.notify(this.averagePollution);
             }
 
             if (this.textDisk) {
