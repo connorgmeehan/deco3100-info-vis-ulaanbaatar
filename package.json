@@ -54,7 +54,7 @@
     "clamp": "^1.0.1",
     "d3": "^5.9.2",
     "sticky-js": "^1.2.0",
-    "three": "^0.104.0",
+    "three": "^0.125.0",
     "three-orbitcontrols": "^2.102.1",
     "three.textsprite": "^20.0.0"
   }
